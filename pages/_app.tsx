@@ -1,8 +1,65 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import { ActionIcon, AppShell, Burger, Center, ColorScheme, Header, MantineProvider, MediaQuery, Text, Title, useMantineTheme } from '@mantine/core';
+import Navigation from '../components/Navigation';
+import { useState } from 'react';
+import Link from 'next/link';
+import { IconSun, IconMoonStars } from '@tabler/icons';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+export default function App(props: AppProps) {
+  const { Component, pageProps } = props;
+  const theme = useMantineTheme();
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('dark');
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+  const dark = colorScheme === 'dark';
+
+  return (
+    <>
+      <Head>
+        <title>Tokenization</title>
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+      </Head>
+
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={{
+          colorScheme: colorScheme,
+          fontSizes: 'xl'
+        }}
+      >
+        <AppShell
+          padding="lg"
+          navbar={<Navigation/>}
+          header={
+            <Header height={100} p="xl">
+              <div style={{ marginLeft: "10px", display: 'flex', alignItems: 'center', justifyContent: "space-between", height: '100%' }}>
+                <Link href="/">
+                  <Center>
+                    <Title style={{ cursor:"pointer"}} order={1}>
+                      Plataforma de Tokenização
+                      </Title>
+                    </Center>
+                  </Link>
+                <ActionIcon
+                  variant="outline"
+                  color={dark ? 'yellow' : 'blue'}
+                  onClick={() => toggleColorScheme()}
+                  title="Toggle color scheme"
+                >
+                  {dark ? <IconSun size={18} /> : <IconMoonStars size={18} />}
+                </ActionIcon>
+              </div>
+            </Header>
+          }
+          styles={(theme) => ({
+            main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
+          })}
+        >
+          <Component {...pageProps} />
+        </AppShell>
+      </MantineProvider>
+    </>
+  );
 }
-
-export default MyApp
