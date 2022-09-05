@@ -1,6 +1,6 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { ActionIcon, AppShell, Burger, Center, ColorScheme, Header, MantineProvider, MediaQuery, Text, Title, useMantineTheme } from '@mantine/core';
+import { ActionIcon, AppShell, Burger, Button, Center, ColorScheme, Header, MantineProvider, MediaQuery, Text, Title, useMantineTheme } from '@mantine/core';
 import Navigation from '../components/Navigation';
 import { useState } from 'react';
 import Link from 'next/link';
@@ -17,7 +17,7 @@ export default function App(props: AppProps) {
   return (
     <>
       <Head>
-        <title>Tokenization</title>
+        <title>Tokenização</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
 
@@ -38,7 +38,7 @@ export default function App(props: AppProps) {
                 <Link href="/">
                   <Center>
                     <Title style={{ cursor:"pointer"}} order={1}>
-                      Plataforma de Tokenização
+                      Tokenização de Ativos Imobiliários
                       </Title>
                     </Center>
                   </Link>

@@ -11,7 +11,7 @@ const Navigation: React.FC = () => {
             </Navbar.Section>
 
             <Navbar.Section>
-                <NavLink label={<Link href={"/offer"}><Center>Criar Oferta</Center></Link>} />
+                <NavLink label={<Link href={"/createOffer"}><Center>Criar Oferta</Center></Link>} />
             </Navbar.Section>
 
             <Navbar.Section>
