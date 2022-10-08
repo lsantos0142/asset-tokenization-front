@@ -1,9 +1,7 @@
-import type { NextPage } from 'next'
+import type { NextPage } from "next";
 
 const Marketplace: NextPage = () => {
-  return (
-    <div>Marketplace</div>
-  )
-}
+    return <div>Marketplace</div>;
+};
 
-export default Marketplace
+export default Marketplace;

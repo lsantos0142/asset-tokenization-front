@@ -1,9 +1,7 @@
-import type { NextPage } from 'next'
+import type { NextPage } from "next";
 
 const Tokenization: NextPage = () => {
-  return (
-    <div>Tokenização</div>
-  )
-}
+    return <div>Tokenização</div>;
+};
 
-export default Tokenization
+export default Tokenization;

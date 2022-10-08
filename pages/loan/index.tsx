@@ -1,9 +1,7 @@
-import type { NextPage } from 'next'
+import type { NextPage } from "next";
 
 const Loan: NextPage = () => {
-  return (
-    <div>Empréstimo</div>
-  )
-}
+    return <div>Empréstimo</div>;
+};
 
-export default Loan
+export default Loan;

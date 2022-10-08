@@ -1,9 +1,7 @@
-import type { NextPage } from 'next'
+import type { NextPage } from "next";
 
 const OfferDetails: NextPage = () => {
-  return (
-    <div>Detalhes</div>
-  )
-}
+    return <div>Detalhes</div>;
+};
 
-export default OfferDetails
+export default OfferDetails;

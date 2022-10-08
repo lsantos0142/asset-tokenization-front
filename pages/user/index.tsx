@@ -1,9 +1,7 @@
-import type { NextPage } from 'next'
+import type { NextPage } from "next";
 
 const User: NextPage = () => {
-  return (
-    <div>Usuário</div>
-  )
-}
+    return <div>Usuário</div>;
+};
 
-export default User
+export default User;
