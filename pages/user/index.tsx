@@ -7,7 +7,7 @@ import AuthContext from "../../context/AuthContext";
 const User: NextPage = () => {
     const router = useRouter();
 
-    const { user, logout } = useContext(AuthContext);
+    const { user, logout, refresh } = useContext(AuthContext);
 
     return (
         <>
@@ -17,6 +17,14 @@ const User: NextPage = () => {
                 }}
             >
                 Logout
+            </Button>
+
+            <Button
+                onClick={() => {
+                    refresh();
+                }}
+            >
+                Refresh
             </Button>
         </>
     );
