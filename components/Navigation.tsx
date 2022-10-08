@@ -61,7 +61,7 @@ const Navigation: React.FC = () => {
                             </Link>
                         ) : (
                             <Link href={"/login"}>
-                                <Center>Fazer Login</Center>
+                                <Center>Fazer Login/Registrar</Center>
                             </Link>
                         )
                     }

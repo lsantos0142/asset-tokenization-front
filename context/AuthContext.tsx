@@ -24,11 +24,15 @@ export const AuthProvider = ({ children }: any) => {
     }, []);
 
     useEffect(() => {
+        if (loading) {
+            refresh();
+        }
+        const fiveMinutes = 1000 * 60 * 5;
         let interval = setInterval(() => {
             if (authTokens) {
                 refresh();
             }
-        }, 1000 * 60 * 5);
+        }, fiveMinutes);
         return () => clearInterval(interval);
     }, [authTokens, loading]);
 
@@ -39,42 +43,62 @@ export const AuthProvider = ({ children }: any) => {
     };
 
     const logout = () => {
-        const headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authTokens.accessToken}`,
-        };
+        if (authTokens?.refreshToken) {
+            const headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authTokens?.accessToken}`,
+            };
 
-        axios
-            .post(`${process.env.BACK}/auth/logout`, {}, { headers: headers })
-            .then((res) => {
-                setUser(null);
-                setAuthTokens(null);
-                localStorage.removeItem("TOKENS");
-            })
-            .catch((e) => {
-                console.log(e);
-                alert(e.response.data.message);
-            });
+            axios
+                .post(
+                    `${process.env.BACK}/auth/logout`,
+                    {},
+                    { headers: headers },
+                )
+                .then((res) => {
+                    setUser(null);
+                    setAuthTokens(null);
+                    localStorage.removeItem("TOKENS");
+                })
+                .catch((e) => {
+                    setUser(null);
+                    setAuthTokens(null);
+                    localStorage.removeItem("TOKENS");
+                });
+        }
     };
 
     const refresh = () => {
-        const headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authTokens.refreshToken}`,
-        };
+        if (authTokens?.refreshToken) {
+            const headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authTokens?.refreshToken}`,
+            };
 
-        axios
-            .post(`${process.env.BACK}/auth/refresh`, {}, { headers: headers })
-            .then((res) => {
-                if (res.status === 200) {
-                    setUser(jwtDecode(res.data.accessToken));
-                    setAuthTokens(res.data);
-                    localStorage.setItem("TOKENS", JSON.stringify(res.data));
-                }
-            })
-            .catch((e) => {
-                logout();
-            });
+            axios
+                .post(
+                    `${process.env.BACK}/auth/refresh`,
+                    {},
+                    { headers: headers },
+                )
+                .then((res) => {
+                    if (res.status === 200) {
+                        setUser(jwtDecode(res.data.accessToken));
+                        setAuthTokens(res.data);
+                        localStorage.setItem(
+                            "TOKENS",
+                            JSON.stringify(res.data),
+                        );
+                    }
+                })
+                .catch((e) => {
+                    logout();
+                });
+        }
+
+        if (loading) {
+            setLoading(false);
+        }
     };
 
     let contextData = {
@@ -85,7 +109,7 @@ export const AuthProvider = ({ children }: any) => {
     };
     return (
         <AuthContext.Provider value={contextData}>
-            {children}
+            {loading ? null : children}
         </AuthContext.Provider>
     );
 };

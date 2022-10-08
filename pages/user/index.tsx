@@ -7,24 +7,17 @@ import AuthContext from "../../context/AuthContext";
 const User: NextPage = () => {
     const router = useRouter();
 
-    const { user, logout, refresh } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
 
     return (
         <>
             <Button
+                color={"red"}
                 onClick={() => {
                     logout(), router.push("/login");
                 }}
             >
                 Logout
-            </Button>
-
-            <Button
-                onClick={() => {
-                    refresh();
-                }}
-            >
-                Refresh
             </Button>
         </>
     );
