@@ -1,7 +1,25 @@
+import { Button } from "@mantine/core";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+import AuthContext from "../../context/AuthContext";
 
 const User: NextPage = () => {
-    return <div>Usuário</div>;
+    const router = useRouter();
+
+    const { user, logout } = useContext(AuthContext);
+
+    return (
+        <>
+            <Button
+                onClick={() => {
+                    logout(), router.push("/login");
+                }}
+            >
+                Logout
+            </Button>
+        </>
+    );
 };
 
 export default User;
