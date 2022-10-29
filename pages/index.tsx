@@ -5,24 +5,6 @@ import { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
-    const [walletAddress, setWalletAddress] = useState("");
-
-    const requestAccount = async () => {
-        if ((window as any).ethereum) {
-            try {
-                const accounts = await (window as any).ethereum.request({
-                    method: "eth_requestAccounts",
-                });
-                setWalletAddress(accounts[0]);
-                console.log(accounts[0]);
-            } catch (error) {
-                console.log("Error Connecting");
-            }
-        } else {
-            console.log("No metamask");
-        }
-    };
-
     const items = [{ title: "Home", href: "#" }].map((item, index) => (
         <Link href={item.href} key={index} passHref>
             <Anchor component="a">{item.title}</Anchor>
@@ -46,11 +28,6 @@ const Home: NextPage = () => {
                 officiis velit dolorum vitae saepe laboriosam error ipsam
                 mollitia, accusamus sit! Voluptas eaque mollitia, delectus minus
                 eos nostrum facere! Similique ducimus quidem debitis possimus.
-                <Button onClick={requestAccount}>
-                    {walletAddress !== ""
-                        ? "Metamask Conectada"
-                        : "Conectar Metamask Teste"}
-                </Button>
             </Group>
         </>
     );
