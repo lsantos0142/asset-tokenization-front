@@ -1,15 +1,11 @@
 import { Anchor, Button, Center, Navbar, NavLink } from "@mantine/core";
 import Link from "next/link";
-import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
 
 const Navigation: React.FC = () => {
-    const { user } = useContext(AuthContext);
     return (
-        <Navbar width={{ base: 250 }} height={"90%"} p="xl">
+        <Navbar width={{ md: 200, lg: 250, base: 170 }} p="xl">
             <Navbar.Section>
                 <NavLink
-                    sx={{ margin: 0, padding: "0.5em 0" }}
                     label={
                         <Link href={"/tokenization"}>
                             <Center>Tokenização</Center>
@@ -20,7 +16,6 @@ const Navigation: React.FC = () => {
 
             <Navbar.Section>
                 <NavLink
-                    sx={{ margin: 0, padding: "0.5em 0" }}
                     label={
                         <Link href={"/createOffer"}>
                             <Center>Criar Oferta</Center>
@@ -31,7 +26,6 @@ const Navigation: React.FC = () => {
 
             <Navbar.Section>
                 <NavLink
-                    sx={{ margin: 0, padding: "0.5em 0" }}
                     label={
                         <Link href={"/marketplace"}>
                             <Center>Marketplace</Center>
@@ -42,7 +36,6 @@ const Navigation: React.FC = () => {
 
             <Navbar.Section grow>
                 <NavLink
-                    sx={{ margin: 0, padding: "0.5em 0" }}
                     label={
                         <Link href={"/loan"}>
                             <Center>Empréstimo</Center>
@@ -53,17 +46,10 @@ const Navigation: React.FC = () => {
 
             <Navbar.Section>
                 <NavLink
-                    sx={{ margin: 0, padding: "0.5em 0" }}
                     label={
-                        user ? (
-                            <Link href={"/user"}>
-                                <Center>{user.username}</Center>
-                            </Link>
-                        ) : (
-                            <Link href={"/login"}>
-                                <Center>Fazer Login/Registrar</Center>
-                            </Link>
-                        )
+                        <Link href={"/user"}>
+                            <Center>Usuário</Center>
+                        </Link>
                     }
                 />
             </Navbar.Section>

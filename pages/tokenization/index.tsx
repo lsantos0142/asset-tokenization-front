@@ -89,7 +89,7 @@ const Tokenization: NextPage = () => {
 
             <Divider my="xl" />
 
-            <Title order={1}>Criar Proposta de Tokenização</Title>
+            <Title order={2}>Criar Proposta de Tokenização</Title>
 
             <Space h="xl" />
 
