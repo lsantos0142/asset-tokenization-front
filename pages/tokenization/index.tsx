@@ -21,6 +21,7 @@ import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons";
+import axios from "axios";
 
 const Tokenization: NextPage = () => {
     const { user } = useContext(AuthContext);
@@ -62,16 +63,45 @@ const Tokenization: NextPage = () => {
         });
 
         setTimeout(() => {
-            updateNotification({
-                id: "create_tokenization_proposal_" + values.registration,
-                disallowClose: true,
-                autoClose: 5000,
-                icon: <IconCheck size={16} />,
-                color: "green",
-                title: <Text size="xl">Proposta Criada</Text>,
-                message: <Text size="xl">Proposta criada com sucesso</Text>,
-            });
-        }, 3000);
+            axios
+                .post(
+                    `${process.env.BACK}/tokenized-asset/proposal/create`,
+                    values,
+                )
+                .then((res) => {
+                    updateNotification({
+                        id:
+                            "create_tokenization_proposal_" +
+                            values.registration,
+                        disallowClose: true,
+                        autoClose: 5000,
+                        icon: <IconCheck size={16} />,
+                        color: "green",
+                        title: <Text size="xl">Proposta Criada</Text>,
+                        message: (
+                            <Text size="xl">Proposta criada com sucesso</Text>
+                        ),
+                    });
+                })
+                .catch((e) => {
+                    console.log(e);
+                    updateNotification({
+                        id:
+                            "create_tokenization_proposal_" +
+                            values.registration,
+                        disallowClose: true,
+                        autoClose: 5000,
+                        icon: <IconX size={16} />,
+                        color: "red",
+                        title: (
+                            <Text size="xl">Erro na Criação da Proposta</Text>
+                        ),
+                        message: (
+                            <Text size="xl">{e.response.data.message}</Text>
+                        ),
+                    });
+                });
+        }, 2000);
     };
 
     const items = [

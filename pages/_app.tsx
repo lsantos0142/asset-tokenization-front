@@ -22,6 +22,7 @@ import { IconSun, IconMoonStars } from "@tabler/icons";
 import axios from "axios";
 import { AuthProvider } from "../context/AuthContext";
 import { NotificationsProvider } from "@mantine/notifications";
+import { RouteGuard } from "../components/RouteGuard";
 
 const client = axios.create({
     baseURL: process.env.BACK,
@@ -107,7 +108,9 @@ export default function App(props: AppProps) {
                         })}
                     >
                         <NotificationsProvider>
-                            <Component {...pageProps} />
+                            <RouteGuard>
+                                <Component {...pageProps} />
+                            </RouteGuard>
                         </NotificationsProvider>
                     </AppShell>
                 </AuthProvider>

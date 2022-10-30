@@ -63,6 +63,18 @@ const Navigation: React.FC = () => {
                     }
                 />
             </Navbar.Section>
+
+            {user?.isAdmin ? (
+                <Navbar.Section>
+                    <NavLink
+                        label={
+                            <Link href={"/admin"}>
+                                <Center>Portal Admin</Center>
+                            </Link>
+                        }
+                    />
+                </Navbar.Section>
+            ) : null}
         </Navbar>
     );
 };
