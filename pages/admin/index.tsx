@@ -1,13 +1,9 @@
-import { Anchor, Box, Breadcrumbs, Divider, Space, Title } from "@mantine/core";
+import { Anchor, Breadcrumbs, Divider, Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useContext } from "react";
-import AuthContext from "../../context/AuthContext";
+import TokenizationProposalAdmin from "../../components/TokenizationProposalAdmin";
 
 const Admin: NextPage = () => {
-    const { user } = useContext(AuthContext);
-
     const items = [
         { title: "Home", href: "/" },
         { title: "Portal Admin", href: "#" },
@@ -26,6 +22,8 @@ const Admin: NextPage = () => {
             <Title order={2}>Portal Admin</Title>
 
             <Space h="xl" />
+
+            <TokenizationProposalAdmin />
         </>
     );
 };

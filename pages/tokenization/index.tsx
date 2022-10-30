@@ -2,7 +2,6 @@ import {
     Text,
     Anchor,
     Grid,
-    Notification,
     Breadcrumbs,
     Divider,
     Space,
@@ -11,13 +10,11 @@ import {
     Group,
     Button,
     NumberInput,
-    Affix,
-    ScrollArea,
 } from "@mantine/core";
 import type { NextPage } from "next";
 import { useForm } from "@mantine/form";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons";
@@ -52,13 +49,13 @@ const Tokenization: NextPage = () => {
     ) => {
         values.userId = user.sub;
         console.log(values);
-        // createTokenizationProposalForm.reset();
+        createTokenizationProposalForm.reset();
         showNotification({
             id: "create_tokenization_proposal_" + values.registration,
             disallowClose: true,
             autoClose: false,
             title: <Text size="xl">Criando Proposta</Text>,
-            message: <Text size="xl">Favor espere até a conclusão</Text>,
+            message: <Text size="xl">Favor esperar até a conclusão</Text>,
             loading: true,
         });
 
@@ -189,7 +186,9 @@ const Tokenization: NextPage = () => {
                 </Grid>
 
                 <Group position="right" my="xl">
-                    <Button type="submit">Criar Proposta de Tokenização</Button>
+                    <Button variant="outline" type="submit">
+                        Criar Proposta de Tokenização
+                    </Button>
                 </Group>
             </form>
         </>

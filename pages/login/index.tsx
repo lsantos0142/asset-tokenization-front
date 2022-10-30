@@ -36,6 +36,7 @@ const Login: NextPage = () => {
             name: "",
             username: "",
             password: "",
+            cpf: "",
         },
 
         validate: {},
@@ -56,6 +57,7 @@ const Login: NextPage = () => {
                 name: values.name,
                 username: values.username,
                 password: values.password,
+                cpf: values.cpf,
             })
             .then((res) => {
                 if (res.status === 200) {
@@ -151,6 +153,14 @@ const Login: NextPage = () => {
                         {...signupForm.getInputProps("username")}
                     />
 
+                    <TextInput
+                        my={"lg"}
+                        withAsterisk
+                        label="CPF"
+                        placeholder="Digite seu CPF"
+                        {...signupForm.getInputProps("cpf")}
+                    />
+
                     <PasswordInput
                         my={"lg"}
                         withAsterisk
@@ -160,7 +170,9 @@ const Login: NextPage = () => {
                     />
 
                     <Group position="right" my="xl">
-                        <Button type="submit">Registrar</Button>
+                        <Button variant="outline" type="submit">
+                            Registrar
+                        </Button>
                     </Group>
                 </form>
             </Box>
@@ -193,7 +205,9 @@ const Login: NextPage = () => {
                     />
 
                     <Group position="right" my="xl">
-                        <Button type="submit">Fazer Login</Button>
+                        <Button variant="outline" type="submit">
+                            Fazer Login
+                        </Button>
                     </Group>
                 </form>
             </Box>

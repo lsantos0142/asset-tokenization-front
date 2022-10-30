@@ -67,6 +67,7 @@ const User: NextPage = () => {
             <Group position="apart">
                 <Breadcrumbs>{items}</Breadcrumbs>
                 <Button
+                    variant="outline"
                     color={"red"}
                     onClick={() => {
                         logout(), router.push("/login");
@@ -104,13 +105,17 @@ const User: NextPage = () => {
                             {walletAddress}
                         </Text>
                         <Space h="xl" />
-                        <Button color="green" onClick={handleConnectWallet}>
+                        <Button
+                            variant="outline"
+                            color="green"
+                            onClick={handleConnectWallet}
+                        >
                             Salvar Carteira
                         </Button>
                     </Box>
                 ) : (
                     <Box>
-                        <Button onClick={requestAccount}>
+                        <Button variant="outline" onClick={requestAccount}>
                             Conectar Metamask
                         </Button>
                     </Box>
