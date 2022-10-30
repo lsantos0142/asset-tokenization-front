@@ -64,7 +64,6 @@ const Login: NextPage = () => {
                 }
             })
             .catch((e) => {
-                console.log(e);
                 if (e.response.data.statusCode == 400) {
                     if (e.response.data.message === "Unauthorized") {
                         setError("Digite um usuário e senha");

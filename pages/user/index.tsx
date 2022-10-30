@@ -25,7 +25,6 @@ const User: NextPage = () => {
     const { user, logout, refresh } = useContext(AuthContext);
     const [walletAddress, setWalletAddress] = useState("");
 
-    console.log(user);
     const requestAccount = async () => {
         if ((window as any).ethereum) {
             try {
