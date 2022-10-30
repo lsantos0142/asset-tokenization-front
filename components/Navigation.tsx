@@ -51,9 +51,15 @@ const Navigation: React.FC = () => {
             <Navbar.Section>
                 <NavLink
                     label={
-                        <Link href={"/user"}>
-                            <Center>Usuário</Center>
-                        </Link>
+                        user ? (
+                            <Link href={"/user"}>
+                                <Center>{user.username}</Center>
+                            </Link>
+                        ) : (
+                            <Link href={"/login"}>
+                                <Center>Fazer Login/Registrar</Center>
+                            </Link>
+                        )
                     }
                 />
             </Navbar.Section>
