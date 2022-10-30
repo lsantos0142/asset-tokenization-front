@@ -28,7 +28,7 @@ const Tokenization: NextPage = () => {
 
     const createTokenizationProposalForm = useForm({
         initialValues: {
-            effectiveOwner: "",
+            effectiveOwner: user?.walletAddress,
             address: "",
             usableArea: undefined,
             registration: undefined,
@@ -131,6 +131,7 @@ const Tokenization: NextPage = () => {
                 <Grid gutter={30}>
                     <Grid.Col md={6} xl={4}>
                         <TextInput
+                            disabled
                             withAsterisk
                             label="Endereço da Carteira do Dono Efetivo"
                             placeholder="Ex: 0x7E2CdEcA4cC308B5253118d7dC99B124EB3a0556"

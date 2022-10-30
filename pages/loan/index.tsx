@@ -1,4 +1,4 @@
-import { Anchor, Box, Breadcrumbs, Divider } from "@mantine/core";
+import { Anchor, Box, Breadcrumbs, Divider, Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
 
@@ -14,8 +14,12 @@ const Loan: NextPage = () => {
     return (
         <>
             <Breadcrumbs>{items}</Breadcrumbs>
+
             <Divider my="xl" />
-            <Box>Empréstimo</Box>
+
+            <Title order={2}>Empréstimo</Title>
+
+            <Space h="xl" />
         </>
     );
 };

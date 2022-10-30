@@ -1,4 +1,4 @@
-import { Anchor, Breadcrumbs, Divider, Title } from "@mantine/core";
+import { Anchor, Breadcrumbs, Divider, Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
 
@@ -17,7 +17,9 @@ const Marketplace: NextPage = () => {
 
             <Divider my="xl" />
 
-            <Title order={1}>Marketplace</Title>
+            <Title order={2}>Marketplace</Title>
+
+            <Space h="xl" />
         </>
     );
 };

@@ -1,4 +1,4 @@
-import { Anchor, Box, Breadcrumbs, Divider } from "@mantine/core";
+import { Anchor, Box, Breadcrumbs, Divider, Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,8 +20,12 @@ const Admin: NextPage = () => {
     return (
         <>
             <Breadcrumbs>{items}</Breadcrumbs>
+
             <Divider my="xl" />
-            <Box>Admin</Box>
+
+            <Title order={2}>Portal Admin</Title>
+
+            <Space h="xl" />
         </>
     );
 };

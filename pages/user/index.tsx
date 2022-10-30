@@ -8,6 +8,7 @@ import {
     Grid,
     Space,
     Text,
+    Group,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import axios from "axios";
@@ -63,66 +64,58 @@ const User: NextPage = () => {
 
     return (
         <>
-            <Grid justify="space-between">
-                <Grid.Col span="content">
-                    <Breadcrumbs>{items}</Breadcrumbs>
-                </Grid.Col>
-                <Grid.Col span="content">
-                    <Button
-                        ml="auto"
-                        color={"red"}
-                        onClick={() => {
-                            logout(), router.push("/login");
-                        }}
-                    >
-                        Logout
-                    </Button>
-                </Grid.Col>
-            </Grid>
+            <Group position="apart">
+                <Breadcrumbs>{items}</Breadcrumbs>
+                <Button
+                    color={"red"}
+                    onClick={() => {
+                        logout(), router.push("/login");
+                    }}
+                >
+                    Logout
+                </Button>
+            </Group>
 
             <Divider my="xl" />
 
             {/* Conectar Carteira */}
-            <Grid justify="space-between">
-                <Grid.Col span="content">
-                    {user?.walletAddress ? (
-                        <Box>
-                            <Title order={2}>Carteira Conectada</Title>
-                        </Box>
-                    ) : (
-                        <Box>
-                            <Title order={2}>Conectar Carteira</Title>
-                        </Box>
-                    )}
-                </Grid.Col>
-                <Grid.Col span="content">
-                    {user?.walletAddress ? (
-                        <Box>
-                            <Text size="xl">Endereço da Carteira: </Text>
-                            <Text size="xl">{user?.walletAddress}</Text>
-                        </Box>
-                    ) : walletAddress !== "" ? (
-                        <Box>
-                            <Text size="xl" color="yellow">
-                                Carteira Metamask:{" "}
-                            </Text>
-                            <Text size="xl" color="yellow">
-                                {walletAddress}
-                            </Text>
-                            <Space h="xl" />
-                            <Button color="green" onClick={handleConnectWallet}>
-                                Salvar Carteira
-                            </Button>
-                        </Box>
-                    ) : (
-                        <Box>
-                            <Button onClick={requestAccount}>
-                                Conectar Metamask
-                            </Button>
-                        </Box>
-                    )}
-                </Grid.Col>
-            </Grid>
+            <Group position="apart">
+                {user?.walletAddress ? (
+                    <Box>
+                        <Title order={2}>Carteira Conectada</Title>
+                    </Box>
+                ) : (
+                    <Box>
+                        <Title order={2}>Conectar Carteira</Title>
+                    </Box>
+                )}
+
+                {user?.walletAddress ? (
+                    <Box>
+                        <Text size="xl">Endereço da Carteira: </Text>
+                        <Text size="xl">{user?.walletAddress}</Text>
+                    </Box>
+                ) : walletAddress !== "" ? (
+                    <Box>
+                        <Text size="xl" color="yellow">
+                            Carteira Metamask:{" "}
+                        </Text>
+                        <Text size="xl" color="yellow">
+                            {walletAddress}
+                        </Text>
+                        <Space h="xl" />
+                        <Button color="green" onClick={handleConnectWallet}>
+                            Salvar Carteira
+                        </Button>
+                    </Box>
+                ) : (
+                    <Box>
+                        <Button onClick={requestAccount}>
+                            Conectar Metamask
+                        </Button>
+                    </Box>
+                )}
+            </Group>
 
             <Divider my="xl" />
 

@@ -1,4 +1,11 @@
-import { Anchor, Breadcrumbs, Divider, Grid, Title } from "@mantine/core";
+import {
+    Anchor,
+    Breadcrumbs,
+    Divider,
+    Grid,
+    Space,
+    Title,
+} from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -23,7 +30,9 @@ const OfferDetails: NextPage = () => {
 
             <Divider my="xl" />
 
-            <Title order={1}>Oferta #{id}</Title>
+            <Title order={2}>Oferta #{id}</Title>
+
+            <Space h="xl" />
         </>
     );
 };

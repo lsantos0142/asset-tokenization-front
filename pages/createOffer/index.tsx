@@ -7,6 +7,8 @@ import {
     Divider,
     Header,
     Navbar,
+    Space,
+    Title,
 } from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -23,8 +25,12 @@ const CreateOffer: NextPage = () => {
     return (
         <>
             <Breadcrumbs>{items}</Breadcrumbs>
+
             <Divider my="xl" />
-            <Box>Criar Oferta</Box>
+
+            <Title order={2}>Criar Oferta</Title>
+
+            <Space h="xl" />
         </>
     );
 };
