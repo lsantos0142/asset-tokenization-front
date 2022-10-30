@@ -10,6 +10,7 @@ import {
     Header,
     MantineProvider,
     MediaQuery,
+    ScrollArea,
     Text,
     Title,
     useMantineTheme,
@@ -20,6 +21,7 @@ import Link from "next/link";
 import { IconSun, IconMoonStars } from "@tabler/icons";
 import axios from "axios";
 import { AuthProvider } from "../context/AuthContext";
+import { NotificationsProvider } from "@mantine/notifications";
 
 const client = axios.create({
     baseURL: process.env.BACK,
@@ -104,7 +106,9 @@ export default function App(props: AppProps) {
                             },
                         })}
                     >
-                        <Component {...pageProps} />
+                        <NotificationsProvider>
+                            <Component {...pageProps} />
+                        </NotificationsProvider>
                     </AppShell>
                 </AuthProvider>
             </MantineProvider>
