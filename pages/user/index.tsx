@@ -10,15 +10,14 @@ import {
     Text,
     Group,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import axios from "axios";
-import jwtDecode from "jwt-decode";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import OwnershipsByUser from "../../components/OwnershipsByUser";
 import AuthContext from "../../context/AuthContext";
-import Login from "../login";
+import { Ownership } from "../../types/Ownership";
 
 const User: NextPage = () => {
     const router = useRouter();
@@ -125,11 +124,7 @@ const User: NextPage = () => {
             <Divider my="xl" />
 
             {/* Listar imóveis do usuário */}
-            <Title order={2}>Imóveis Tokenizados</Title>
-            <Grid justify="space-between">
-                <Grid.Col span="content"></Grid.Col>
-                <Grid.Col span="content"></Grid.Col>
-            </Grid>
+            <OwnershipsByUser userId={user?.sub} />
 
             <Divider my="xl" />
 

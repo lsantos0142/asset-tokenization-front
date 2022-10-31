@@ -16,32 +16,8 @@ import { IconCheck, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
-
-type Proposal = {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    address: string;
-    registration: number;
-    deed?: string;
-    usableArea: number;
-    status: number;
-    user: {
-        id: string;
-        name: string;
-        cpf: string;
-        username: string;
-        password: string;
-        walletAddress: string;
-        isAdmin: boolean;
-        createdAt: string;
-        updatedAt: string;
-        deletedAt: string | null;
-        hashedRt: string;
-    };
-};
+import { useEffect, useState } from "react";
+import { Proposal } from "../types/Proposal";
 
 const TokenizationProposalAdmin: NextPage = () => {
     const [proposals, setProposals] = useState<Proposal[]>([]);
@@ -147,15 +123,6 @@ const TokenizationProposalAdmin: NextPage = () => {
     useEffect(() => {
         getAllActiveProposals();
     }, []);
-
-    const items = [
-        { title: "Home", href: "/" },
-        { title: "Portal Admin", href: "#" },
-    ].map((item, index) => (
-        <Link href={item.href} key={index} passHref>
-            <Anchor component="a">{item.title}</Anchor>
-        </Link>
-    ));
 
     return (
         <>
