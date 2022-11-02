@@ -38,10 +38,19 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
     useEffect(() => {
         getAllOwnerships();
     }, []);
-    <Title order={2}>Imóveis Tokenizados</Title>;
+
     return (
         <>
-            <Title order={2}>Imóveis Tokenizados</Title>
+            <Group position="apart">
+                <Title order={2}>Imóveis Tokenizados</Title>
+                <Button
+                    variant="outline"
+                    color={"blue"}
+                    onClick={getAllOwnerships}
+                >
+                    Atualizar Imóveis
+                </Button>
+            </Group>
 
             <Space h="xl" />
 
@@ -51,7 +60,7 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
                         <Grid.Col md={6} lg={4} xl={3}>
                             <Card shadow="sm" p="lg" radius="lg" withBorder>
                                 <Group position="apart" mb="xs">
-                                    <Text weight={500}>
+                                    <Text size={22} weight={500}>
                                         {ownership.tokenizedAsset.address}
                                     </Text>
                                     {ownership?.isEffectiveOwner ? (
@@ -61,12 +70,13 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
                                     ) : null}
                                 </Group>
 
-                                <Space h="xl" />
+                                <Space h="xs" />
 
                                 <Group position="apart" my="xs">
                                     <Text>Área Útil</Text>
                                     <Text>
-                                        {ownership.tokenizedAsset.usableArea}
+                                        {ownership.tokenizedAsset.usableArea} m
+                                        <sup>2</sup>
                                     </Text>
                                 </Group>
 

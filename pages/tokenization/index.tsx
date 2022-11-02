@@ -151,7 +151,7 @@ const Tokenization: NextPage = () => {
                         <NumberInput
                             min={1}
                             withAsterisk
-                            label="Área Útil do Imóvel"
+                            label={`Área Útil do Imóvel (m\xB2)`}
                             placeholder="Ex: 100"
                             {...createTokenizationProposalForm.getInputProps(
                                 "usableArea",

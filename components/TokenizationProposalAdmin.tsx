@@ -17,6 +17,7 @@ import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import formatCPF from "../helpers/FormatCPF";
 import { Proposal } from "../types/Proposal";
 
 const TokenizationProposalAdmin: NextPage = () => {
@@ -199,13 +200,15 @@ const TokenizationProposalAdmin: NextPage = () => {
                         <Grid.Col md={6} xl={4}>
                             <Card shadow="sm" p="lg" radius="lg" withBorder>
                                 <Group position="apart" mb="xs">
-                                    <Text weight={500}>{proposal.address}</Text>
+                                    <Text size={22} weight={500}>
+                                        {proposal.address}
+                                    </Text>
                                     <Badge color="pink" variant="light">
                                         Em aberto
                                     </Badge>
                                 </Group>
 
-                                <Space h="xl" />
+                                <Space h="xs" />
 
                                 <Group position="apart" my="xs">
                                     <Text>Nome do Usuário</Text>
@@ -216,14 +219,16 @@ const TokenizationProposalAdmin: NextPage = () => {
 
                                 <Group position="apart" my="xs">
                                     <Text>CPF do Usuário</Text>
-                                    <Text>{proposal.user.cpf}</Text>
+                                    <Text>{formatCPF(proposal.user.cpf)}</Text>
                                 </Group>
 
                                 <Divider size="xs" />
 
                                 <Group position="apart" my="xs">
                                     <Text>Área útil</Text>
-                                    <Text>{proposal.usableArea}</Text>
+                                    <Text>
+                                        {proposal.usableArea} m<sup>2</sup>
+                                    </Text>
                                 </Group>
 
                                 <Divider size="xs" />
