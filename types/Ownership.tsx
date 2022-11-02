@@ -8,6 +8,6 @@ export type Ownership = {
     deletedAt?: string;
     isEffectiveOwner: boolean;
     percentageOwned: number;
-    tokenizedAsset: TokenizedAsset;
-    user: User;
+    tokenizedAsset?: TokenizedAsset;
+    user?: User;
 };

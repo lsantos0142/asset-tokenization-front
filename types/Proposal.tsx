@@ -9,5 +9,5 @@ export type Proposal = {
     deed?: string;
     usableArea: number;
     status: number;
-    user: User;
+    user?: User;
 };

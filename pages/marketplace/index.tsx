@@ -1,4 +1,4 @@
-import { Anchor, Breadcrumbs, Divider, Space, Title } from "@mantine/core";
+import { Anchor, Breadcrumbs, Divider } from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
 import MarketplaceOffers from "../../components/MarketplaceOffers";
@@ -12,6 +12,7 @@ const Marketplace: NextPage = () => {
             <Anchor component="a">{item.title}</Anchor>
         </Link>
     ));
+
     return (
         <>
             <Breadcrumbs>{items}</Breadcrumbs>

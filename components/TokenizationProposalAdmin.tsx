@@ -212,14 +212,16 @@ const TokenizationProposalAdmin: NextPage = () => {
 
                                 <Group position="apart" my="xs">
                                     <Text>Nome do Usuário</Text>
-                                    <Text>{proposal.user.username}</Text>
+                                    <Text>{proposal?.user?.username}</Text>
                                 </Group>
 
                                 <Divider size="xs" />
 
                                 <Group position="apart" my="xs">
                                     <Text>CPF do Usuário</Text>
-                                    <Text>{formatCPF(proposal.user.cpf)}</Text>
+                                    <Text>
+                                        {formatCPF(proposal?.user?.cpf!)}
+                                    </Text>
                                 </Group>
 
                                 <Divider size="xs" />

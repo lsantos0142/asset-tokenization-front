@@ -61,7 +61,7 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
                             <Card shadow="sm" p="lg" radius="lg" withBorder>
                                 <Group position="apart" mb="xs">
                                     <Text size={22} weight={500}>
-                                        {ownership.tokenizedAsset.address}
+                                        {ownership.tokenizedAsset?.address}
                                     </Text>
                                     {ownership?.isEffectiveOwner ? (
                                         <Badge color="green" variant="light">
@@ -75,7 +75,7 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
                                 <Group position="apart" my="xs">
                                     <Text>Área Útil</Text>
                                     <Text>
-                                        {ownership.tokenizedAsset.usableArea} m
+                                        {ownership.tokenizedAsset?.usableArea} m
                                         <sup>2</sup>
                                     </Text>
                                 </Group>
@@ -85,7 +85,7 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
                                 <Group position="apart" my="xs">
                                     <Text>Número do Registro</Text>
                                     <Text>
-                                        {ownership.tokenizedAsset.registration}
+                                        {ownership.tokenizedAsset?.registration}
                                     </Text>
                                 </Group>
 

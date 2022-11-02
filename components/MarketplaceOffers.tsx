@@ -15,15 +15,9 @@ import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+import { filterList } from "../helpers/FilterList";
 import { formatNumber } from "../helpers/FormatCurrencyBRL";
 import { Offer } from "../types/Offer";
-
-const filterList = [
-    "invert(99%) sepia(52%) saturate(6231%) hue-rotate(322deg) brightness(96%) contrast(94%)",
-    "invert(68%) sepia(59%) saturate(590%) hue-rotate(160deg) brightness(95%) contrast(89%)",
-    "invert(25%) sepia(40%) saturate(2269%) hue-rotate(331deg) brightness(104%) contrast(114%)",
-    "invert(75%) sepia(65%) saturate(544%) hue-rotate(72deg) brightness(100%) contrast(93%)",
-];
 
 type MarketplaceOffersProps = {};
 
@@ -107,7 +101,10 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
                                 </Card.Section>
                                 <Group position="apart" mb="xs">
                                     <Text size={22} weight={500}>
-                                        {offer.ownership.tokenizedAsset.address}
+                                        {
+                                            offer?.ownership?.tokenizedAsset
+                                                ?.address
+                                        }
                                     </Text>
                                     {offer.isEffectiveTransfer ? (
                                         <Badge color="green" variant="light">
@@ -122,8 +119,8 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
                                     <Text>Área Útil</Text>
                                     <Text>
                                         {
-                                            offer.ownership.tokenizedAsset
-                                                .usableArea
+                                            offer?.ownership?.tokenizedAsset
+                                                ?.usableArea
                                         }{" "}
                                         m<sup>2</sup>
                                     </Text>
@@ -149,7 +146,9 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
 
                                 <Group position="apart" my="xs">
                                     <Text>Vendedor</Text>
-                                    <Text>{offer.ownership.user.username}</Text>
+                                    <Text>
+                                        {offer?.ownership?.user?.username}
+                                    </Text>
                                 </Group>
                             </Card>
                         </Grid.Col>

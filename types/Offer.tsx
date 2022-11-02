@@ -9,5 +9,5 @@ export type Offer = {
     amount: number;
     isEffectiveTransfer: boolean;
     status: number;
-    ownership: Ownership;
+    ownership?: Ownership;
 };
