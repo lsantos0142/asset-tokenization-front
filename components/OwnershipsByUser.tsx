@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import axios from "axios";
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Ownership } from "../types/Ownership";
 
 type OwnershipsByUserProps = {
@@ -21,7 +21,7 @@ type OwnershipsByUserProps = {
 const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
     const [ownerships, setOwnerships] = useState<Ownership[]>([]);
 
-    const getAllOwnerships = () => {
+    const getAllOwnerships = useCallback(() => {
         axios
             .get(
                 `${process.env.BACK}/tokenized-asset/ownership/get-by-user/${userId}`,
@@ -33,7 +33,7 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
             .catch((e) => {
                 console.log(e.response.data.message);
             });
-    };
+    }, [userId]);
 
     useEffect(() => {
         getAllOwnerships();

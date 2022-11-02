@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { formatNumber } from "../helpers/FormatCurrencyBRL";
 import { Offer } from "../types/Offer";
 
@@ -48,7 +48,7 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
 
     useEffect(() => {
         getAllAvailableOffers();
-    }, [getAllAvailableOffers]);
+    }, []);
 
     const handleOpenOfferDetail = (id: string) => {
         router.push(`marketplace/${id}`);
