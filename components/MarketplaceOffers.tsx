@@ -48,7 +48,7 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
 
     useEffect(() => {
         getAllAvailableOffers();
-    }, []);
+    }, [getAllAvailableOffers]);
 
     const handleOpenOfferDetail = (id: string) => {
         router.push(`marketplace/${id}`);
@@ -73,6 +73,7 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
                 {offers.map((offer) => {
                     return (
                         <Grid.Col
+                            key={offer.id}
                             md={6}
                             lg={4}
                             xl={3}

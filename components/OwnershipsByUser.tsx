@@ -37,7 +37,7 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
 
     useEffect(() => {
         getAllOwnerships();
-    }, []);
+    }, [getAllOwnerships]);
 
     return (
         <>
@@ -57,7 +57,7 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
             <Grid gutter={30}>
                 {ownerships.map((ownership) => {
                     return (
-                        <Grid.Col md={6} lg={4} xl={3}>
+                        <Grid.Col key={ownership.id} md={6} lg={4} xl={3}>
                             <Card shadow="sm" p="lg" radius="lg" withBorder>
                                 <Group position="apart" mb="xs">
                                     <Text size={22} weight={500}>

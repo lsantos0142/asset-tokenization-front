@@ -197,7 +197,7 @@ const TokenizationProposalAdmin: NextPage = () => {
             <Grid gutter={30}>
                 {proposals.map((proposal) => {
                     return (
-                        <Grid.Col md={6} xl={4}>
+                        <Grid.Col md={6} xl={4} key={proposal.id}>
                             <Card shadow="sm" p="lg" radius="lg" withBorder>
                                 <Group position="apart" mb="xs">
                                     <Text size={22} weight={500}>
