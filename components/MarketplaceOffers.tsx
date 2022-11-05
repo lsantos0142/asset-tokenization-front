@@ -14,7 +14,8 @@ import {
 import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
+import AuthContext from "../context/AuthContext";
 import { filterList } from "../helpers/FilterList";
 import { formatNumber } from "../helpers/FormatCurrencyBRL";
 import { Offer } from "../types/Offer";
@@ -22,6 +23,8 @@ import { Offer } from "../types/Offer";
 type MarketplaceOffersProps = {};
 
 const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
+    const { user } = useContext(AuthContext);
+
     const router = useRouter();
 
     const [offers, setOffers] = useState<Offer[]>([]);
@@ -32,8 +35,11 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
                 `${process.env.BACK}/tokenized-asset/offer/get-all?status=AVAILABLE`,
             )
             .then((res) => {
-                console.log(res.data);
-                setOffers(res.data);
+                setOffers(
+                    res.data.filter((o: Offer) => {
+                        return o?.ownership?.user?.id !== user?.sub;
+                    }),
+                );
             })
             .catch((e) => {
                 console.log(e.response.data.message);
