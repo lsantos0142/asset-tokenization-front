@@ -10,6 +10,7 @@ import {
     Header,
     MantineProvider,
     MediaQuery,
+    ScrollArea,
     Text,
     Title,
     useMantineTheme,
@@ -18,6 +19,15 @@ import Navigation from "../components/Navigation";
 import { useState } from "react";
 import Link from "next/link";
 import { IconSun, IconMoonStars } from "@tabler/icons";
+import axios from "axios";
+import { AuthProvider } from "../context/AuthContext";
+import { NotificationsProvider } from "@mantine/notifications";
+import { RouteGuard } from "../components/RouteGuard";
+
+const client = axios.create({
+    baseURL: process.env.BACK,
+    timeout: 10000,
+});
 
 export default function App(props: AppProps) {
     const { Component, pageProps } = props;
@@ -45,58 +55,65 @@ export default function App(props: AppProps) {
                     fontSizes: "xl",
                 }}
             >
-                <AppShell
-                    padding="lg"
-                    navbar={<Navigation />}
-                    header={
-                        <Header height={100} p="xl">
-                            <div
-                                style={{
-                                    marginLeft: "10px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "space-between",
-                                    height: "100%",
-                                }}
-                            >
-                                <Link href="/">
-                                    <Center>
-                                        <Title
-                                            style={{
-                                                cursor: "pointer",
-                                            }}
-                                            order={1}
-                                        >
-                                            Tokenização de Ativos Imobiliários
-                                        </Title>
-                                    </Center>
-                                </Link>
-                                <ActionIcon
-                                    variant="outline"
-                                    color={dark ? "yellow" : "blue"}
-                                    onClick={() => toggleColorScheme()}
-                                    title="Toggle color scheme"
+                <AuthProvider>
+                    <AppShell
+                        padding="lg"
+                        navbar={<Navigation />}
+                        header={
+                            <Header height={100} p="xl">
+                                <div
+                                    style={{
+                                        marginLeft: "10px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                        height: "100%",
+                                    }}
                                 >
-                                    {dark ? (
-                                        <IconSun size={18} />
-                                    ) : (
-                                        <IconMoonStars size={18} />
-                                    )}
-                                </ActionIcon>
-                            </div>
-                        </Header>
-                    }
-                    styles={(theme) => ({
-                        main: {
-                            backgroundColor:
-                                theme.colorScheme === "dark"
-                                    ? theme.colors.dark[8]
-                                    : theme.colors.gray[0],
-                        },
-                    })}
-                >
-                    <Component {...pageProps} />
-                </AppShell>
+                                    <Link href="/">
+                                        <Center>
+                                            <Title
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
+                                                order={1}
+                                            >
+                                                Tokenização de Ativos
+                                                Imobiliários
+                                            </Title>
+                                        </Center>
+                                    </Link>
+                                    <ActionIcon
+                                        variant="outline"
+                                        color={dark ? "yellow" : "blue"}
+                                        onClick={() => toggleColorScheme()}
+                                        title="Toggle color scheme"
+                                    >
+                                        {dark ? (
+                                            <IconSun size={18} />
+                                        ) : (
+                                            <IconMoonStars size={18} />
+                                        )}
+                                    </ActionIcon>
+                                </div>
+                            </Header>
+                        }
+                        styles={(theme) => ({
+                            main: {
+                                backgroundColor:
+                                    theme.colorScheme === "dark"
+                                        ? theme.colors.dark[8]
+                                        : theme.colors.gray[0],
+                            },
+                        })}
+                    >
+                        <NotificationsProvider>
+                            <RouteGuard>
+                                <Component {...pageProps} />
+                            </RouteGuard>
+                        </NotificationsProvider>
+                    </AppShell>
+                </AuthProvider>
             </MantineProvider>
         </>
     );
