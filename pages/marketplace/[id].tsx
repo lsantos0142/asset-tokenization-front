@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { filterList } from "../../helpers/FilterList";
+import formatCPF from "../../helpers/FormatCPF";
 import { Offer } from "../../types/Offer";
 
 const OfferDetails: NextPage = () => {
@@ -65,7 +66,7 @@ const OfferDetails: NextPage = () => {
             <Space h="xl" />
 
             <Card shadow="sm" p="xl" radius="lg" withBorder>
-                <Grid gutter={100}>
+                <Grid gutter={50}>
                     <Grid.Col lg={5}>
                         <Stack>
                             <Center>
@@ -96,16 +97,18 @@ const OfferDetails: NextPage = () => {
                                 <Text size={25} weight={500}>
                                     {offer?.ownership?.tokenizedAsset?.address}
                                 </Text>
-                                {offer?.ownership?.isEffectiveOwner ? (
+                                {offer?.isEffectiveTransfer ? (
                                     <Badge color="green" variant="light">
-                                        Dono
+                                        Transferência de Posse
                                     </Badge>
                                 ) : null}
                             </Group>
 
                             <Space h="xs" />
 
-                            <Group position="apart" my="xs">
+                            <Title order={3}>Dados do Imóvel:</Title>
+
+                            <Group position="apart">
                                 <Text>Área Útil</Text>
                                 <Text>
                                     {
@@ -118,7 +121,7 @@ const OfferDetails: NextPage = () => {
 
                             <Divider size="xs" />
 
-                            <Group position="apart" my="xs">
+                            <Group position="apart">
                                 <Text>Número do Registro</Text>
                                 <Text>
                                     {
@@ -130,10 +133,49 @@ const OfferDetails: NextPage = () => {
 
                             <Divider size="xs" />
 
-                            <Group position="apart" my="xs">
-                                <Text>Porcentagem de Posse</Text>
+                            <Link
+                                href={`https://goerli.etherscan.io/address/${offer?.ownership?.tokenizedAsset?.contractAddress}`}
+                            >
+                                <Group
+                                    position="apart"
+                                    sx={{ cursor: "pointer" }}
+                                >
+                                    <Text>Endereço do Imóvel Tokenizado</Text>
+                                    <Text>
+                                        {
+                                            offer?.ownership?.tokenizedAsset
+                                                ?.contractAddress
+                                        }
+                                    </Text>
+                                </Group>
+                            </Link>
+
+                            <Space h="xs" />
+
+                            <Title order={3}>Dados do Vendedor:</Title>
+
+                            <Group position="apart">
+                                <Text>Nome</Text>
+                                <Text>{offer?.ownership?.user?.name!}</Text>
+                            </Group>
+
+                            <Divider size="xs" />
+
+                            <Group position="apart">
+                                <Text>Usuário</Text>
+                                <Text>{offer?.ownership?.user?.username!}</Text>
+                            </Group>
+
+                            <Divider size="xs" />
+
+                            <Group position="apart">
+                                <Text>CPF</Text>
                                 <Text>
-                                    {offer?.ownership?.percentageOwned! * 100} %
+                                    {offer?.ownership?.user?.cpf
+                                        ? formatCPF(
+                                              offer?.ownership?.user?.cpf!,
+                                          )
+                                        : null}
                                 </Text>
                             </Group>
                         </Stack>
