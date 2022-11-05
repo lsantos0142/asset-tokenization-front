@@ -27,7 +27,6 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
                 `${process.env.BACK}/tokenized-asset/ownership/get-by-user/${userId}`,
             )
             .then((res) => {
-                console.log(res.data);
                 setOwnerships(res.data);
             })
             .catch((e) => {

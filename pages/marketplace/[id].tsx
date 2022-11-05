@@ -14,36 +14,90 @@ import {
     Grid,
     Badge,
 } from "@mantine/core";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
+import AuthContext from "../../context/AuthContext";
 import { filterList } from "../../helpers/FilterList";
 import formatCPF from "../../helpers/FormatCPF";
 import { Offer } from "../../types/Offer";
 
 const OfferDetails: NextPage = () => {
+    const { user } = useContext(AuthContext);
+
     const router = useRouter();
     const { id } = router.query;
 
     const [offer, setOffer] = useState<Offer>();
 
     const getOfferById = useCallback(() => {
-        axios
-            .get(`${process.env.BACK}/tokenized-asset/offer/get-by-id/${id}`)
-            .then((res) => {
-                console.log(res.data);
-                setOffer(res.data);
-            })
-            .catch((e) => {
-                console.log(e.response.data.message);
-            });
+        if (typeof id !== "undefined") {
+            axios
+                .get(
+                    `${process.env.BACK}/tokenized-asset/offer/get-by-id/${id}`,
+                )
+                .then((res) => {
+                    setOffer(res.data);
+                })
+                .catch((e) => {
+                    console.log(e.response.data.message);
+                });
+        }
     }, [id]);
 
     useEffect(() => {
         getOfferById();
     }, [getOfferById]);
+
+    const handleAcceptOffer = () => {
+        showNotification({
+            id: "accept_offer_" + offer?.id,
+            disallowClose: true,
+            autoClose: false,
+            title: <Text size="xl">Aceitando Oferta</Text>,
+            message: <Text size="xl">Favor esperar até a conclusão</Text>,
+            loading: true,
+        });
+
+        setTimeout(() => {
+            axios
+                .put(`${process.env.BACK}/tokenized-asset/offer/accept`, {
+                    userId: user.sub,
+                    offerId: offer?.id,
+                })
+                .then((res) => {
+                    updateNotification({
+                        id: "accept_offer_" + offer?.id,
+                        disallowClose: true,
+                        autoClose: 5000,
+                        icon: <IconCheck size={16} />,
+                        color: "green",
+                        title: <Text size="xl">Oferta Aceita</Text>,
+                        message: (
+                            <Text size="xl">Oferta aceita com sucesso</Text>
+                        ),
+                    });
+                })
+                .catch((e) => {
+                    console.log(e);
+                    updateNotification({
+                        id: "accept_offer_" + offer?.id,
+                        disallowClose: true,
+                        autoClose: 5000,
+                        icon: <IconX size={16} />,
+                        color: "red",
+                        title: <Text size="xl">Erro no Aceite da Oferta</Text>,
+                        message: (
+                            <Text size="xl">{e.response.data.message}</Text>
+                        ),
+                    });
+                });
+        }, 2000);
+    };
 
     const items = [
         { title: "Home", href: "/" },
@@ -86,8 +140,12 @@ const OfferDetails: NextPage = () => {
                                     }}
                                 />
                             </Center>
-                            <Button color="green" variant="outline">
-                                Comprar Agora
+                            <Button
+                                color="green"
+                                variant="outline"
+                                onClick={handleAcceptOffer}
+                            >
+                                Aceitar Oferta
                             </Button>
                         </Stack>
                     </Grid.Col>
