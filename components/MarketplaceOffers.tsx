@@ -99,19 +99,23 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
                                         />
                                     </Center>
                                 </Card.Section>
-                                <Group position="apart" mb="xs">
-                                    <Text size={22} weight={500}>
-                                        {
-                                            offer?.ownership?.tokenizedAsset
-                                                ?.address
-                                        }
-                                    </Text>
-                                    {offer.isEffectiveTransfer ? (
-                                        <Badge color="green" variant="light">
-                                            Transferência de Posse
-                                        </Badge>
-                                    ) : null}
-                                </Group>
+
+                                <Text size={22} weight={500}>
+                                    {offer?.ownership?.tokenizedAsset?.address}
+                                </Text>
+
+                                <Badge
+                                    color="green"
+                                    variant="light"
+                                    mt="lg"
+                                    sx={
+                                        offer.isEffectiveTransfer
+                                            ? { visibility: "visible" }
+                                            : { visibility: "hidden" }
+                                    }
+                                >
+                                    Transferência de Posse
+                                </Badge>
 
                                 <Space h="xs" />
 
