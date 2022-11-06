@@ -113,7 +113,7 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
                                 <Badge
                                     color="green"
                                     variant="light"
-                                    mt="lg"
+                                    mt="md"
                                     sx={
                                         offer.isEffectiveTransfer
                                             ? { visibility: "visible" }

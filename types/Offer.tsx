@@ -1,4 +1,5 @@
 import { Ownership } from "./Ownership";
+import { User } from "./User";
 
 export type Offer = {
     id: string;
@@ -10,4 +11,5 @@ export type Offer = {
     isEffectiveTransfer: boolean;
     status: number;
     ownership?: Ownership;
+    currentBuyer?: User;
 };

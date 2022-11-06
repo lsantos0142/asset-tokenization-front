@@ -1,6 +1,7 @@
 import { Anchor, Breadcrumbs, Divider, Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
+import OffersAdmin from "../../components/OffersAdmin";
 import TokenizationProposalAdmin from "../../components/TokenizationProposalAdmin";
 
 const Admin: NextPage = () => {
@@ -24,6 +25,8 @@ const Admin: NextPage = () => {
             <Space h="xl" />
 
             <TokenizationProposalAdmin />
+
+            <OffersAdmin />
         </>
     );
 };

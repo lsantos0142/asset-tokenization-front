@@ -13,6 +13,7 @@ import {
     Stack,
     Grid,
     Badge,
+    MediaQuery,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons";
@@ -24,6 +25,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import { filterList } from "../../helpers/FilterList";
 import formatCPF from "../../helpers/FormatCPF";
+import { formatNumber } from "../../helpers/FormatCurrencyBRL";
 import { Offer } from "../../types/Offer";
 
 const OfferDetails: NextPage = () => {
@@ -121,45 +123,80 @@ const OfferDetails: NextPage = () => {
 
             <Card shadow="sm" p="xl" radius="lg" withBorder>
                 <Grid gutter={50}>
-                    <Grid.Col lg={5}>
-                        <Stack>
-                            <Center>
-                                <Image
-                                    height="40vh"
-                                    width="40vh"
-                                    alt="Casa"
-                                    src="/house.png"
-                                    withPlaceholder
-                                    style={{
-                                        filter: filterList[
-                                            Math.floor(
-                                                Math.random() *
-                                                    filterList.length,
-                                            )
-                                        ],
-                                    }}
-                                />
-                            </Center>
-                            <Button
-                                color="green"
-                                variant="outline"
-                                onClick={handleAcceptOffer}
-                            >
-                                Aceitar Oferta
-                            </Button>
-                        </Stack>
+                    <Grid.Col lg={5} xl={4}>
+                        <MediaQuery
+                            query="(max-width: 1200px) and (min-width: 650px)"
+                            styles={{
+                                width: "50%",
+                                marginInline: "auto",
+                            }}
+                        >
+                            <Stack justify="center">
+                                <Center>
+                                    <Image
+                                        height="100%"
+                                        fit="contain"
+                                        alt="Casa"
+                                        src="/house.png"
+                                        withPlaceholder
+                                        style={{
+                                            filter: filterList[
+                                                Math.floor(
+                                                    Math.random() *
+                                                        filterList.length,
+                                                )
+                                            ],
+                                        }}
+                                    />
+                                </Center>
+                                <Button
+                                    color="green"
+                                    variant="outline"
+                                    onClick={handleAcceptOffer}
+                                >
+                                    Aceitar Oferta
+                                </Button>
+                            </Stack>
+                        </MediaQuery>
                     </Grid.Col>
-                    <Grid.Col lg={7}>
+                    <Grid.Col lg={7} xl={8}>
                         <Stack>
-                            <Group position="apart" mb="xs">
-                                <Text size={25} weight={500}>
-                                    {offer?.ownership?.tokenizedAsset?.address}
+                            <Text size={25} weight={500}>
+                                {offer?.ownership?.tokenizedAsset?.address}
+                            </Text>
+
+                            <Badge
+                                color="green"
+                                variant="light"
+                                mt="md"
+                                sx={
+                                    offer?.isEffectiveTransfer
+                                        ? {
+                                              visibility: "visible",
+                                              width: "fit-content",
+                                          }
+                                        : { visibility: "hidden" }
+                                }
+                            >
+                                Transferência de Posse
+                            </Badge>
+
+                            <Space h="xs" />
+
+                            <Title order={3}>Dados da Oferta:</Title>
+
+                            <Group position="apart">
+                                <Text>Porcentagem à Venda</Text>
+                                <Text>{offer?.percentage! * 100} %</Text>
+                            </Group>
+
+                            <Divider size="xs" />
+
+                            <Group position="apart">
+                                <Text>Valor da Oferta</Text>
+                                <Text>
+                                    {formatNumber.format(offer?.amount!)}
                                 </Text>
-                                {offer?.isEffectiveTransfer ? (
-                                    <Badge color="green" variant="light">
-                                        Transferência de Posse
-                                    </Badge>
-                                ) : null}
                             </Group>
 
                             <Space h="xs" />

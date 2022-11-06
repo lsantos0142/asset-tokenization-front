@@ -58,16 +58,21 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
                     return (
                         <Grid.Col key={ownership.id} md={6} lg={4} xl={3}>
                             <Card shadow="sm" p="lg" radius="lg" withBorder>
-                                <Group position="apart" mb="xs">
-                                    <Text size={22} weight={500}>
-                                        {ownership.tokenizedAsset?.address}
-                                    </Text>
-                                    {ownership?.isEffectiveOwner ? (
-                                        <Badge color="green" variant="light">
-                                            Dono
-                                        </Badge>
-                                    ) : null}
-                                </Group>
+                                <Text size={22} weight={500}>
+                                    {ownership.tokenizedAsset?.address}
+                                </Text>
+                                <Badge
+                                    color="green"
+                                    variant="light"
+                                    mt="md"
+                                    sx={
+                                        ownership?.isEffectiveOwner
+                                            ? { visibility: "visible" }
+                                            : { visibility: "hidden" }
+                                    }
+                                >
+                                    Dono
+                                </Badge>
 
                                 <Space h="xs" />
 
