@@ -6,7 +6,6 @@ export type Proposal = {
     updatedAt: string;
     address: string;
     registration: number;
-    deed?: string;
     usableArea: number;
     status: number;
     user?: User;

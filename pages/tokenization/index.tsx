@@ -29,7 +29,6 @@ const Tokenization: NextPage = () => {
             address: "",
             usableArea: undefined,
             registration: undefined,
-            deed: "",
             userId: "",
         },
 
@@ -40,7 +39,6 @@ const Tokenization: NextPage = () => {
                 value && value > 0 ? null : "Campo Obrigatório",
             registration: (value) =>
                 value && value > 0 ? null : "Campo Obrigatório",
-            deed: (value) => (!value ? "Campo Obrigatório" : null),
         },
     });
 
@@ -171,16 +169,6 @@ const Tokenization: NextPage = () => {
                             )}
                             stepHoldDelay={500}
                             stepHoldInterval={100}
-                        />
-                    </Grid.Col>
-                    <Grid.Col md={6} xl={2}>
-                        <TextInput
-                            withAsterisk
-                            label="Escritura do Imóvel"
-                            placeholder="Ex: Escritura do Imóvel"
-                            {...createTokenizationProposalForm.getInputProps(
-                                "deed",
-                            )}
                         />
                     </Grid.Col>
                 </Grid>
