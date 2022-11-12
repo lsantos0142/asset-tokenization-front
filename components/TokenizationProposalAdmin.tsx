@@ -128,6 +128,7 @@ const TokenizationProposalAdmin: NextPage = () => {
     return (
         <>
             <Modal
+                centered
                 opened={openedRejectModal}
                 onClose={() => setOpenedRejectModal(false)}
                 title={<Title order={3}>Deseja Rejeitar Esta Proposta?</Title>}
@@ -155,6 +156,7 @@ const TokenizationProposalAdmin: NextPage = () => {
             </Modal>
 
             <Modal
+                centered
                 opened={openedAcceptModal}
                 onClose={() => setOpenedAcceptModal(false)}
                 title={<Title order={3}>Deseja Aceitar Esta Proposta?</Title>}

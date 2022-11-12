@@ -1,6 +1,5 @@
 import {
     Text,
-    Anchor,
     Button,
     Card,
     Divider,
@@ -51,7 +50,7 @@ const OffersAdmin: NextPage = () => {
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/proposal/refuse/${selectedOfferId}`,
+                `${process.env.BACK}/tokenized-asset/offer/reject-payment/${selectedOfferId}`,
             )
             .then((res) => {
                 getAllWaitingPaymentOffers();
@@ -138,6 +137,7 @@ const OffersAdmin: NextPage = () => {
     return (
         <>
             <Modal
+                centered
                 opened={openedRejectModal}
                 onClose={() => setOpenedRejectModal(false)}
                 title={
@@ -169,6 +169,7 @@ const OffersAdmin: NextPage = () => {
             </Modal>
 
             <Modal
+                centered
                 opened={openedConfirmModal}
                 onClose={() => setOpenedConfirmModal(false)}
                 title={

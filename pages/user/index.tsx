@@ -97,12 +97,8 @@ const User: NextPage = () => {
                     </Box>
                 ) : walletAddress !== "" ? (
                     <Box>
-                        <Text size="xl" color="yellow">
-                            Carteira Metamask:{" "}
-                        </Text>
-                        <Text size="xl" color="yellow">
-                            {walletAddress}
-                        </Text>
+                        <Text size="xl">Carteira Metamask: </Text>
+                        <Text size="xl">{walletAddress}</Text>
                         <Space h="xl" />
                         <Button
                             variant="outline"
