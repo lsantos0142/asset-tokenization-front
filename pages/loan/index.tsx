@@ -92,8 +92,7 @@ const Loan: NextPage = () => {
             sellerUserId: user.sub,
             collateralShares: 0.0,
             expirationDate: new Date(),
-            contractAddress:
-                selectedOwnership?.tokenizedAsset?.contractAddress!,
+            contractAddress: "",
         },
 
         validate: {
@@ -111,7 +110,7 @@ const Loan: NextPage = () => {
             "contractAddress",
             selectedOwnership?.tokenizedAsset?.contractAddress!,
         );
-    }, [selectedOwnershipId]);
+    }, [selectedOwnershipId, openedModal]);
 
     const handleCreateCollateral = (
         values: typeof createCollateralForm.values,
@@ -202,11 +201,15 @@ const Loan: NextPage = () => {
                 size="auto"
                 centered
                 opened={openedModal}
-                onClose={() => setOpenedModal(false)}
+                onClose={() => {
+                    setOpenedModal(false);
+                    createCollateralForm.reset();
+                }}
                 title={
                     <Title order={3}>
-                        Cadastrar Empréstimo do Imóvel{" "}
-                        {selectedOwnership?.tokenizedAsset?.registration}
+                        Cadastrar imóvel{" "}
+                        {selectedOwnership?.tokenizedAsset?.registration} como
+                        garantia de empréstimo
                     </Title>
                 }
             >
@@ -227,6 +230,8 @@ const Loan: NextPage = () => {
                         />
 
                         <DatePicker
+                            firstDayOfWeek="sunday"
+                            withAsterisk
                             minDate={new Date()}
                             locale="pt-br"
                             placeholder="Escolha uma data"
@@ -239,6 +244,7 @@ const Loan: NextPage = () => {
                         />
 
                         <Select
+                            withAsterisk
                             label="Nome de usuário do banco"
                             placeholder="Escolha um banco"
                             data={allUsers}
@@ -279,7 +285,7 @@ const Loan: NextPage = () => {
                         </Button>
 
                         <Button variant="outline" color="green" type="submit">
-                            Cadastrar Empréstimo
+                            Cadastrar Garantia
                         </Button>
                     </Group>
                 </form>
@@ -289,7 +295,9 @@ const Loan: NextPage = () => {
 
             <Divider my="xl" />
 
-            <Title order={2}>Cadastrar Empréstimo</Title>
+            <Title order={2}>
+                Cadastrar Imóvel como Garantia de Empréstimo
+            </Title>
 
             <Space h="xl" />
 
@@ -318,7 +326,6 @@ const Loan: NextPage = () => {
                                 sx={{ cursor: "pointer" }}
                                 onClick={() => {
                                     setOpenedModal(true);
-                                    createCollateralForm.reset();
                                     setSelectedOwnershipId(ownership?.id);
                                 }}
                             >

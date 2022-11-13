@@ -42,7 +42,9 @@ const Navigation: React.FC = () => {
                 <NavLink
                     label={
                         <Link href={"/loan"}>
-                            <Center>Empréstimo</Center>
+                            <Center sx={{ textAlign: "center" }}>
+                                Garantias de Empréstimos
+                            </Center>
                         </Link>
                     }
                 />
