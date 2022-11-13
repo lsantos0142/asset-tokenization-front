@@ -16,6 +16,7 @@ import axios from "axios";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import formatCPF from "../helpers/FormatCPF";
+import { formatNumber } from "../helpers/FormatCurrencyBRL";
 import { Offer } from "../types/Offer";
 
 const OffersAdmin: NextPage = () => {
@@ -307,7 +308,9 @@ const OffersAdmin: NextPage = () => {
 
                                 <Group position="apart" my="xs">
                                     <Text>Valor da Oferta</Text>
-                                    <Text>{offer?.amount}</Text>
+                                    <Text>
+                                        {formatNumber.format(offer?.amount)}
+                                    </Text>
                                 </Group>
 
                                 <Space h="xl" />
