@@ -38,11 +38,20 @@ const Navigation: React.FC = () => {
                 />
             </Navbar.Section>
 
-            <Navbar.Section grow>
+            <Navbar.Section>
                 <NavLink
                     label={
                         <Link href={"/loan"}>
                             <Center>Empréstimo</Center>
+                        </Link>
+                    }
+                />
+            </Navbar.Section>
+            <Navbar.Section grow>
+                <NavLink
+                    label={
+                        <Link href={"/rent-payments"}>
+                            <Center>Pagamentos de aluguéis</Center>
                         </Link>
                     }
                 />

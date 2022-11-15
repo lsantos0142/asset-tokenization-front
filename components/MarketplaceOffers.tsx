@@ -29,7 +29,7 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
 
     const [offers, setOffers] = useState<Offer[]>([]);
 
-    const getAllAvailableOffers = () => {
+    const getAllAvailableOffers = useCallback(() => {
         axios
             .get(
                 `${process.env.BACK}/tokenized-asset/offer/get-all?status=AVAILABLE`,
@@ -44,11 +44,11 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
             .catch((e) => {
                 console.log(e.response.data.message);
             });
-    };
+    }, [user]);
 
     useEffect(() => {
         getAllAvailableOffers();
-    }, []);
+    }, [getAllAvailableOffers]);
 
     const handleOpenOfferDetail = (id: string) => {
         router.push(`marketplace/${id}`);
