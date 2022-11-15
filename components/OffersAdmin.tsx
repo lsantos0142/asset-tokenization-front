@@ -11,7 +11,7 @@ import {
     Modal,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons";
+import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
@@ -210,7 +210,7 @@ const OffersAdmin: NextPage = () => {
                     color={"blue"}
                     onClick={getAllWaitingPaymentOffers}
                 >
-                    Atualizar Ofertas
+                    <IconRefresh />
                 </Button>
             </Group>
 

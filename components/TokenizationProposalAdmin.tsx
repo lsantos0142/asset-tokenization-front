@@ -12,7 +12,7 @@ import {
     Modal,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons";
+import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -190,7 +190,7 @@ const TokenizationProposalAdmin: NextPage = () => {
                     color={"blue"}
                     onClick={getAllActiveProposals}
                 >
-                    Atualizar Propostas
+                    <IconRefresh />
                 </Button>
             </Group>
 

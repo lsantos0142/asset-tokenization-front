@@ -53,6 +53,7 @@ const RentPayments: NextPage = () => {
     return (
         <>
             <RegisterRentPaymentModal
+                getAllOwnerships={getAllOwnerships}
                 setShowModal={setShowRegisterModal}
                 showModal={showRegisterModal}
                 selectedOwnership={selectedOwnership}

@@ -11,7 +11,7 @@ import {
     Modal,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons";
+import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useCallback, useEffect, useState } from "react";
@@ -160,7 +160,7 @@ const CollateralsByUser: NextPage<CollateralsByUserProps> = ({ userId }) => {
                     color={"blue"}
                     onClick={getAllCollaterals}
                 >
-                    Atualizar Empréstimos
+                    <IconRefresh />
                 </Button>
             </Group>
 

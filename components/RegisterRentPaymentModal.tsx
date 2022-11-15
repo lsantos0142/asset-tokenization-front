@@ -1,6 +1,6 @@
-import { Button, Group, Modal, NumberInput, Title } from "@mantine/core";
+import { Button, Group, Modal, NumberInput, Title, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
+import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons";
 import axios from "axios";
 import { useCallback, useState } from "react";
@@ -10,14 +10,15 @@ interface IRegisterRentPaymentModalProps {
     selectedOwnership?: Ownership;
     showModal: boolean;
     setShowModal: (showModal: boolean) => void;
+    getAllOwnerships: () => Promise<void>;
 }
 
 export function RegisterRentPaymentModal({
+    getAllOwnerships,
     selectedOwnership,
     showModal,
     setShowModal,
 }: IRegisterRentPaymentModalProps) {
-    const [loading, setLoading] = useState(false);
     const createOfferForm = useForm({
         initialValues: {
             amount: 0,
@@ -29,39 +30,64 @@ export function RegisterRentPaymentModal({
 
     const createRentPayment = useCallback(
         async (values: typeof createOfferForm.values) => {
-            try {
-                setLoading(true);
-                const payload = {
-                    ...values,
-                    tokenizedAssetId: selectedOwnership?.tokenizedAsset?.id,
-                    contractAddress:
-                        selectedOwnership?.tokenizedAsset?.contractAddress,
-                };
+            const payload = {
+                ...values,
+                tokenizedAssetId: selectedOwnership?.tokenizedAsset?.id,
+                contractAddress:
+                    selectedOwnership?.tokenizedAsset?.contractAddress,
+            };
 
-                await axios.post(
+            showNotification({
+                id: "register_rent_payment_" + values.amount,
+                disallowClose: true,
+                autoClose: false,
+                title: <Text size="xl">Registrando Pagamento do Aluguel</Text>,
+                message: <Text size="xl">Favor esperar até a conclusão</Text>,
+                loading: true,
+            });
+
+            setShowModal(false);
+
+            await axios
+                .post(
                     `${process.env.BACK}/tokenized-asset/rent-payment/create`,
                     payload,
-                );
-
-                showNotification({
-                    title: "Sucesso!",
-                    message: "Pagamento de aluguel registrado.",
-                    color: "green",
-                    icon: <IconCheck />,
+                )
+                .then((res) => {
+                    getAllOwnerships();
+                    updateNotification({
+                        id: "register_rent_payment_" + values.amount,
+                        disallowClose: true,
+                        autoClose: 5000,
+                        icon: <IconCheck size={16} />,
+                        color: "green",
+                        title: <Text size="xl">Sucesso!</Text>,
+                        message: (
+                            <Text size="xl">
+                                Pagamento de aluguel registrado.
+                            </Text>
+                        ),
+                    });
+                    createOfferForm.reset();
+                })
+                .catch((e) => {
+                    updateNotification({
+                        id: "register_rent_payment_" + values.amount,
+                        disallowClose: true,
+                        autoClose: 5000,
+                        icon: <IconX size={16} />,
+                        color: "red",
+                        title: (
+                            <Text size="xl">
+                                Erro no Registro de Pagamento de Aluguel
+                            </Text>
+                        ),
+                        message: (
+                            <Text size="xl">{e.response?.data?.message}</Text>
+                        ),
+                    });
+                    console.error(e);
                 });
-
-                setShowModal(false);
-            } catch (e) {
-                showNotification({
-                    title: "Erro!",
-                    message: "Não foi possível registrar pagamento de aluguel",
-                    color: "red",
-                    icon: <IconX />,
-                });
-                console.error(e);
-            } finally {
-                setLoading(false);
-            }
         },
         [createOfferForm, selectedOwnership, setShowModal],
     );
@@ -72,7 +98,10 @@ export function RegisterRentPaymentModal({
                 size="auto"
                 centered
                 opened={showModal}
-                onClose={() => setShowModal(false)}
+                onClose={() => {
+                    setShowModal(false);
+                    createOfferForm.reset();
+                }}
                 title={
                     <Title order={3}>
                         {`Registrar pagamento de aluguel do imóvel ${selectedOwnership?.tokenizedAsset?.registration}`}
@@ -120,7 +149,6 @@ export function RegisterRentPaymentModal({
                                 variant="outline"
                                 color="green"
                                 type="submit"
-                                loading={loading}
                             >
                                 Registrar
                             </Button>
