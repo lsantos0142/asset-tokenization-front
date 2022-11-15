@@ -53,7 +53,9 @@ const Navigation: React.FC = () => {
                 <NavLink
                     label={
                         <Link href={"/rent-payments"}>
-                            <Center>Pagamentos de aluguéis</Center>
+                            <Center sx={{ textAlign: "center" }}>
+                                Pagamentos de aluguéis
+                            </Center>
                         </Link>
                     }
                 />

@@ -17,46 +17,49 @@ import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import formatCPF from "../helpers/FormatCPF";
 import { formatNumber } from "../helpers/FormatCurrencyBRL";
-import { Offer } from "../types/Offer";
+import { Collateral } from "../types/Collateral";
+import { User } from "../types/User";
 
-const OffersAdmin: NextPage = () => {
-    const [offers, setOffers] = useState<Offer[]>([]);
+const CollateralsAdmin: NextPage = () => {
+    const [collaterals, setCollaterals] = useState<Collateral[]>([]);
     const [openedRejectModal, setOpenedRejectModal] = useState<boolean>(false);
     const [openedConfirmModal, setOpenedConfirmModal] =
         useState<boolean>(false);
-    const [selectedOfferId, setSelectedOfferId] = useState<string>("");
+    const [selectedCollateralId, setSelectedCollateralId] =
+        useState<string>("");
+    const [allUsers, setAllUsers] = useState<User[]>([]);
 
-    const getAllWaitingPaymentOffers = () => {
+    const getAllPendingCollaterals = () => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/offer/get-all?status=WAITING_PAYMENT`,
+                `${process.env.BACK}/tokenized-asset/collateral/get-all?status=PENDING`,
             )
             .then((res) => {
-                setOffers(res.data);
+                setCollaterals(res.data);
             })
             .catch((e) => {
                 console.log(e.response.data.message);
             });
     };
 
-    const handleRejectOfferPayment = () => {
+    const handleRejectCollateral = () => {
         showNotification({
-            id: "reject_offer_payment" + selectedOfferId,
+            id: "reject_collateral_" + selectedCollateralId,
             disallowClose: true,
             autoClose: false,
-            title: <Text size="xl">Rejeitando Proposta</Text>,
+            title: <Text size="xl">Rejeitando Empréstimo</Text>,
             message: <Text size="xl">Favor esperar até a conclusão</Text>,
             loading: true,
         });
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/offer/reject-payment/${selectedOfferId}`,
+                `${process.env.BACK}/tokenized-asset/collateral/reject/${selectedCollateralId}`,
             )
             .then((res) => {
-                getAllWaitingPaymentOffers();
+                getAllPendingCollaterals();
                 updateNotification({
-                    id: "reject_offer_payment" + selectedOfferId,
+                    id: "reject_collateral_" + selectedCollateralId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconCheck size={16} />,
@@ -69,7 +72,7 @@ const OffersAdmin: NextPage = () => {
             })
             .catch((e) => {
                 updateNotification({
-                    id: "reject_offer_payment" + selectedOfferId,
+                    id: "reject_collateral_" + selectedCollateralId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconX size={16} />,
@@ -82,9 +85,9 @@ const OffersAdmin: NextPage = () => {
             });
     };
 
-    const handleConfirmOfferPayment = () => {
+    const handleConfirmCollateral = () => {
         showNotification({
-            id: "confirm_offer_payment" + selectedOfferId,
+            id: "confirm_collateral_" + selectedCollateralId,
             disallowClose: true,
             autoClose: false,
             title: <Text size="xl">Confirmando Pagamento da Oferta</Text>,
@@ -94,12 +97,12 @@ const OffersAdmin: NextPage = () => {
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/offer/validate-payment/${selectedOfferId}`,
+                `${process.env.BACK}/tokenized-asset/offer/validate/${selectedCollateralId}`,
             )
             .then((res) => {
-                getAllWaitingPaymentOffers();
+                getAllPendingCollaterals();
                 updateNotification({
-                    id: "confirm_offer_payment" + selectedOfferId,
+                    id: "confirm_collateral_" + selectedCollateralId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconCheck size={16} />,
@@ -116,7 +119,7 @@ const OffersAdmin: NextPage = () => {
             })
             .catch((e) => {
                 updateNotification({
-                    id: "confirm_offer_payment" + selectedOfferId,
+                    id: "confirm_collateral_" + selectedCollateralId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconX size={16} />,
@@ -132,8 +135,29 @@ const OffersAdmin: NextPage = () => {
     };
 
     useEffect(() => {
-        getAllWaitingPaymentOffers();
+        getAllPendingCollaterals();
     }, []);
+
+    const getAllUsers = () => {
+        axios
+            .get(`${process.env.BACK}/users`)
+            .then((res) => {
+                setAllUsers(res.data);
+            })
+            .catch((e) => {
+                console.log(e.response.data.message);
+            });
+    };
+
+    useEffect(() => {
+        getAllUsers();
+    }, []);
+
+    const getBankUsername = (collateral: Collateral) => {
+        return allUsers.filter(
+            (user) => user.walletAddress === collateral.bankWallet,
+        )[0]?.username;
+    };
 
     return (
         <>
@@ -160,7 +184,7 @@ const OffersAdmin: NextPage = () => {
                         variant="outline"
                         color="red"
                         onClick={() => {
-                            handleRejectOfferPayment();
+                            handleRejectCollateral();
                             setOpenedRejectModal(false);
                         }}
                     >
@@ -192,7 +216,7 @@ const OffersAdmin: NextPage = () => {
                         variant="outline"
                         color="green"
                         onClick={() => {
-                            handleConfirmOfferPayment();
+                            handleConfirmCollateral();
                             setOpenedConfirmModal(false);
                         }}
                     >
@@ -202,114 +226,77 @@ const OffersAdmin: NextPage = () => {
             </Modal>
 
             <Group position="apart">
-                <Title order={3}>
-                    Ofertas Esperando Confirmação de Pagamento
-                </Title>
+                <Title order={3}>Empréstimos Esperando Confirmação</Title>
                 <Button
                     variant="outline"
                     color={"blue"}
-                    onClick={getAllWaitingPaymentOffers}
+                    onClick={getAllPendingCollaterals}
                 >
-                    Atualizar Ofertas
+                    Atualizar Empréstimos
                 </Button>
             </Group>
 
             <Space h="xl" />
 
             <Grid gutter={30}>
-                {offers.map((offer) => {
+                {collaterals.map((collateral) => {
                     return (
-                        <Grid.Col md={6} xl={4} key={offer.id}>
+                        <Grid.Col md={6} xl={4} key={collateral.id}>
                             <Card shadow="sm" p="lg" radius="lg" withBorder>
                                 <Text size={22} weight={500}>
-                                    {offer.ownership?.tokenizedAsset?.address}
+                                    {
+                                        collateral.ownership?.tokenizedAsset
+                                            ?.address
+                                    }
                                 </Text>
 
                                 <Badge color="pink" variant="light" mt="md">
-                                    Esperando Pagamento
+                                    Esperando Confirmação
                                 </Badge>
 
                                 <Space h="xs" />
 
                                 <Group position="apart" my="xs">
-                                    <Text>Usuário Comprador</Text>
-                                    <Text>{offer?.currentBuyer?.username}</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>CPF do Comprador</Text>
+                                    <Text>Usuário Mutuário</Text>
                                     <Text>
-                                        {offer?.currentBuyer?.cpf
-                                            ? formatCPF(
-                                                  offer?.currentBuyer?.cpf,
-                                              )
-                                            : null}
+                                        {collateral.ownership.user?.username!}
                                     </Text>
                                 </Group>
 
                                 <Divider size="xs" />
 
                                 <Group position="apart" my="xs">
-                                    <Text>Nome do Comprador</Text>
-                                    <Text>{offer?.currentBuyer?.name}</Text>
+                                    <Text>Usuário Mutuante</Text>
+                                    <Text>{getBankUsername(collateral)}</Text>
                                 </Group>
 
                                 <Divider size="xs" />
 
                                 <Group position="apart" my="xs">
-                                    <Text>Usuário Vendedor</Text>
+                                    <Text>Porcentagem em Garantia</Text>
+                                    <Text>{collateral.percentage * 100} %</Text>
+                                </Group>
+
+                                <Divider size="xs" />
+
+                                <Group position="apart" my="xs">
+                                    <Text>Data de Expiração do Empréstimo</Text>
                                     <Text>
-                                        {offer?.ownership?.user?.username}
+                                        {Intl.DateTimeFormat("pt-br").format(
+                                            new Date(collateral.expirationDate),
+                                        )}
                                     </Text>
                                 </Group>
 
                                 <Divider size="xs" />
 
                                 <Group position="apart" my="xs">
-                                    <Text>CPF do Vendedor</Text>
-                                    <Text>
-                                        {offer?.ownership?.user?.cpf
-                                            ? formatCPF(
-                                                  offer?.ownership?.user?.cpf,
-                                              )
-                                            : null}
-                                    </Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Nome do Vendedor</Text>
-                                    <Text>{offer?.ownership?.user?.name}</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Número de Registro</Text>
+                                    <Text>Número de Registro do Imóvel</Text>
                                     <Text>
                                         {
-                                            offer?.ownership?.tokenizedAsset
-                                                ?.registration
+                                            collateral?.ownership
+                                                ?.tokenizedAsset?.registration
                                         }
-                                    </Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Porcentagem do Imóvel em Oferta</Text>
-                                    <Text>{offer?.percentage * 100} %</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Valor da Oferta</Text>
-                                    <Text>
-                                        {formatNumber.format(offer?.amount)}
                                     </Text>
                                 </Group>
 
@@ -321,7 +308,9 @@ const OffersAdmin: NextPage = () => {
                                         color="red"
                                         onClick={() => {
                                             setOpenedRejectModal(true);
-                                            setSelectedOfferId(offer?.id);
+                                            setSelectedCollateralId(
+                                                collateral?.id,
+                                            );
                                         }}
                                     >
                                         Rejeitar
@@ -331,7 +320,9 @@ const OffersAdmin: NextPage = () => {
                                         color="green"
                                         onClick={() => {
                                             setOpenedConfirmModal(true);
-                                            setSelectedOfferId(offer?.id);
+                                            setSelectedCollateralId(
+                                                collateral?.id,
+                                            );
                                         }}
                                     >
                                         Confirmar
@@ -348,4 +339,4 @@ const OffersAdmin: NextPage = () => {
     );
 };
 
-export default OffersAdmin;
+export default CollateralsAdmin;
