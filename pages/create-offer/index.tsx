@@ -1,23 +1,20 @@
 import {
     Anchor,
-    Text,
     Breadcrumbs,
     Button,
-    Card,
+    Checkbox,
     Divider,
-    Grid,
     Group,
-    Space,
-    Title,
-    Badge,
     Modal,
     NumberInput,
+    Space,
     Stack,
-    Checkbox,
+    Text,
+    Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
+import { IconCash, IconCheck, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -42,7 +39,7 @@ const CreateOffer: NextPage = () => {
                 setOwnerships(res.data);
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     }, [user]);
 
@@ -121,11 +118,11 @@ const CreateOffer: NextPage = () => {
                         color: "red",
                         title: <Text size="xl">Erro na Criação da Oferta</Text>,
                         message: (
-                            <Text size="xl">{e.response.data.message}</Text>
+                            <Text size="xl">{e.response?.data?.message}</Text>
                         ),
                     });
                 });
-        }, 2000);
+        }, 1000);
     };
 
     const items = [
@@ -230,7 +227,10 @@ const CreateOffer: NextPage = () => {
             <Divider my="xl" />
 
             <div className="d-flex flex-column gap-3 mb-5">
-                <Title order={2}>Criar oferta</Title>
+                <div className="d-flex gap-3 align-items-center">
+                    <IconCash size={35} />
+                    <Title order={2}>Criar oferta</Title>
+                </div>
                 <div className="d-flex justify-content-between">
                     <Text size={20}>
                         Selecione o imóvel que deseja ofertar no Markeplace.

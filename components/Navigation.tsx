@@ -1,38 +1,36 @@
 import { Center, Navbar, NavLink } from "@mantine/core";
+import {
+    IconBook,
+    IconCash,
+    IconCurrencyEthereum,
+    IconHome2,
+    IconReceipt,
+    IconReportAnalytics,
+    IconUser,
+} from "@tabler/icons";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
 const Navigation: React.FC = () => {
     const { user } = useContext(AuthContext);
+    const router = useRouter();
 
     return (
-        <Navbar width={{ md: 200, lg: 250, base: 170 }} p="xl">
+        <Navbar width={{ md: 200, lg: 250, base: 170 }}>
             <Navbar.Section>
                 <NavLink
-                    label={
-                        <Link href={"/tokenization"}>
-                            <Center>Tokenização</Center>
-                        </Link>
-                    }
-                />
-            </Navbar.Section>
-
-            <Navbar.Section>
-                <NavLink
-                    label={
-                        <Link href={"/create-offer"}>
-                            <Center>Criar Oferta</Center>
-                        </Link>
-                    }
-                />
-            </Navbar.Section>
-
-            <Navbar.Section>
-                <NavLink
+                    className="py-3"
+                    active={router.pathname.includes("marketplace")}
                     label={
                         <Link href={"/marketplace"}>
-                            <Center>Marketplace</Center>
+                            <div className="d-flex gap-3 align-items-center">
+                                <div>
+                                    <IconHome2 />
+                                </div>
+                                <Center>Marketplace</Center>
+                            </div>
                         </Link>
                     }
                 />
@@ -40,22 +38,66 @@ const Navigation: React.FC = () => {
 
             <Navbar.Section>
                 <NavLink
+                    className="py-3"
+                    active={router.pathname.includes("tokenization")}
+                    label={
+                        <Link href={"/tokenization"}>
+                            <div className="d-flex gap-3 align-items-center">
+                                <div>
+                                    <IconCurrencyEthereum />
+                                </div>
+                                <Center>Tokenização</Center>
+                            </div>
+                        </Link>
+                    }
+                />
+            </Navbar.Section>
+
+            <Navbar.Section>
+                <NavLink
+                    className="py-3"
+                    active={router.pathname.includes("create-offer")}
+                    label={
+                        <Link href={"/create-offer"}>
+                            <div className="d-flex gap-3 align-items-center">
+                                <div>
+                                    <IconCash />
+                                </div>
+                                <Center>Criar Oferta</Center>
+                            </div>
+                        </Link>
+                    }
+                />
+            </Navbar.Section>
+
+            <Navbar.Section>
+                <NavLink
+                    className="py-3"
+                    active={router.pathname.includes("loan")}
                     label={
                         <Link href={"/loan"}>
-                            <Center sx={{ textAlign: "center" }}>
-                                Garantias de Empréstimos
-                            </Center>
+                            <div className="d-flex gap-3 align-items-center">
+                                <div>
+                                    <IconBook />
+                                </div>
+                                <Center>Garantias de empréstimos</Center>
+                            </div>
                         </Link>
                     }
                 />
             </Navbar.Section>
             <Navbar.Section grow>
                 <NavLink
+                    className="py-3"
+                    active={router.pathname.includes("rent-payments")}
                     label={
                         <Link href={"/rent-payments"}>
-                            <Center sx={{ textAlign: "center" }}>
-                                Pagamentos de aluguéis
-                            </Center>
+                            <div className="d-flex gap-3 align-items-center">
+                                <div>
+                                    <IconReceipt />
+                                </div>
+                                <Center>Pagamentos de aluguéis</Center>
+                            </div>
                         </Link>
                     }
                 />
@@ -63,31 +105,51 @@ const Navigation: React.FC = () => {
 
             <Navbar.Section>
                 <NavLink
+                    className="py-3"
+                    active={
+                        router.pathname.includes("/user") ||
+                        router.pathname.includes("/login")
+                    }
                     label={
                         user ? (
                             <Link href={"/user"}>
-                                <Center>{user.username}</Center>
+                                <div className="d-flex gap-3 align-items-center">
+                                    <div>
+                                        <IconUser />
+                                    </div>
+                                    <Center>{user.username}</Center>
+                                </div>
                             </Link>
                         ) : (
                             <Link href={"/login"}>
-                                <Center>Fazer Login/Registrar</Center>
+                                <div className="d-flex gap-3 align-items-center">
+                                    <div>
+                                        <IconUser />
+                                    </div>
+                                    <Center>Login / Registro</Center>
+                                </div>
                             </Link>
                         )
                     }
                 />
             </Navbar.Section>
 
-            {user?.isAdmin ? (
+            {user?.isAdmin && (
                 <Navbar.Section>
                     <NavLink
+                        className="py-3"
+                        active={router.pathname.includes("/admin")}
                         label={
                             <Link href={"/admin"}>
-                                <Center>Portal Admin</Center>
+                                <div className="d-flex gap-3 align-items-center">
+                                    <IconReportAnalytics />
+                                    <Center>Portal Admin</Center>
+                                </div>
                             </Link>
                         }
                     />
                 </Navbar.Section>
-            ) : null}
+            )}
         </Navbar>
     );
 };

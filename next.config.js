@@ -5,6 +5,15 @@ const nextConfig = {
         BASE_URL: "http://localhost:3000",
         BACK: "http://localhost:4000",
     },
+    async redirects() {
+        return [
+            {
+                source: "/",
+                destination: "/marketplace",
+                permanent: true,
+            },
+        ];
+    },
 };
 
 module.exports = nextConfig;

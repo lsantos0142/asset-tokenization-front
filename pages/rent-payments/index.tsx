@@ -9,11 +9,13 @@ import {
     Text,
     Title,
 } from "@mantine/core";
+import { IconReceipt, IconRefresh } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { OwnershipCard } from "../../components/OwnershipCard";
+import { ReadRentPaymentsModal } from "../../components/ReadRentPaymentsModal";
 import { RegisterRentPaymentModal } from "../../components/RegisterRentPaymentModal";
 import AuthContext from "../../context/AuthContext";
 import { Ownership } from "../../types/Ownership";
@@ -29,7 +31,8 @@ const RentPayments: NextPage = () => {
     );
 
     const [selectedOwnership, setSelectedOwnership] = useState<Ownership>();
-    const [showModal, setShowModal] = useState<boolean>(false);
+    const [showRegisterModal, setShowRegisterModal] = useState<boolean>(false);
+    const [showReadModal, setShowReadModal] = useState<boolean>(false);
 
     const getAllOwnerships = useCallback(async () => {
         try {
@@ -37,7 +40,7 @@ const RentPayments: NextPage = () => {
                 `${process.env.BACK}/tokenized-asset/ownership/get-by-user/${user.sub}`,
             );
 
-            setEffectiveOwnerships(data.filter((o) => o.isEffectiveOwner));
+            setEffectiveOwnerships(data);
         } catch (e) {
             console.error(e);
         }
@@ -50,8 +53,14 @@ const RentPayments: NextPage = () => {
     return (
         <>
             <RegisterRentPaymentModal
-                setShowModal={setShowModal}
-                showModal={showModal}
+                setShowModal={setShowRegisterModal}
+                showModal={showRegisterModal}
+                selectedOwnership={selectedOwnership}
+            />
+
+            <ReadRentPaymentsModal
+                setShowModal={setShowReadModal}
+                showModal={showReadModal}
                 selectedOwnership={selectedOwnership}
             />
 
@@ -65,27 +74,52 @@ const RentPayments: NextPage = () => {
 
             <Divider my="xl" />
             <div className="d-flex flex-column gap-3 mb-5">
-                <Title order={2}>Pagamentos de aluguéis</Title>
-                <Text size={20}>
-                    Registre os pagamentos de aluguéis dos imóveis de que você é
-                    proprietário.
-                </Text>
+                <div className="d-flex gap-3 align-items-center">
+                    <IconReceipt size={35} />
+                    <Title order={2}>Pagamentos de aluguéis</Title>
+                </div>
+                <div className="d-flex justify-content-between">
+                    <Text size={20}>
+                        Visualize os pagamentos de aluguéis dos seus imóveis ou
+                        registre novos pagamentos dos imóveis em que você é
+                        proprietário efetivo.
+                    </Text>
+                    <Button
+                        variant="outline"
+                        color={"blue"}
+                        onClick={getAllOwnerships}
+                    >
+                        <IconRefresh />
+                    </Button>
+                </div>
             </div>
 
             <div className="d-flex flex-wrap gap-4">
                 {effectiveOwnerships.map((ownership) => (
                     <OwnershipCard key={ownership.id} ownership={ownership}>
-                        <div className="d-flex mt-4">
+                        <div className="d-flex mt-4 justify-content-between">
                             <Button
                                 className="text-center"
                                 variant="outline"
                                 color={"green"}
                                 onClick={() => {
-                                    setShowModal(true);
+                                    setShowRegisterModal(true);
+                                    setSelectedOwnership(ownership);
+                                }}
+                                disabled={!ownership.isEffectiveOwner}
+                            >
+                                Registrar
+                            </Button>
+                            <Button
+                                className="text-center"
+                                variant="outline"
+                                color={"green"}
+                                onClick={() => {
+                                    setShowReadModal(true);
                                     setSelectedOwnership(ownership);
                                 }}
                             >
-                                Registrar pagamento
+                                Visualizar
                             </Button>
                         </div>
                     </OwnershipCard>

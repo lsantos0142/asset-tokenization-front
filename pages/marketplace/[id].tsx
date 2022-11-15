@@ -46,7 +46,7 @@ const OfferDetails: NextPage = () => {
                     setOffer(res.data);
                 })
                 .catch((e) => {
-                    console.log(e.response.data.message);
+                    console.log(e.response?.data?.message);
                 });
         }
     }, [id]);
@@ -94,7 +94,7 @@ const OfferDetails: NextPage = () => {
                         color: "red",
                         title: <Text size="xl">Erro no Aceite da Oferta</Text>,
                         message: (
-                            <Text size="xl">{e.response.data.message}</Text>
+                            <Text size="xl">{e.response?.data?.message}</Text>
                         ),
                     });
                 });

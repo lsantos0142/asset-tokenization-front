@@ -33,7 +33,7 @@ const TokenizationProposalAdmin: NextPage = () => {
                 setProposals(res.data);
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     };
 
@@ -75,7 +75,7 @@ const TokenizationProposalAdmin: NextPage = () => {
                     title: (
                         <Text size="xl">Erro na Rejeição da Tokenização</Text>
                     ),
-                    message: <Text size="xl">{e.response.data.message}</Text>,
+                    message: <Text size="xl">{e.response?.data?.message}</Text>,
                 });
             });
     };
@@ -116,7 +116,7 @@ const TokenizationProposalAdmin: NextPage = () => {
                     icon: <IconX size={16} />,
                     color: "red",
                     title: <Text size="xl">Erro no Aceite da Tokenização</Text>,
-                    message: <Text size="xl">{e.response.data.message}</Text>,
+                    message: <Text size="xl">{e.response?.data?.message}</Text>,
                 });
             });
     };
