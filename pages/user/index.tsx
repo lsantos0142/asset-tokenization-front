@@ -15,6 +15,7 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
+import CollateralsByUser from "../../components/CollateralsByUser";
 import OwnershipsByUser from "../../components/OwnershipsByUser";
 import AuthContext from "../../context/AuthContext";
 
@@ -124,11 +125,7 @@ const User: NextPage = () => {
             <Divider my="xl" />
 
             {/* Listar garantias do usuário */}
-            <Title order={2}>Empréstimos</Title>
-            <Grid justify="space-between">
-                <Grid.Col span="content"></Grid.Col>
-                <Grid.Col span="content"></Grid.Col>
-            </Grid>
+            <CollateralsByUser userId={user?.sub} />
         </>
     );
 };

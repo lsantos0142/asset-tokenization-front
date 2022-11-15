@@ -17,6 +17,7 @@ import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import formatCPF from "../helpers/FormatCPF";
 import { formatNumber } from "../helpers/FormatCurrencyBRL";
+import { formatDate } from "../helpers/FormatDate";
 import { Collateral } from "../types/Collateral";
 import { User } from "../types/User";
 
@@ -32,7 +33,7 @@ const CollateralsAdmin: NextPage = () => {
     const getAllPendingCollaterals = () => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/collateral/get-all?status=PENDING`,
+                `${process.env.BACK}/tokenized-asset/collateral/get-all?status=PENDING_CONFIRMATION`,
             )
             .then((res) => {
                 setCollaterals(res.data);
@@ -64,9 +65,9 @@ const CollateralsAdmin: NextPage = () => {
                     autoClose: 5000,
                     icon: <IconCheck size={16} />,
                     color: "green",
-                    title: <Text size="xl">Tokenização Rejeitada</Text>,
+                    title: <Text size="xl">Empréstimo Rejeitado</Text>,
                     message: (
-                        <Text size="xl">Tokenização rejeitada com sucesso</Text>
+                        <Text size="xl">Empréstimo rejeitado com sucesso</Text>
                     ),
                 });
             })
@@ -78,7 +79,7 @@ const CollateralsAdmin: NextPage = () => {
                     icon: <IconX size={16} />,
                     color: "red",
                     title: (
-                        <Text size="xl">Erro na Rejeição da Tokenização</Text>
+                        <Text size="xl">Erro na Rejeição do Empréstimo</Text>
                     ),
                     message: <Text size="xl">{e.response.data.message}</Text>,
                 });
@@ -90,14 +91,14 @@ const CollateralsAdmin: NextPage = () => {
             id: "confirm_collateral_" + selectedCollateralId,
             disallowClose: true,
             autoClose: false,
-            title: <Text size="xl">Confirmando Pagamento da Oferta</Text>,
+            title: <Text size="xl">Confirmando Empréstimo</Text>,
             message: <Text size="xl">Favor esperar até a conclusão</Text>,
             loading: true,
         });
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/offer/validate/${selectedCollateralId}`,
+                `${process.env.BACK}/tokenized-asset/collateral/validate/${selectedCollateralId}`,
             )
             .then((res) => {
                 getAllPendingCollaterals();
@@ -107,13 +108,9 @@ const CollateralsAdmin: NextPage = () => {
                     autoClose: 5000,
                     icon: <IconCheck size={16} />,
                     color: "green",
-                    title: (
-                        <Text size="xl">Pagamento da Oferta Confirmado</Text>
-                    ),
+                    title: <Text size="xl">Empréstimo Confirmado</Text>,
                     message: (
-                        <Text size="xl">
-                            Pagamento da oferta confirmado com sucesso
-                        </Text>
+                        <Text size="xl">Empréstimo confirmado com sucesso</Text>
                     ),
                 });
             })
@@ -125,9 +122,7 @@ const CollateralsAdmin: NextPage = () => {
                     icon: <IconX size={16} />,
                     color: "red",
                     title: (
-                        <Text size="xl">
-                            Erro na Confimação do Pagamento da Oferta
-                        </Text>
+                        <Text size="xl">Erro na Confimação do Empréstimo</Text>
                     ),
                     message: <Text size="xl">{e.response.data.message}</Text>,
                 });
@@ -166,9 +161,7 @@ const CollateralsAdmin: NextPage = () => {
                 opened={openedRejectModal}
                 onClose={() => setOpenedRejectModal(false)}
                 title={
-                    <Title order={3}>
-                        Deseja Rejeitar O Pagamento desta Oferta?
-                    </Title>
+                    <Title order={3}>Deseja Rejeitar Este Empréstimo?</Title>
                 }
             >
                 <Group position="apart">
@@ -198,9 +191,7 @@ const CollateralsAdmin: NextPage = () => {
                 opened={openedConfirmModal}
                 onClose={() => setOpenedConfirmModal(false)}
                 title={
-                    <Title order={3}>
-                        Deseja Confirmar o Pagamento Desta Oferta?
-                    </Title>
+                    <Title order={3}>Deseja Confirmar Este Empréstimo?</Title>
                 }
             >
                 <Group position="apart">
@@ -282,7 +273,7 @@ const CollateralsAdmin: NextPage = () => {
                                 <Group position="apart" my="xs">
                                     <Text>Data de Expiração do Empréstimo</Text>
                                     <Text>
-                                        {Intl.DateTimeFormat("pt-br").format(
+                                        {formatDate.format(
                                             new Date(collateral.expirationDate),
                                         )}
                                     </Text>
