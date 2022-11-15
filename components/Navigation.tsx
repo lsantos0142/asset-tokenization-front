@@ -1,4 +1,4 @@
-import { Anchor, Button, Center, Navbar, NavLink } from "@mantine/core";
+import { Center, Navbar, NavLink } from "@mantine/core";
 import Link from "next/link";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
@@ -21,7 +21,7 @@ const Navigation: React.FC = () => {
             <Navbar.Section>
                 <NavLink
                     label={
-                        <Link href={"/createOffer"}>
+                        <Link href={"/create-offer"}>
                             <Center>Criar Oferta</Center>
                         </Link>
                     }

@@ -1,18 +1,10 @@
-import {
-    Text,
-    Badge,
-    Button,
-    Card,
-    Divider,
-    Grid,
-    Group,
-    Space,
-    Title,
-} from "@mantine/core";
+import { Button, Group, Space, Text, Title } from "@mantine/core";
+import { IconRefresh } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useCallback, useEffect, useState } from "react";
 import { Ownership } from "../types/Ownership";
+import { OwnershipCard } from "./OwnershipCard";
 
 type OwnershipsByUserProps = {
     userId?: string;
@@ -47,7 +39,7 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
                     color={"blue"}
                     onClick={getAllOwnerships}
                 >
-                    Atualizar Imóveis
+                    <IconRefresh />
                 </Button>
             </Group>
 
@@ -55,63 +47,16 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
             {!ownerships?.length ? (
                 <Text>Você ainda não possui imóveis tokenizados.</Text>
             ) : (
-                <Grid gutter={30}>
+                <div className="d-flex flex-wrap gap-4">
                     {ownerships.map((ownership) => {
                         return (
-                            <Grid.Col key={ownership.id} md={6} lg={4} xl={3}>
-                                <Card shadow="sm" p="lg" radius="lg" withBorder>
-                                    <Group position="apart" mb="xs">
-                                        <Text size={22} weight={500}>
-                                            {ownership.tokenizedAsset?.address}
-                                        </Text>
-                                        {ownership?.isEffectiveOwner && (
-                                            <Badge
-                                                color="green"
-                                                variant="light"
-                                            >
-                                                Dono
-                                            </Badge>
-                                        )}
-                                    </Group>
-
-                                    <Space h="xs" />
-
-                                    <Group position="apart" my="xs">
-                                        <Text>Área Útil</Text>
-                                        <Text>
-                                            {
-                                                ownership.tokenizedAsset
-                                                    ?.usableArea
-                                            }{" "}
-                                            m<sup>2</sup>
-                                        </Text>
-                                    </Group>
-
-                                    <Divider size="xs" />
-
-                                    <Group position="apart" my="xs">
-                                        <Text>Número do Registro</Text>
-                                        <Text>
-                                            {
-                                                ownership.tokenizedAsset
-                                                    ?.registration
-                                            }
-                                        </Text>
-                                    </Group>
-
-                                    <Divider size="xs" />
-
-                                    <Group position="apart" my="xs">
-                                        <Text>Porcentagem de Posse</Text>
-                                        <Text>
-                                            {ownership.percentageOwned * 100} %
-                                        </Text>
-                                    </Group>
-                                </Card>
-                            </Grid.Col>
+                            <OwnershipCard
+                                key={ownership.id}
+                                ownership={ownership}
+                            />
                         );
                     })}
-                </Grid>
+                </div>
             )}
         </>
     );
