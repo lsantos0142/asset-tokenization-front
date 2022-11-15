@@ -18,7 +18,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons";
+import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -28,6 +28,7 @@ import AuthContext from "../../context/AuthContext";
 import { Ownership } from "../../types/Ownership";
 import { User } from "../../types/User";
 import { DatePicker } from "@mantine/dates";
+import { OwnershipCard } from "../../components/OwnershipCard";
 
 type SelectData = {
     value: string;
@@ -295,88 +296,44 @@ const Loan: NextPage = () => {
 
             <Divider my="xl" />
 
-            <Title order={2}>
-                Cadastrar Imóvel como Garantia de Empréstimo
-            </Title>
+            <div className="d-flex flex-column gap-3 mb-5">
+                <Title order={2}>Garantias de empréstimos</Title>
+                <div className="d-flex justify-content-between">
+                    <Text size={20}>
+                        Selecione o imóvel que deseja associar a uma garantia de
+                        empréstimo.
+                    </Text>
+                    <Button
+                        variant="outline"
+                        color={"blue"}
+                        onClick={getAllOwnerships}
+                    >
+                        <IconRefresh />
+                    </Button>
+                </div>
+            </div>
 
-            <Space h="xl" />
-
-            <Group position="apart">
-                <Title order={3}>Selecione o Imóvel Tokenizado</Title>
-                <Button
-                    variant="outline"
-                    color={"blue"}
-                    onClick={getAllOwnerships}
-                >
-                    Atualizar Imóveis
-                </Button>
-            </Group>
-
-            <Space h="xl" />
-
-            <Grid gutter={30}>
+            <div className="d-flex flex-wrap gap-4">
                 {ownerships.map((ownership) => {
                     return (
-                        <Grid.Col key={ownership.id} md={6} lg={4} xl={3}>
-                            <Card
-                                shadow="sm"
-                                p="lg"
-                                radius="lg"
-                                withBorder
-                                sx={{ cursor: "pointer" }}
-                                onClick={() => {
-                                    setOpenedModal(true);
-                                    setSelectedOwnershipId(ownership?.id);
-                                }}
-                            >
-                                <Text size={22} weight={500}>
-                                    {ownership.tokenizedAsset?.address}
-                                </Text>
-                                <Badge
-                                    color="green"
-                                    variant="light"
-                                    mt="md"
-                                    sx={
-                                        ownership?.isEffectiveOwner
-                                            ? { visibility: "visible" }
-                                            : { visibility: "hidden" }
-                                    }
+                        <OwnershipCard key={ownership.id} ownership={ownership}>
+                            <div className="d-flex mt-4">
+                                <Button
+                                    className="text-center"
+                                    variant="outline"
+                                    color={"green"}
+                                    onClick={() => {
+                                        setOpenedModal(true);
+                                        setSelectedOwnershipId(ownership?.id);
+                                    }}
                                 >
-                                    Dono
-                                </Badge>
-
-                                <Space h="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Área Útil</Text>
-                                    <Text>
-                                        {ownership.tokenizedAsset?.usableArea} m
-                                        <sup>2</sup>
-                                    </Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Número do Registro</Text>
-                                    <Text>
-                                        {ownership.tokenizedAsset?.registration}
-                                    </Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Porcentagem de Posse</Text>
-                                    <Text>
-                                        {ownership.percentageOwned * 100} %
-                                    </Text>
-                                </Group>
-                            </Card>
-                        </Grid.Col>
+                                    Cadastrar garantia
+                                </Button>
+                            </div>
+                        </OwnershipCard>
                     );
                 })}
-            </Grid>
+            </div>
         </>
     );
 };

@@ -13,6 +13,7 @@ import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useCallback, useContext, useEffect, useState } from "react";
+import { OwnershipCard } from "../../components/OwnershipCard";
 import { RegisterRentPaymentModal } from "../../components/RegisterRentPaymentModal";
 import AuthContext from "../../context/AuthContext";
 import { Ownership } from "../../types/Ownership";
@@ -62,7 +63,7 @@ const RentPayments: NextPage = () => {
             </Breadcrumbs>
 
             <Divider my="xl" />
-            <div className="d-flex flex-column gap-2 mb-5">
+            <div className="d-flex flex-column gap-3 mb-5">
                 <Title order={2}>Pagamentos de aluguéis</Title>
                 <Text size={20}>
                     Registre os pagamentos de aluguéis dos imóveis de que você é
@@ -72,53 +73,12 @@ const RentPayments: NextPage = () => {
 
             <div className="d-flex flex-wrap gap-4">
                 {effectiveOwnerships.map((ownership) => (
-                    <Card
-                        key={ownership.id}
-                        shadow="sm"
-                        p="lg"
-                        radius="lg"
-                        withBorder
-                        style={{ width: "400px" }}
-                    >
-                        <Group position="apart" className="mb-4">
-                            <Text size={22} weight={500}>
-                                {ownership.tokenizedAsset?.address}
-                            </Text>
-                            {ownership?.isEffectiveOwner && (
-                                <Badge color="green" variant="light">
-                                    Dono
-                                </Badge>
-                            )}
-                        </Group>
-
-                        <Group position="apart" my="xs">
-                            <Text>Área Útil</Text>
-                            <Text>
-                                {ownership.tokenizedAsset?.usableArea} m
-                                <sup>2</sup>
-                            </Text>
-                        </Group>
-
-                        <Divider size="xs" />
-
-                        <Group position="apart" my="xs">
-                            <Text>Número do Registro</Text>
-                            <Text>
-                                {ownership.tokenizedAsset?.registration}
-                            </Text>
-                        </Group>
-
-                        <Divider size="xs" />
-
-                        <Group position="apart" my="xs">
-                            <Text>Porcentagem de Posse</Text>
-                            <Text>{ownership.percentageOwned * 100} %</Text>
-                        </Group>
-                        <div className="d-flex justify-content-center">
+                    <OwnershipCard key={ownership.id} ownership={ownership}>
+                        <div className="d-flex mt-4">
                             <Button
-                                className="text-center mt-4"
+                                className="text-center"
                                 variant="outline"
-                                color={"blue"}
+                                color={"green"}
                                 onClick={() => {
                                     setShowModal(true);
                                     setSelectedOwnership(ownership);
@@ -127,7 +87,7 @@ const RentPayments: NextPage = () => {
                                 Registrar pagamento
                             </Button>
                         </div>
-                    </Card>
+                    </OwnershipCard>
                 ))}
             </div>
         </>
