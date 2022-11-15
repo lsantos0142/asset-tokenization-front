@@ -133,7 +133,8 @@ const Loan: NextPage = () => {
                 "create_collateral_" +
                 body.contractAddress +
                 "_" +
-                body.expirationDateISOString,
+                body.expirationDateISOString +
+                body.collateralShares,
             disallowClose: true,
             autoClose: false,
             title: <Text size="xl">Cadastrando Empréstimo</Text>,
@@ -153,7 +154,8 @@ const Loan: NextPage = () => {
                             "create_collateral_" +
                             body.contractAddress +
                             "_" +
-                            body.expirationDateISOString,
+                            body.expirationDateISOString +
+                            body.collateralShares,
                         disallowClose: true,
                         autoClose: 5000,
                         icon: <IconCheck size={16} />,
@@ -171,7 +173,8 @@ const Loan: NextPage = () => {
                             "create_collateral_" +
                             body.contractAddress +
                             "_" +
-                            body.expirationDateISOString,
+                            body.expirationDateISOString +
+                            body.collateralShares,
                         disallowClose: true,
                         autoClose: 5000,
                         icon: <IconX size={16} />,

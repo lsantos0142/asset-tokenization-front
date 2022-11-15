@@ -63,8 +63,6 @@ const CollateralsByUser: NextPage<CollateralsByUserProps> = ({ userId }) => {
     }, []);
 
     const getBankUsername = (collateral: Collateral) => {
-        console.log(collateral);
-
         return allUsers.filter(
             (user) => user.walletAddress === collateral.bankWallet,
         )[0]?.username;
@@ -80,35 +78,43 @@ const CollateralsByUser: NextPage<CollateralsByUserProps> = ({ userId }) => {
             loading: true,
         });
 
-        axios
-            .put(
-                `${process.env.BACK}/tokenized-asset/collateral/register-loan-payment/${selectedCollateralId}`,
-            )
-            .then((res) => {
-                getAllCollaterals();
-                updateNotification({
-                    id: "register_loan_payment_" + selectedCollateralId,
-                    disallowClose: true,
-                    autoClose: 5000,
-                    icon: <IconCheck size={16} />,
-                    color: "green",
-                    title: <Text size="xl">Pagamento Registrado</Text>,
-                    message: (
-                        <Text size="xl">Pagamento registrado com sucesso</Text>
-                    ),
+        setTimeout(() => {
+            axios
+                .put(
+                    `${process.env.BACK}/tokenized-asset/collateral/register-loan-payment/${selectedCollateralId}`,
+                )
+                .then((res) => {
+                    getAllCollaterals();
+                    updateNotification({
+                        id: "register_loan_payment_" + selectedCollateralId,
+                        disallowClose: true,
+                        autoClose: 5000,
+                        icon: <IconCheck size={16} />,
+                        color: "green",
+                        title: <Text size="xl">Pagamento Registrado</Text>,
+                        message: (
+                            <Text size="xl">
+                                Pagamento registrado com sucesso
+                            </Text>
+                        ),
+                    });
+                })
+                .catch((e) => {
+                    updateNotification({
+                        id: "register_loan_payment_" + selectedCollateralId,
+                        disallowClose: true,
+                        autoClose: 5000,
+                        icon: <IconX size={16} />,
+                        color: "red",
+                        title: (
+                            <Text size="xl">Erro no registro do pagamento</Text>
+                        ),
+                        message: (
+                            <Text size="xl">{e.response.data.message}</Text>
+                        ),
+                    });
                 });
-            })
-            .catch((e) => {
-                updateNotification({
-                    id: "register_loan_payment_" + selectedCollateralId,
-                    disallowClose: true,
-                    autoClose: 5000,
-                    icon: <IconX size={16} />,
-                    color: "red",
-                    title: <Text size="xl">Erro no registro do pagamento</Text>,
-                    message: <Text size="xl">{e.response.data.message}</Text>,
-                });
-            });
+        }, 1000);
     };
 
     return (

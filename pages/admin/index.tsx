@@ -2,6 +2,7 @@ import { Anchor, Breadcrumbs, Divider, Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
 import CollateralsAdmin from "../../components/CollateralsAdmin";
+import LoanPaymentAdmin from "../../components/LoanPaymentAdmin";
 import OffersAdmin from "../../components/OffersAdmin";
 import TokenizationProposalAdmin from "../../components/TokenizationProposalAdmin";
 
@@ -30,6 +31,8 @@ const Admin: NextPage = () => {
             <OffersAdmin />
 
             <CollateralsAdmin />
+
+            <LoanPaymentAdmin />
         </>
     );
 };
