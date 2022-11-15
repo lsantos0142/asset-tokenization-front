@@ -2,17 +2,18 @@ import {
     Anchor,
     Badge,
     Breadcrumbs,
+    Button,
     Card,
     Divider,
     Group,
     Text,
     Title,
-    Button,
 } from "@mantine/core";
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useCallback, useContext, useEffect, useState } from "react";
+import { RegisterRentPaymentModal } from "../../components/RegisterRentPaymentModal";
 import AuthContext from "../../context/AuthContext";
 import { Ownership } from "../../types/Ownership";
 
@@ -25,6 +26,9 @@ const RentPayments: NextPage = () => {
     const [effectiveOwnerships, setEffectiveOwnerships] = useState<Ownership[]>(
         [],
     );
+
+    const [selectedOwnership, setSelectedOwnership] = useState<Ownership>();
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     const getAllOwnerships = useCallback(async () => {
         try {
@@ -44,6 +48,11 @@ const RentPayments: NextPage = () => {
 
     return (
         <>
+            <RegisterRentPaymentModal
+                setShowModal={setShowModal}
+                showModal={showModal}
+                selectedOwnership={selectedOwnership}
+            />
             <Breadcrumbs>
                 {items.map((item, index) => (
                     <Link href={item.href} key={index} passHref>
@@ -110,7 +119,10 @@ const RentPayments: NextPage = () => {
                                 className="text-center mt-4"
                                 variant="outline"
                                 color={"blue"}
-                                onClick={getAllOwnerships}
+                                onClick={() => {
+                                    setShowModal(true);
+                                    setSelectedOwnership(ownership);
+                                }}
                             >
                                 Registrar pagamento
                             </Button>
