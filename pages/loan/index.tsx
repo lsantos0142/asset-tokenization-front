@@ -56,7 +56,7 @@ const Loan: NextPage = () => {
                 setOwnerships(res.data);
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     }, [user]);
 
@@ -79,7 +79,7 @@ const Loan: NextPage = () => {
                 );
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     };
 
@@ -180,7 +180,7 @@ const Loan: NextPage = () => {
                             <Text size="xl">Erro na Criação do Empréstimo</Text>
                         ),
                         message: (
-                            <Text size="xl">{e.response.data.message}</Text>
+                            <Text size="xl">{e.response?.data?.message}</Text>
                         ),
                     });
                 });

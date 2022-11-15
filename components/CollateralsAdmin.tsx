@@ -39,7 +39,7 @@ const CollateralsAdmin: NextPage = () => {
                 setCollaterals(res.data);
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     };
 
@@ -81,7 +81,7 @@ const CollateralsAdmin: NextPage = () => {
                     title: (
                         <Text size="xl">Erro na Rejeição do Empréstimo</Text>
                     ),
-                    message: <Text size="xl">{e.response.data.message}</Text>,
+                    message: <Text size="xl">{e.response?.data?.message}</Text>,
                 });
             });
     };
@@ -124,7 +124,7 @@ const CollateralsAdmin: NextPage = () => {
                     title: (
                         <Text size="xl">Erro na Confimação do Empréstimo</Text>
                     ),
-                    message: <Text size="xl">{e.response.data.message}</Text>,
+                    message: <Text size="xl">{e.response?.data?.message}</Text>,
                 });
             });
     };
@@ -140,7 +140,7 @@ const CollateralsAdmin: NextPage = () => {
                 setAllUsers(res.data);
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     };
 

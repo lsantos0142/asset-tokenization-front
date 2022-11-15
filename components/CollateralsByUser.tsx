@@ -33,7 +33,7 @@ const CollateralsByUser: NextPage<CollateralsByUserProps> = ({ userId }) => {
                 setCollaterals(res.data);
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     }, [userId]);
 
@@ -48,7 +48,7 @@ const CollateralsByUser: NextPage<CollateralsByUserProps> = ({ userId }) => {
                 setAllUsers(res.data);
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     };
 

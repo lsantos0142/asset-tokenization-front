@@ -65,23 +65,23 @@ const Login: NextPage = () => {
             })
             .catch((e) => {
                 if (e.response.data.statusCode == 400) {
-                    if (e.response.data.message === "Unauthorized") {
+                    if (e.response?.data?.message === "Unauthorized") {
                         setError("Digite um usuário e senha");
                     } else {
-                        console.log(e.response.data.message);
+                        console.log(e.response?.data?.message);
                         setError(
                             Array.prototype.join.call(
-                                e.response.data.message,
+                                e.response?.data?.message,
                                 "\r\n",
                             ),
                         );
                     }
                     setShow(true);
                 } else if (e.response.status == 409) {
-                    setError(e.response.data.message);
+                    setError(e.response?.data?.message);
                     setShow(true);
                 } else {
-                    alert(e.response.data.message);
+                    alert(e.response?.data?.message);
                 }
             });
     };
@@ -100,14 +100,14 @@ const Login: NextPage = () => {
             })
             .catch((e) => {
                 if (e.response.data.statusCode == 401) {
-                    if (e.response.data.message === "Unauthorized") {
+                    if (e.response?.data?.message === "Unauthorized") {
                         setError("Digite um usuário e senha");
                     } else {
-                        setError(e.response.data.message);
+                        setError(e.response?.data?.message);
                     }
                     setShow(true);
                 } else {
-                    alert(e.response.data.message);
+                    alert(e.response?.data?.message);
                 }
             });
     };

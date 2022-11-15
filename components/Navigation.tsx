@@ -1,4 +1,14 @@
 import { Center, Navbar, NavLink } from "@mantine/core";
+import {
+    IconBook,
+    IconCash,
+    IconCurrencyEthereum,
+    IconHome2,
+    IconReceipt,
+    IconReportAnalytics,
+    IconUser,
+    IconUserCheck,
+} from "@tabler/icons";
 import Link from "next/link";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
@@ -12,7 +22,10 @@ const Navigation: React.FC = () => {
                 <NavLink
                     label={
                         <Link href={"/tokenization"}>
-                            <Center>Tokenização</Center>
+                            <div className="d-flex gap-3 align-items-center">
+                                <IconCurrencyEthereum />
+                                <Center>Tokenização</Center>
+                            </div>
                         </Link>
                     }
                 />
@@ -22,7 +35,10 @@ const Navigation: React.FC = () => {
                 <NavLink
                     label={
                         <Link href={"/create-offer"}>
-                            <Center>Criar Oferta</Center>
+                            <div className="d-flex gap-3 align-items-center">
+                                <IconCash />
+                                <Center>Criar Oferta</Center>
+                            </div>
                         </Link>
                     }
                 />
@@ -32,7 +48,10 @@ const Navigation: React.FC = () => {
                 <NavLink
                     label={
                         <Link href={"/marketplace"}>
-                            <Center>Marketplace</Center>
+                            <div className="d-flex gap-3 align-items-center">
+                                <IconHome2 />
+                                <Center>Marketplace</Center>
+                            </div>
                         </Link>
                     }
                 />
@@ -42,9 +61,10 @@ const Navigation: React.FC = () => {
                 <NavLink
                     label={
                         <Link href={"/loan"}>
-                            <Center sx={{ textAlign: "center" }}>
-                                Garantias de Empréstimos
-                            </Center>
+                            <div className="d-flex gap-3 align-items-center">
+                                <IconBook />
+                                <Center>Garantias de Empréstimos</Center>
+                            </div>
                         </Link>
                     }
                 />
@@ -53,9 +73,10 @@ const Navigation: React.FC = () => {
                 <NavLink
                     label={
                         <Link href={"/rent-payments"}>
-                            <Center sx={{ textAlign: "center" }}>
-                                Pagamentos de aluguéis
-                            </Center>
+                            <div className="d-flex gap-3 align-items-center">
+                                <IconReceipt />
+                                <Center>Pagamentos de aluguéis</Center>
+                            </div>
                         </Link>
                     }
                 />
@@ -66,28 +87,37 @@ const Navigation: React.FC = () => {
                     label={
                         user ? (
                             <Link href={"/user"}>
-                                <Center>{user.username}</Center>
+                                <div className="d-flex gap-3 align-items-center">
+                                    <IconUserCheck />
+                                    <Center>{user.username}</Center>
+                                </div>
                             </Link>
                         ) : (
                             <Link href={"/login"}>
-                                <Center>Fazer Login/Registrar</Center>
+                                <div className="d-flex gap-3 align-items-center">
+                                    <IconUser />
+                                    <Center>Login / Registro</Center>
+                                </div>
                             </Link>
                         )
                     }
                 />
             </Navbar.Section>
 
-            {user?.isAdmin ? (
+            {user?.isAdmin && (
                 <Navbar.Section>
                     <NavLink
                         label={
                             <Link href={"/admin"}>
-                                <Center>Portal Admin</Center>
+                                <div className="d-flex gap-3 align-items-center">
+                                    <IconReportAnalytics />
+                                    <Center>Portal Admin</Center>
+                                </div>
                             </Link>
                         }
                     />
                 </Navbar.Section>
-            ) : null}
+            )}
         </Navbar>
     );
 };

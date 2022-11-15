@@ -42,7 +42,7 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
                 );
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     }, [user]);
 

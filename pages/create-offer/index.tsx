@@ -42,7 +42,7 @@ const CreateOffer: NextPage = () => {
                 setOwnerships(res.data);
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     }, [user]);
 
@@ -121,7 +121,7 @@ const CreateOffer: NextPage = () => {
                         color: "red",
                         title: <Text size="xl">Erro na Criação da Oferta</Text>,
                         message: (
-                            <Text size="xl">{e.response.data.message}</Text>
+                            <Text size="xl">{e.response?.data?.message}</Text>
                         ),
                     });
                 });

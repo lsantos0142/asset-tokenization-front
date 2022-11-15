@@ -92,7 +92,7 @@ const Tokenization: NextPage = () => {
                             <Text size="xl">Erro na Criação da Proposta</Text>
                         ),
                         message: (
-                            <Text size="xl">{e.response.data.message}</Text>
+                            <Text size="xl">{e.response?.data?.message}</Text>
                         ),
                     });
                 });
