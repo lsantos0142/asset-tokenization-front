@@ -82,13 +82,7 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
                 {offers.map((offer) => {
                     return (
                         <Grid.Col key={offer.id} md={6} lg={4} xl={3}>
-                            <Card
-                                shadow="sm"
-                                p="lg"
-                                radius="lg"
-                                withBorder
-                                sx={{ cursor: "pointer" }}
-                            >
+                            <Card shadow="sm" p="lg" radius="lg" withBorder>
                                 <Card.Section className="mt-1 mb-5">
                                     <Center>
                                         <Image
