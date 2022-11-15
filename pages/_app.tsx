@@ -23,6 +23,7 @@ import axios from "axios";
 import { AuthProvider } from "../context/AuthContext";
 import { NotificationsProvider } from "@mantine/notifications";
 import { RouteGuard } from "../components/RouteGuard";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const client = axios.create({
     baseURL: process.env.BACK,

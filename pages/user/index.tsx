@@ -4,20 +4,19 @@ import {
     Breadcrumbs,
     Button,
     Divider,
-    Title,
     Grid,
+    Group,
     Space,
     Text,
-    Group,
+    Title,
 } from "@mantine/core";
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import OwnershipsByUser from "../../components/OwnershipsByUser";
 import AuthContext from "../../context/AuthContext";
-import { Ownership } from "../../types/Ownership";
 
 const User: NextPage = () => {
     const router = useRouter();

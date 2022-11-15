@@ -52,60 +52,67 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
             </Group>
 
             <Space h="xl" />
+            {!ownerships?.length ? (
+                <Text>Você ainda não possui imóveis tokenizados.</Text>
+            ) : (
+                <Grid gutter={30}>
+                    {ownerships.map((ownership) => {
+                        return (
+                            <Grid.Col key={ownership.id} md={6} lg={4} xl={3}>
+                                <Card shadow="sm" p="lg" radius="lg" withBorder>
+                                    <Group position="apart" mb="xs">
+                                        <Text size={22} weight={500}>
+                                            {ownership.tokenizedAsset?.address}
+                                        </Text>
+                                        {ownership?.isEffectiveOwner && (
+                                            <Badge
+                                                color="green"
+                                                variant="light"
+                                            >
+                                                Dono
+                                            </Badge>
+                                        )}
+                                    </Group>
 
-            <Grid gutter={30}>
-                {ownerships.map((ownership) => {
-                    return (
-                        <Grid.Col key={ownership.id} md={6} lg={4} xl={3}>
-                            <Card shadow="sm" p="lg" radius="lg" withBorder>
-                                <Text size={22} weight={500}>
-                                    {ownership.tokenizedAsset?.address}
-                                </Text>
-                                <Badge
-                                    color="green"
-                                    variant="light"
-                                    mt="md"
-                                    sx={
-                                        ownership?.isEffectiveOwner
-                                            ? { visibility: "visible" }
-                                            : { visibility: "hidden" }
-                                    }
-                                >
-                                    Dono
-                                </Badge>
+                                    <Space h="xs" />
 
-                                <Space h="xs" />
+                                    <Group position="apart" my="xs">
+                                        <Text>Área Útil</Text>
+                                        <Text>
+                                            {
+                                                ownership.tokenizedAsset
+                                                    ?.usableArea
+                                            }{" "}
+                                            m<sup>2</sup>
+                                        </Text>
+                                    </Group>
 
-                                <Group position="apart" my="xs">
-                                    <Text>Área Útil</Text>
-                                    <Text>
-                                        {ownership.tokenizedAsset?.usableArea} m
-                                        <sup>2</sup>
-                                    </Text>
-                                </Group>
+                                    <Divider size="xs" />
 
-                                <Divider size="xs" />
+                                    <Group position="apart" my="xs">
+                                        <Text>Número do Registro</Text>
+                                        <Text>
+                                            {
+                                                ownership.tokenizedAsset
+                                                    ?.registration
+                                            }
+                                        </Text>
+                                    </Group>
 
-                                <Group position="apart" my="xs">
-                                    <Text>Número do Registro</Text>
-                                    <Text>
-                                        {ownership.tokenizedAsset?.registration}
-                                    </Text>
-                                </Group>
+                                    <Divider size="xs" />
 
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Porcentagem de Posse</Text>
-                                    <Text>
-                                        {ownership.percentageOwned * 100} %
-                                    </Text>
-                                </Group>
-                            </Card>
-                        </Grid.Col>
-                    );
-                })}
-            </Grid>
+                                    <Group position="apart" my="xs">
+                                        <Text>Porcentagem de Posse</Text>
+                                        <Text>
+                                            {ownership.percentageOwned * 100} %
+                                        </Text>
+                                    </Group>
+                                </Card>
+                            </Grid.Col>
+                        );
+                    })}
+                </Grid>
+            )}
         </>
     );
 };
