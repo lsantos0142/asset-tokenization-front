@@ -143,7 +143,7 @@ const OffersAdmin: NextPage = () => {
                 onClose={() => setOpenedRejectModal(false)}
                 title={
                     <Title order={3}>
-                        Deseja Rejeitar O Pagamento desta Oferta?
+                        Deseja Rejeitar o Pagamento Desta Oferta?
                     </Title>
                 }
             >
