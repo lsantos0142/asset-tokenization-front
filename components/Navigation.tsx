@@ -7,49 +7,28 @@ import {
     IconReceipt,
     IconReportAnalytics,
     IconUser,
-    IconUserCheck,
 } from "@tabler/icons";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
 const Navigation: React.FC = () => {
     const { user } = useContext(AuthContext);
+    const router = useRouter();
 
     return (
-        <Navbar width={{ md: 200, lg: 250, base: 170 }} p="xl">
+        <Navbar width={{ md: 200, lg: 250, base: 170 }}>
             <Navbar.Section>
                 <NavLink
-                    label={
-                        <Link href={"/tokenization"}>
-                            <div className="d-flex gap-3 align-items-center">
-                                <IconCurrencyEthereum />
-                                <Center>Tokenização</Center>
-                            </div>
-                        </Link>
-                    }
-                />
-            </Navbar.Section>
-
-            <Navbar.Section>
-                <NavLink
-                    label={
-                        <Link href={"/create-offer"}>
-                            <div className="d-flex gap-3 align-items-center">
-                                <IconCash />
-                                <Center>Criar Oferta</Center>
-                            </div>
-                        </Link>
-                    }
-                />
-            </Navbar.Section>
-
-            <Navbar.Section>
-                <NavLink
+                    className="py-3"
+                    active={router.pathname.includes("marketplace")}
                     label={
                         <Link href={"/marketplace"}>
                             <div className="d-flex gap-3 align-items-center">
-                                <IconHome2 />
+                                <div>
+                                    <IconHome2 />
+                                </div>
                                 <Center>Marketplace</Center>
                             </div>
                         </Link>
@@ -59,11 +38,49 @@ const Navigation: React.FC = () => {
 
             <Navbar.Section>
                 <NavLink
+                    className="py-3"
+                    active={router.pathname.includes("tokenization")}
+                    label={
+                        <Link href={"/tokenization"}>
+                            <div className="d-flex gap-3 align-items-center">
+                                <div>
+                                    <IconCurrencyEthereum />
+                                </div>
+                                <Center>Tokenização</Center>
+                            </div>
+                        </Link>
+                    }
+                />
+            </Navbar.Section>
+
+            <Navbar.Section>
+                <NavLink
+                    className="py-3"
+                    active={router.pathname.includes("create-offer")}
+                    label={
+                        <Link href={"/create-offer"}>
+                            <div className="d-flex gap-3 align-items-center">
+                                <div>
+                                    <IconCash />
+                                </div>
+                                <Center>Criar Oferta</Center>
+                            </div>
+                        </Link>
+                    }
+                />
+            </Navbar.Section>
+
+            <Navbar.Section>
+                <NavLink
+                    className="py-3"
+                    active={router.pathname.includes("loan")}
                     label={
                         <Link href={"/loan"}>
                             <div className="d-flex gap-3 align-items-center">
-                                <IconBook />
-                                <Center>Garantias de Empréstimos</Center>
+                                <div>
+                                    <IconBook />
+                                </div>
+                                <Center>Garantias de empréstimos</Center>
                             </div>
                         </Link>
                     }
@@ -71,10 +88,14 @@ const Navigation: React.FC = () => {
             </Navbar.Section>
             <Navbar.Section grow>
                 <NavLink
+                    className="py-3"
+                    active={router.pathname.includes("rent-payments")}
                     label={
                         <Link href={"/rent-payments"}>
                             <div className="d-flex gap-3 align-items-center">
-                                <IconReceipt />
+                                <div>
+                                    <IconReceipt />
+                                </div>
                                 <Center>Pagamentos de aluguéis</Center>
                             </div>
                         </Link>
@@ -84,18 +105,27 @@ const Navigation: React.FC = () => {
 
             <Navbar.Section>
                 <NavLink
+                    className="py-3"
+                    active={
+                        router.pathname.includes("/user") ||
+                        router.pathname.includes("/login")
+                    }
                     label={
                         user ? (
                             <Link href={"/user"}>
                                 <div className="d-flex gap-3 align-items-center">
-                                    <IconUserCheck />
+                                    <div>
+                                        <IconUser />
+                                    </div>
                                     <Center>{user.username}</Center>
                                 </div>
                             </Link>
                         ) : (
                             <Link href={"/login"}>
                                 <div className="d-flex gap-3 align-items-center">
-                                    <IconUser />
+                                    <div>
+                                        <IconUser />
+                                    </div>
                                     <Center>Login / Registro</Center>
                                 </div>
                             </Link>
@@ -107,6 +137,8 @@ const Navigation: React.FC = () => {
             {user?.isAdmin && (
                 <Navbar.Section>
                     <NavLink
+                        className="py-3"
+                        active={router.pathname.includes("/admin")}
                         label={
                             <Link href={"/admin"}>
                                 <div className="d-flex gap-3 align-items-center">

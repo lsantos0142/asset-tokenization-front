@@ -1,11 +1,11 @@
 import { Badge, Card, Divider, Group, Text } from "@mantine/core";
 import { Ownership } from "../types/Ownership";
 
-interface OwnershipCardProps {
+interface IOwnershipCardProps {
     children?: React.ReactNode;
     ownership: Ownership;
 }
-export function OwnershipCard({ children, ownership }: OwnershipCardProps) {
+export function OwnershipCard({ children, ownership }: IOwnershipCardProps) {
     return (
         <Card
             key={ownership.id}

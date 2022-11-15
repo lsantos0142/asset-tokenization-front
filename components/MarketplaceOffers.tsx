@@ -11,6 +11,7 @@ import {
     Center,
     Image,
 } from "@mantine/core";
+import { IconHome2, IconRefresh } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -56,29 +57,31 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
 
     return (
         <>
-            <Group position="apart">
-                <Title order={2}>Marketplace</Title>
-                <Button
-                    variant="outline"
-                    color={"blue"}
-                    onClick={getAllAvailableOffers}
-                >
-                    Atualizar Ofertas
-                </Button>
-            </Group>
-
-            <Space h="xl" />
+            <div className="d-flex flex-column gap-3 mb-5">
+                <div className="d-flex gap-3 align-items-center">
+                    <IconHome2 size={35} />
+                    <Title order={2}>Marketplace</Title>
+                </div>
+                <div className="d-flex justify-content-between">
+                    <Text size={20}>
+                        Visualize diferentes ofertas de imóveis tokenizados
+                        disponíveis para venda e adquira o seu em sua carteira
+                        digital.
+                    </Text>
+                    <Button
+                        variant="outline"
+                        color={"blue"}
+                        onClick={getAllAvailableOffers}
+                    >
+                        <IconRefresh />
+                    </Button>
+                </div>
+            </div>
 
             <Grid gutter={30}>
                 {offers.map((offer) => {
                     return (
-                        <Grid.Col
-                            key={offer.id}
-                            md={6}
-                            lg={4}
-                            xl={3}
-                            onClick={() => handleOpenOfferDetail(offer.id)}
-                        >
+                        <Grid.Col key={offer.id} md={6} lg={4} xl={3}>
                             <Card
                                 shadow="sm"
                                 p="lg"
@@ -86,11 +89,11 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
                                 withBorder
                                 sx={{ cursor: "pointer" }}
                             >
-                                <Card.Section p="1em">
+                                <Card.Section className="mt-1 mb-5">
                                     <Center>
                                         <Image
-                                            width={100}
-                                            height={100}
+                                            width={150}
+                                            height={150}
                                             alt="Casa"
                                             src="/house.png"
                                             withPlaceholder
@@ -160,6 +163,18 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
                                         {offer?.ownership?.user?.username}
                                     </Text>
                                 </Group>
+                                <div className="d-flex mt-5">
+                                    <Button
+                                        className="text-center"
+                                        variant="outline"
+                                        color={"green"}
+                                        onClick={() =>
+                                            handleOpenOfferDetail(offer.id)
+                                        }
+                                    >
+                                        Adquirir
+                                    </Button>
+                                </div>
                             </Card>
                         </Grid.Col>
                     );

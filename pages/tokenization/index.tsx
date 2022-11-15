@@ -17,7 +17,7 @@ import Link from "next/link";
 import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons";
+import { IconCheck, IconCurrencyEthereum, IconX } from "@tabler/icons";
 import axios from "axios";
 
 const Tokenization: NextPage = () => {
@@ -114,9 +114,17 @@ const Tokenization: NextPage = () => {
 
             <Divider my="xl" />
 
-            <Title order={2}>Criar Proposta de Tokenização</Title>
-
-            <Space h="xl" />
+            <div className="d-flex flex-column gap-3 mb-5">
+                <div className="d-flex gap-3 align-items-center">
+                    <IconCurrencyEthereum size={35} />
+                    <Title order={2}>Tokenize o seu imóvel</Title>
+                </div>
+                <Text size={20}>
+                    Insira os dados do seu imóvel para análise da plataforma.
+                    Caso os dados sejam aprovados, você receberá em sua carteira
+                    digital o imóvel tokenizado.
+                </Text>
+            </div>
 
             <form
                 onSubmit={createTokenizationProposalForm.onSubmit((values) =>
@@ -124,17 +132,6 @@ const Tokenization: NextPage = () => {
                 )}
             >
                 <Grid gutter={30}>
-                    <Grid.Col md={6} xl={4}>
-                        <TextInput
-                            disabled
-                            withAsterisk
-                            label="Endereço da Carteira do Dono Efetivo"
-                            placeholder="Ex: 0x7E2CdEcA4cC308B5253118d7dC99B124EB3a0556"
-                            {...createTokenizationProposalForm.getInputProps(
-                                "effectiveOwner",
-                            )}
-                        />
-                    </Grid.Col>
                     <Grid.Col md={6} xl={3}>
                         <TextInput
                             withAsterisk
@@ -171,9 +168,20 @@ const Tokenization: NextPage = () => {
                             stepHoldInterval={100}
                         />
                     </Grid.Col>
+                    <Grid.Col md={6} xl={4}>
+                        <TextInput
+                            disabled
+                            withAsterisk
+                            label="Endereço da Carteira do Dono Efetivo"
+                            placeholder="Ex: 0x7E2CdEcA4cC308B5253118d7dC99B124EB3a0556"
+                            {...createTokenizationProposalForm.getInputProps(
+                                "effectiveOwner",
+                            )}
+                        />
+                    </Grid.Col>
                 </Grid>
 
-                <Group position="right" my="xl">
+                <Group my="xl">
                     <Button variant="outline" type="submit">
                         Criar Proposta de Tokenização
                     </Button>
