@@ -8,7 +8,10 @@ import {
     Group,
     Space,
     Title,
+    Modal,
 } from "@mantine/core";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useCallback, useEffect, useState } from "react";
@@ -23,6 +26,9 @@ type CollateralsByUserProps = {
 const CollateralsByUser: NextPage<CollateralsByUserProps> = ({ userId }) => {
     const [collaterals, setCollaterals] = useState<Collateral[]>([]);
     const [allUsers, setAllUsers] = useState<User[]>([]);
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [selectedCollateralId, setSelectedCollateralId] =
+        useState<string>("");
 
     const getAllCollaterals = useCallback(() => {
         axios
@@ -64,8 +70,83 @@ const CollateralsByUser: NextPage<CollateralsByUserProps> = ({ userId }) => {
         )[0]?.username;
     };
 
+    const handleConfirmLoanPayment = () => {
+        showNotification({
+            id: "register_loan_payment_" + selectedCollateralId,
+            disallowClose: true,
+            autoClose: false,
+            title: <Text size="xl">Registrando Pagamento do Empréstimo</Text>,
+            message: <Text size="xl">Favor esperar até a conclusão</Text>,
+            loading: true,
+        });
+
+        axios
+            .put(
+                `${process.env.BACK}/tokenized-asset/collateral/register-loan-payment/${selectedCollateralId}`,
+            )
+            .then((res) => {
+                getAllCollaterals();
+                updateNotification({
+                    id: "register_loan_payment_" + selectedCollateralId,
+                    disallowClose: true,
+                    autoClose: 5000,
+                    icon: <IconCheck size={16} />,
+                    color: "green",
+                    title: <Text size="xl">Pagamento Registrado</Text>,
+                    message: (
+                        <Text size="xl">Pagamento registrado com sucesso</Text>
+                    ),
+                });
+            })
+            .catch((e) => {
+                updateNotification({
+                    id: "register_loan_payment_" + selectedCollateralId,
+                    disallowClose: true,
+                    autoClose: 5000,
+                    icon: <IconX size={16} />,
+                    color: "red",
+                    title: <Text size="xl">Erro no registro do pagamento</Text>,
+                    message: <Text size="xl">{e.response.data.message}</Text>,
+                });
+            });
+    };
+
     return (
         <>
+            <Modal
+                size="auto"
+                centered
+                opened={showModal}
+                onClose={() => setShowModal(false)}
+                title={
+                    <Title order={3}>
+                        {`Deseja registrar o pagamento do empréstimo?`}
+                    </Title>
+                }
+            >
+                <Group position="apart">
+                    <Button
+                        variant="outline"
+                        color="gray"
+                        onClick={() => setShowModal(false)}
+                    >
+                        Cancelar
+                    </Button>
+
+                    <Button
+                        variant="outline"
+                        color="green"
+                        type="submit"
+                        onClick={() => {
+                            setShowModal(false);
+                            handleConfirmLoanPayment();
+                        }}
+                    >
+                        Sim, registrar
+                    </Button>
+                </Group>
+            </Modal>
+
             <Group position="apart">
                 <Title order={2}>Empréstimos</Title>
                 <Button
@@ -147,6 +228,21 @@ const CollateralsByUser: NextPage<CollateralsByUserProps> = ({ userId }) => {
                                             )}
                                         </Text>
                                     </Group>
+
+                                    <Space h="xs" />
+
+                                    <Button
+                                        variant="outline"
+                                        color="green"
+                                        onClick={() => {
+                                            setShowModal(true);
+                                            setSelectedCollateralId(
+                                                collateral.id,
+                                            );
+                                        }}
+                                    >
+                                        Pagar empréstimo
+                                    </Button>
                                 </Card>
                             </Grid.Col>
                         );

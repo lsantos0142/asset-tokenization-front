@@ -53,6 +53,7 @@ const RentPayments: NextPage = () => {
                 showModal={showModal}
                 selectedOwnership={selectedOwnership}
             />
+
             <Breadcrumbs>
                 {items.map((item, index) => (
                     <Link href={item.href} key={index} passHref>
