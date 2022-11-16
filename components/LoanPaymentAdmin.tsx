@@ -14,6 +14,7 @@ import {
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
+import { cp } from "fs";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import formatCPF from "../helpers/FormatCPF";
@@ -282,126 +283,152 @@ const LoanPaymentAdmin: NextPage = () => {
                 </Group>
             </Modal>
 
-            <Group position="apart">
+            <div className="d-flex flex-column gap-2 mt-5 mb-5">
                 <Title order={3}>
                     Empréstimos Esperando Confirmação de Pagamento
                 </Title>
-                <Button
-                    variant="outline"
-                    color={"blue"}
-                    onClick={getAllPendingCollaterals}
-                >
-                    <IconRefresh />
-                </Button>
-            </Group>
-
-            <Space h="xl" />
-
-            <Grid gutter={30}>
-                {collaterals.map((collateral) => {
-                    return (
-                        <Grid.Col md={6} xl={4} key={collateral.id}>
-                            <Card shadow="sm" p="lg" radius="lg" withBorder>
-                                <Text size={22} weight={500}>
-                                    {
-                                        collateral.ownership?.tokenizedAsset
-                                            ?.address
-                                    }
-                                </Text>
-
-                                <Badge color="pink" variant="light" mt="md">
-                                    Esperando Confirmação de Pagamento
-                                </Badge>
-
-                                <Space h="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Usuário Mutuário</Text>
-                                    <Text>
-                                        {collateral.ownership.user?.username!}
-                                    </Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Usuário Mutuante</Text>
-                                    <Text>{getBankUsername(collateral)}</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Porcentagem em Garantia</Text>
-                                    <Text>{collateral.percentage * 100} %</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Data de Expiração do Empréstimo</Text>
-                                    <Text>
-                                        {formatDate.format(
-                                            new Date(collateral.expirationDate),
-                                        )}
-                                    </Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Número de Registro do Imóvel</Text>
-                                    <Text>
+                <div className="d-flex gap-5 align-items-center justify-content-between">
+                    <Text size={20}>
+                        Valide os pagamentos de empréstimos com imóveis
+                        tokenizados como garantia. Caso o pagamento tenha sido
+                        feito, confirme para desalienar o imóvel da operação,
+                        caso contrário, se a data de expiração for atingida,
+                        confirme a tomada da garantia pelo banco.
+                    </Text>
+                    <Button
+                        variant="outline"
+                        color={"blue"}
+                        onClick={getAllPendingCollaterals}
+                    >
+                        <IconRefresh />
+                    </Button>
+                </div>
+            </div>
+            {!!collaterals?.length ? (
+                <Grid gutter={30}>
+                    {collaterals.map((collateral) => {
+                        return (
+                            <Grid.Col md={6} xl={4} key={collateral.id}>
+                                <Card shadow="sm" p="lg" radius="lg" withBorder>
+                                    <Text size={22} weight={500}>
                                         {
-                                            collateral?.ownership
-                                                ?.tokenizedAsset?.registration
+                                            collateral.ownership?.tokenizedAsset
+                                                ?.address
                                         }
                                     </Text>
-                                </Group>
 
-                                <Space h="xl" />
+                                    <Badge color="pink" variant="light" mt="md">
+                                        Esperando Confirmação de Pagamento
+                                    </Badge>
 
-                                <Group position="apart" my="xs">
-                                    <Button
-                                        variant="outline"
-                                        disabled={
-                                            new Date(
-                                                collateral.expirationDate,
-                                            ) > new Date()
-                                        }
-                                        color="red"
-                                        onClick={() => {
-                                            setOpenedSeizeCollateralModal(true);
-                                            setSelectedCollateralId(
-                                                collateral?.id,
-                                            );
-                                        }}
-                                    >
-                                        Tomada de posse
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        color="green"
-                                        disabled={collateral.status === 1}
-                                        onClick={() => {
-                                            setOpenedConfirmLoanPaymentModal(
-                                                true,
-                                            );
-                                            setSelectedCollateralId(
-                                                collateral?.id,
-                                            );
-                                        }}
-                                    >
-                                        Confirmar Pagamento
-                                    </Button>
-                                </Group>
-                            </Card>
-                        </Grid.Col>
-                    );
-                })}
-            </Grid>
+                                    <Space h="xs" />
 
-            <Divider my="xl" />
+                                    <Group position="apart" my="xs">
+                                        <Text>Usuário Mutuário</Text>
+                                        <Text>
+                                            {
+                                                collateral.ownership.user
+                                                    ?.username!
+                                            }
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Usuário Mutuante</Text>
+                                        <Text>
+                                            {getBankUsername(collateral)}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Porcentagem em Garantia</Text>
+                                        <Text>
+                                            {collateral.percentage * 100} %
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>
+                                            Data de Expiração do Empréstimo
+                                        </Text>
+                                        <Text>
+                                            {formatDate.format(
+                                                new Date(
+                                                    collateral.expirationDate,
+                                                ),
+                                            )}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>
+                                            Número de Registro do Imóvel
+                                        </Text>
+                                        <Text>
+                                            {
+                                                collateral?.ownership
+                                                    ?.tokenizedAsset
+                                                    ?.registration
+                                            }
+                                        </Text>
+                                    </Group>
+
+                                    <Space h="xl" />
+
+                                    <Group position="apart" my="xs">
+                                        <Button
+                                            variant="outline"
+                                            disabled={
+                                                new Date(
+                                                    collateral.expirationDate,
+                                                ) > new Date()
+                                            }
+                                            color="red"
+                                            onClick={() => {
+                                                setOpenedSeizeCollateralModal(
+                                                    true,
+                                                );
+                                                setSelectedCollateralId(
+                                                    collateral?.id,
+                                                );
+                                            }}
+                                        >
+                                            Tomada de posse
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            color="green"
+                                            disabled={collateral.status === 1}
+                                            onClick={() => {
+                                                setOpenedConfirmLoanPaymentModal(
+                                                    true,
+                                                );
+                                                setSelectedCollateralId(
+                                                    collateral?.id,
+                                                );
+                                            }}
+                                        >
+                                            Confirmar Pagamento
+                                        </Button>
+                                    </Group>
+                                </Card>
+                            </Grid.Col>
+                        );
+                    })}
+                </Grid>
+            ) : (
+                <Text size={20} className="my-3 text-center">
+                    Nenhuma pagamento de empréstimo pendente de validação.
+                </Text>
+            )}
         </>
     );
 };

@@ -216,114 +216,141 @@ const CollateralsAdmin: NextPage = () => {
                 </Group>
             </Modal>
 
-            <Group position="apart">
-                <Title order={3}>Empréstimos Esperando Confirmação</Title>
-                <Button
-                    variant="outline"
-                    color={"blue"}
-                    onClick={getAllPendingCollaterals}
-                >
-                    <IconRefresh />
-                </Button>
-            </Group>
-
-            <Space h="xl" />
-
-            <Grid gutter={30}>
-                {collaterals.map((collateral) => {
-                    return (
-                        <Grid.Col md={6} xl={4} key={collateral.id}>
-                            <Card shadow="sm" p="lg" radius="lg" withBorder>
-                                <Text size={22} weight={500}>
-                                    {
-                                        collateral.ownership?.tokenizedAsset
-                                            ?.address
-                                    }
-                                </Text>
-
-                                <Badge color="pink" variant="light" mt="md">
-                                    Esperando Confirmação
-                                </Badge>
-
-                                <Space h="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Usuário Mutuário</Text>
-                                    <Text>
-                                        {collateral.ownership.user?.username!}
-                                    </Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Usuário Mutuante</Text>
-                                    <Text>{getBankUsername(collateral)}</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Porcentagem em Garantia</Text>
-                                    <Text>{collateral.percentage * 100} %</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Data de Expiração do Empréstimo</Text>
-                                    <Text>
-                                        {formatDate.format(
-                                            new Date(collateral.expirationDate),
-                                        )}
-                                    </Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Número de Registro do Imóvel</Text>
-                                    <Text>
+            <div className="d-flex flex-column gap-2 mt-5 mb-5">
+                <Title order={3}>
+                    Validação de novas garantias de empréstimo
+                </Title>
+                <div className="d-flex gap-5 align-items-center justify-content-between">
+                    <Text size={20}>
+                        Gerencie as novas garantias cadastradas pelos usuários
+                        no portal. Caso uma garantia tenha sido de fato acordada
+                        entre as partes envolvidas e esteja com os dados
+                        corretos, valide a criação em seu respectivo card.
+                    </Text>
+                    <Button
+                        variant="outline"
+                        color={"blue"}
+                        onClick={getAllPendingCollaterals}
+                    >
+                        <IconRefresh />
+                    </Button>
+                </div>
+            </div>
+            {!!collaterals?.length ? (
+                <Grid gutter={30}>
+                    {collaterals.map((collateral) => {
+                        return (
+                            <Grid.Col md={6} xl={4} key={collateral.id}>
+                                <Card shadow="sm" p="lg" radius="lg" withBorder>
+                                    <Text size={22} weight={500}>
                                         {
-                                            collateral?.ownership
-                                                ?.tokenizedAsset?.registration
+                                            collateral.ownership?.tokenizedAsset
+                                                ?.address
                                         }
                                     </Text>
-                                </Group>
 
-                                <Space h="xl" />
+                                    <Badge color="pink" variant="light" mt="md">
+                                        Esperando Confirmação
+                                    </Badge>
 
-                                <Group position="apart" my="xs">
-                                    <Button
-                                        variant="outline"
-                                        color="red"
-                                        onClick={() => {
-                                            setOpenedRejectModal(true);
-                                            setSelectedCollateralId(
-                                                collateral?.id,
-                                            );
-                                        }}
-                                    >
-                                        Rejeitar
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        color="green"
-                                        onClick={() => {
-                                            setOpenedConfirmModal(true);
-                                            setSelectedCollateralId(
-                                                collateral?.id,
-                                            );
-                                        }}
-                                    >
-                                        Confirmar
-                                    </Button>
-                                </Group>
-                            </Card>
-                        </Grid.Col>
-                    );
-                })}
-            </Grid>
+                                    <Space h="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Usuário Mutuário</Text>
+                                        <Text>
+                                            {
+                                                collateral.ownership.user
+                                                    ?.username!
+                                            }
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Usuário Mutuante</Text>
+                                        <Text>
+                                            {getBankUsername(collateral)}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Porcentagem em Garantia</Text>
+                                        <Text>
+                                            {collateral.percentage * 100} %
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>
+                                            Data de Expiração do Empréstimo
+                                        </Text>
+                                        <Text>
+                                            {formatDate.format(
+                                                new Date(
+                                                    collateral.expirationDate,
+                                                ),
+                                            )}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>
+                                            Número de Registro do Imóvel
+                                        </Text>
+                                        <Text>
+                                            {
+                                                collateral?.ownership
+                                                    ?.tokenizedAsset
+                                                    ?.registration
+                                            }
+                                        </Text>
+                                    </Group>
+
+                                    <Space h="xl" />
+
+                                    <Group position="apart" my="xs">
+                                        <Button
+                                            variant="outline"
+                                            color="red"
+                                            onClick={() => {
+                                                setOpenedRejectModal(true);
+                                                setSelectedCollateralId(
+                                                    collateral?.id,
+                                                );
+                                            }}
+                                        >
+                                            Rejeitar
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            color="green"
+                                            onClick={() => {
+                                                setOpenedConfirmModal(true);
+                                                setSelectedCollateralId(
+                                                    collateral?.id,
+                                                );
+                                            }}
+                                        >
+                                            Confirmar
+                                        </Button>
+                                    </Group>
+                                </Card>
+                            </Grid.Col>
+                        );
+                    })}
+                </Grid>
+            ) : (
+                <Text size={20} className="my-3 text-center">
+                    Nenhuma garantia pendente de validação.
+                </Text>
+            )}
 
             <Divider my="xl" />
         </>

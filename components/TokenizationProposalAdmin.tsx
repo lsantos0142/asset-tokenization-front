@@ -1,21 +1,19 @@
 import {
-    Text,
-    Anchor,
+    Badge,
     Button,
     Card,
     Divider,
-    Group,
-    Space,
-    Title,
-    Badge,
     Grid,
+    Group,
     Modal,
+    Space,
+    Text,
+    Title,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import formatCPF from "../helpers/FormatCPF";
 import { Proposal } from "../types/Proposal";
@@ -183,102 +181,114 @@ const TokenizationProposalAdmin: NextPage = () => {
                 </Group>
             </Modal>
 
-            <Group position="apart">
+            <div className="d-flex flex-column gap-2 mt-5 mb-5">
                 <Title order={3}>Propostas de Tokenização Ativas</Title>
-                <Button
-                    variant="outline"
-                    color={"blue"}
-                    onClick={getAllActiveProposals}
-                >
-                    <IconRefresh />
-                </Button>
-            </Group>
+                <div className="d-flex gap-3 align-items-center justify-content-between">
+                    <Text size={20}>
+                        Gerencie as propostas de tokenização ativas, aceite ou
+                        rejeite de acordo com os dados fornecidos.
+                    </Text>
+                    <Button
+                        variant="outline"
+                        color={"blue"}
+                        onClick={getAllActiveProposals}
+                    >
+                        <IconRefresh />
+                    </Button>
+                </div>
+            </div>
 
-            <Space h="xl" />
-
-            <Grid gutter={30}>
-                {proposals.map((proposal) => {
-                    return (
-                        <Grid.Col md={6} xl={4} key={proposal.id}>
-                            <Card shadow="sm" p="lg" radius="lg" withBorder>
-                                <Text size={22} weight={500}>
-                                    {proposal.address}
-                                </Text>
-
-                                <Badge color="pink" variant="light" mt="md">
-                                    Em aberto
-                                </Badge>
-
-                                <Space h="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Nome do Usuário</Text>
-                                    <Text>{proposal?.user?.username}</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Nome</Text>
-                                    <Text>{proposal?.user?.name}</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>CPF do Usuário</Text>
-                                    <Text>
-                                        {formatCPF(proposal?.user?.cpf!)}
+            {!!proposals.length ? (
+                <Grid gutter={30}>
+                    {proposals.map((proposal) => {
+                        return (
+                            <Grid.Col md={6} xl={4} key={proposal.id}>
+                                <Card shadow="sm" p="lg" radius="lg" withBorder>
+                                    <Text size={22} weight={500}>
+                                        {proposal.address}
                                     </Text>
-                                </Group>
 
-                                <Divider size="xs" />
+                                    <Badge color="pink" variant="light" mt="md">
+                                        Em aberto
+                                    </Badge>
 
-                                <Group position="apart" my="xs">
-                                    <Text>Área útil</Text>
-                                    <Text>
-                                        {proposal.usableArea} m<sup>2</sup>
-                                    </Text>
-                                </Group>
+                                    <Space h="xs" />
 
-                                <Divider size="xs" />
+                                    <Group position="apart" my="xs">
+                                        <Text>Nome do Usuário</Text>
+                                        <Text>{proposal?.user?.username}</Text>
+                                    </Group>
 
-                                <Group position="apart" my="xs">
-                                    <Text>Número de Registro</Text>
-                                    <Text>{proposal.registration}</Text>
-                                </Group>
+                                    <Divider size="xs" />
 
-                                <Space h="xl" />
+                                    <Group position="apart" my="xs">
+                                        <Text>Nome</Text>
+                                        <Text>{proposal?.user?.name}</Text>
+                                    </Group>
 
-                                <Group position="apart" my="xs">
-                                    <Button
-                                        variant="outline"
-                                        color="red"
-                                        onClick={() => {
-                                            setOpenedRejectModal(true);
-                                            setSelectedProposalId(proposal.id);
-                                        }}
-                                    >
-                                        Rejeitar
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        color="green"
-                                        onClick={() => {
-                                            setOpenedAcceptModal(true);
-                                            setSelectedProposalId(proposal.id);
-                                        }}
-                                    >
-                                        Aceitar
-                                    </Button>
-                                </Group>
-                            </Card>
-                        </Grid.Col>
-                    );
-                })}
-            </Grid>
+                                    <Divider size="xs" />
 
-            <Divider my="xl" />
+                                    <Group position="apart" my="xs">
+                                        <Text>CPF do Usuário</Text>
+                                        <Text>
+                                            {formatCPF(proposal?.user?.cpf!)}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Área útil</Text>
+                                        <Text>
+                                            {proposal.usableArea} m<sup>2</sup>
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Número de Registro</Text>
+                                        <Text>{proposal.registration}</Text>
+                                    </Group>
+
+                                    <Space h="xl" />
+
+                                    <Group position="apart" my="xs">
+                                        <Button
+                                            variant="outline"
+                                            color="red"
+                                            onClick={() => {
+                                                setOpenedRejectModal(true);
+                                                setSelectedProposalId(
+                                                    proposal.id,
+                                                );
+                                            }}
+                                        >
+                                            Rejeitar
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            color="green"
+                                            onClick={() => {
+                                                setOpenedAcceptModal(true);
+                                                setSelectedProposalId(
+                                                    proposal.id,
+                                                );
+                                            }}
+                                        >
+                                            Aceitar
+                                        </Button>
+                                    </Group>
+                                </Card>
+                            </Grid.Col>
+                        );
+                    })}
+                </Grid>
+            ) : (
+                <Text size={20} className="my-3 text-center">
+                    Não há nehuma proposta de tokenização ativa.
+                </Text>
+            )}
         </>
     );
 };

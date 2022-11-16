@@ -201,147 +201,169 @@ const OffersAdmin: NextPage = () => {
                 </Group>
             </Modal>
 
-            <Group position="apart">
+            <div className="d-flex flex-column gap-2 mt-5 mb-5">
                 <Title order={3}>
                     Ofertas Esperando Confirmação de Pagamento
                 </Title>
-                <Button
-                    variant="outline"
-                    color={"blue"}
-                    onClick={getAllWaitingPaymentOffers}
-                >
-                    <IconRefresh />
-                </Button>
-            </Group>
+                <div className="d-flex gap-2 align-items-center justify-content-between">
+                    <Text size={20}>
+                        Gerencie as ofertas com compradores já definidos. Caso a
+                        oferta tenha sido paga, valide o pagamento no respectivo
+                        card abaixo.
+                    </Text>
+                    <Button
+                        variant="outline"
+                        color={"blue"}
+                        onClick={getAllWaitingPaymentOffers}
+                    >
+                        <IconRefresh />
+                    </Button>
+                </div>
+            </div>
 
-            <Space h="xl" />
-
-            <Grid gutter={30}>
-                {offers.map((offer) => {
-                    return (
-                        <Grid.Col md={6} xl={4} key={offer.id}>
-                            <Card shadow="sm" p="lg" radius="lg" withBorder>
-                                <Text size={22} weight={500}>
-                                    {offer.ownership?.tokenizedAsset?.address}
-                                </Text>
-
-                                <Badge color="pink" variant="light" mt="md">
-                                    Esperando Pagamento
-                                </Badge>
-
-                                <Space h="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Usuário Comprador</Text>
-                                    <Text>{offer?.currentBuyer?.username}</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>CPF do Comprador</Text>
-                                    <Text>
-                                        {offer?.currentBuyer?.cpf
-                                            ? formatCPF(
-                                                  offer?.currentBuyer?.cpf,
-                                              )
-                                            : null}
-                                    </Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Nome do Comprador</Text>
-                                    <Text>{offer?.currentBuyer?.name}</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Usuário Vendedor</Text>
-                                    <Text>
-                                        {offer?.ownership?.user?.username}
-                                    </Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>CPF do Vendedor</Text>
-                                    <Text>
-                                        {offer?.ownership?.user?.cpf
-                                            ? formatCPF(
-                                                  offer?.ownership?.user?.cpf,
-                                              )
-                                            : null}
-                                    </Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Nome do Vendedor</Text>
-                                    <Text>{offer?.ownership?.user?.name}</Text>
-                                </Group>
-
-                                <Divider size="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Número de Registro</Text>
-                                    <Text>
+            {!!offers?.length ? (
+                <Grid gutter={30}>
+                    {offers.map((offer) => {
+                        return (
+                            <Grid.Col md={6} xl={4} key={offer.id}>
+                                <Card shadow="sm" p="lg" radius="lg" withBorder>
+                                    <Text size={22} weight={500}>
                                         {
-                                            offer?.ownership?.tokenizedAsset
-                                                ?.registration
+                                            offer.ownership?.tokenizedAsset
+                                                ?.address
                                         }
                                     </Text>
-                                </Group>
 
-                                <Divider size="xs" />
+                                    <Badge color="pink" variant="light" mt="md">
+                                        Esperando Pagamento
+                                    </Badge>
 
-                                <Group position="apart" my="xs">
-                                    <Text>Porcentagem do Imóvel em Oferta</Text>
-                                    <Text>{offer?.percentage * 100} %</Text>
-                                </Group>
+                                    <Space h="xs" />
 
-                                <Divider size="xs" />
+                                    <Group position="apart" my="xs">
+                                        <Text>Usuário Comprador</Text>
+                                        <Text>
+                                            {offer?.currentBuyer?.username}
+                                        </Text>
+                                    </Group>
 
-                                <Group position="apart" my="xs">
-                                    <Text>Valor da Oferta</Text>
-                                    <Text>
-                                        {formatNumber.format(offer?.amount)}
-                                    </Text>
-                                </Group>
+                                    <Divider size="xs" />
 
-                                <Space h="xl" />
+                                    <Group position="apart" my="xs">
+                                        <Text>CPF do Comprador</Text>
+                                        <Text>
+                                            {offer?.currentBuyer?.cpf
+                                                ? formatCPF(
+                                                      offer?.currentBuyer?.cpf,
+                                                  )
+                                                : null}
+                                        </Text>
+                                    </Group>
 
-                                <Group position="apart" my="xs">
-                                    <Button
-                                        variant="outline"
-                                        color="red"
-                                        onClick={() => {
-                                            setOpenedRejectModal(true);
-                                            setSelectedOfferId(offer?.id);
-                                        }}
-                                    >
-                                        Rejeitar
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        color="green"
-                                        onClick={() => {
-                                            setOpenedConfirmModal(true);
-                                            setSelectedOfferId(offer?.id);
-                                        }}
-                                    >
-                                        Confirmar
-                                    </Button>
-                                </Group>
-                            </Card>
-                        </Grid.Col>
-                    );
-                })}
-            </Grid>
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Nome do Comprador</Text>
+                                        <Text>{offer?.currentBuyer?.name}</Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Usuário Vendedor</Text>
+                                        <Text>
+                                            {offer?.ownership?.user?.username}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>CPF do Vendedor</Text>
+                                        <Text>
+                                            {offer?.ownership?.user?.cpf
+                                                ? formatCPF(
+                                                      offer?.ownership?.user
+                                                          ?.cpf,
+                                                  )
+                                                : null}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Nome do Vendedor</Text>
+                                        <Text>
+                                            {offer?.ownership?.user?.name}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Número de Registro</Text>
+                                        <Text>
+                                            {
+                                                offer?.ownership?.tokenizedAsset
+                                                    ?.registration
+                                            }
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>
+                                            Porcentagem do Imóvel em Oferta
+                                        </Text>
+                                        <Text>{offer?.percentage * 100} %</Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Valor da Oferta</Text>
+                                        <Text>
+                                            {formatNumber.format(offer?.amount)}
+                                        </Text>
+                                    </Group>
+
+                                    <Space h="xl" />
+
+                                    <Group position="apart" my="xs">
+                                        <Button
+                                            variant="outline"
+                                            color="red"
+                                            onClick={() => {
+                                                setOpenedRejectModal(true);
+                                                setSelectedOfferId(offer?.id);
+                                            }}
+                                        >
+                                            Rejeitar
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            color="green"
+                                            onClick={() => {
+                                                setOpenedConfirmModal(true);
+                                                setSelectedOfferId(offer?.id);
+                                            }}
+                                        >
+                                            Confirmar
+                                        </Button>
+                                    </Group>
+                                </Card>
+                            </Grid.Col>
+                        );
+                    })}
+                </Grid>
+            ) : (
+                <Text size={20} className="my-3 text-center">
+                    {" "}
+                    Nenhuma oferta pendente de confirmação de pagamento.
+                </Text>
+            )}
 
             <Divider my="xl" />
         </>
