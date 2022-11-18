@@ -4,6 +4,7 @@ import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { AuditModal } from "../../components/AuditModal";
 import { TokenizedAsset } from "../../types/TokenizedAsset";
 
 const Temp: NextPage = () => {
@@ -36,11 +37,11 @@ const Temp: NextPage = () => {
 
     return (
         <>
-            {/* <AuditModal
+            <AuditModal
                 setShowModal={setShowModal}
                 showModal={showModal}
                 selectedAsset={selectedAsset}
-            /> */}
+            />
 
             <div className="d-flex flex-column gap-3 mb-5">
                 <div className="d-flex gap-3 align-items-center">
