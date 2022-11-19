@@ -44,7 +44,9 @@ export function OwnershipCard({ children, ownership }: IOwnershipCardProps) {
 
             <Group position="apart" my="xs">
                 <Text>Porcentagem de Posse</Text>
-                <Text>{ownership.percentageOwned * 100} %</Text>
+                <Text>
+                    {Math.round(ownership.percentageOwned * 10000) / 100} %
+                </Text>
             </Group>
             {children}
         </Card>

@@ -17,6 +17,8 @@ const Navigation: React.FC = () => {
     const { user } = useContext(AuthContext);
     const router = useRouter();
 
+    if (!user) return <></>;
+
     return (
         <Navbar width={{ md: 200, lg: 250, base: 170 }}>
             <Navbar.Section>
@@ -106,30 +108,16 @@ const Navigation: React.FC = () => {
             <Navbar.Section>
                 <NavLink
                     py={0}
-                    active={
-                        router.pathname.includes("/user") ||
-                        router.pathname.includes("/login")
-                    }
+                    active={router.pathname.includes("/user")}
                     label={
-                        user ? (
-                            <Link href={"/user"}>
-                                <div className="py-3 d-flex gap-3 align-items-center">
-                                    <div>
-                                        <IconUser />
-                                    </div>
-                                    <Center>{user.username}</Center>
+                        <Link href={"/user"}>
+                            <div className="py-3 d-flex gap-3 align-items-center">
+                                <div>
+                                    <IconUser />
                                 </div>
-                            </Link>
-                        ) : (
-                            <Link href={"/login"}>
-                                <div className="py-3 d-flex gap-3 align-items-center">
-                                    <div>
-                                        <IconUser />
-                                    </div>
-                                    <Center>Login / Registro</Center>
-                                </div>
-                            </Link>
-                        )
+                                <Center>{user.username}</Center>
+                            </div>
+                        </Link>
                     }
                 />
             </Navbar.Section>

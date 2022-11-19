@@ -60,7 +60,7 @@ const Login: NextPage = () => {
             .then((res) => {
                 if (res.status === 200) {
                     login(jwtDecode(res.data.accessToken), res.data);
-                    router.push("/");
+                    router.push("/marketplace");
                 }
             })
             .catch((e) => {
@@ -95,7 +95,7 @@ const Login: NextPage = () => {
             .then((res) => {
                 if (res.status === 200) {
                     login(jwtDecode(res.data.accessToken), res.data);
-                    router.push("/");
+                    router.push("/marketplace");
                 }
             })
             .catch((e) => {
@@ -123,8 +123,39 @@ const Login: NextPage = () => {
 
     return (
         <>
-            <Breadcrumbs>{items}</Breadcrumbs>
-            <Divider my="xl" />
+            <Title order={2} align="center" mt={"1rem"}>
+                Fazer Login
+            </Title>
+            <Box sx={{ maxWidth: 400 }} mx="auto">
+                <form
+                    onSubmit={loginForm.onSubmit((values) =>
+                        handleLogin(values),
+                    )}
+                >
+                    <TextInput
+                        my={"lg"}
+                        withAsterisk
+                        label="Usuário"
+                        placeholder="Digite seu usuário"
+                        {...loginForm.getInputProps("username")}
+                    />
+
+                    <PasswordInput
+                        my={"lg"}
+                        withAsterisk
+                        label="Senha"
+                        placeholder="Digite sua senha"
+                        {...loginForm.getInputProps("password")}
+                    />
+
+                    <Group position="right" my="xl">
+                        <Button variant="outline" type="submit">
+                            Fazer Login
+                        </Button>
+                    </Group>
+                </form>
+            </Box>
+            <Divider my="xl" label="OU" labelPosition="center" />
 
             <Title order={2} align="center">
                 Registrar
@@ -170,41 +201,6 @@ const Login: NextPage = () => {
                     <Group position="right" my="xl">
                         <Button variant="outline" type="submit">
                             Registrar
-                        </Button>
-                    </Group>
-                </form>
-            </Box>
-
-            <Divider my="xl" label="OU" labelPosition="center" />
-
-            <Title order={2} align="center" mt={"1rem"}>
-                Fazer Login
-            </Title>
-            <Box sx={{ maxWidth: 400 }} mx="auto">
-                <form
-                    onSubmit={loginForm.onSubmit((values) =>
-                        handleLogin(values),
-                    )}
-                >
-                    <TextInput
-                        my={"lg"}
-                        withAsterisk
-                        label="Usuário"
-                        placeholder="Digite seu usuário"
-                        {...loginForm.getInputProps("username")}
-                    />
-
-                    <PasswordInput
-                        my={"lg"}
-                        withAsterisk
-                        label="Senha"
-                        placeholder="Digite sua senha"
-                        {...loginForm.getInputProps("password")}
-                    />
-
-                    <Group position="right" my="xl">
-                        <Button variant="outline" type="submit">
-                            Fazer Login
                         </Button>
                     </Group>
                 </form>

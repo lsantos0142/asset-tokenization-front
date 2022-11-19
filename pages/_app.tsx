@@ -71,7 +71,7 @@ export default function App(props: AppProps) {
                                         height: "100%",
                                     }}
                                 >
-                                    <Link href="/">
+                                    <Link href="/marketplace">
                                         <Center>
                                             <Title
                                                 style={{
