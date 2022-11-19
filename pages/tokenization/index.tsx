@@ -183,10 +183,10 @@ const Tokenization: NextPage = () => {
                             className="flex-grow-1"
                             min={1}
                             withAsterisk
-                            label="Número do Registro em Cartório"
-                            placeholder="Ex: 23412"
+                            label={`Área Útil do Imóvel (m\xB2)`}
+                            placeholder="Ex: 100"
                             {...createTokenizationProposalForm.getInputProps(
-                                "registration",
+                                "usableArea",
                             )}
                             stepHoldDelay={500}
                             stepHoldInterval={100}
