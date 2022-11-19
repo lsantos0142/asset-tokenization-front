@@ -2,12 +2,11 @@ import { Button, LoadingOverlay, Table, Text, Title } from "@mantine/core";
 import { IconExternalLink, IconReceipt, IconRefresh } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { AuditModal } from "../../components/AuditModal";
-import { TokenizedAsset } from "../../types/TokenizedAsset";
+import { TokenizedAsset } from "../types/TokenizedAsset";
+import { AuditModal } from "./AuditModal";
 
-const Temp: NextPage = () => {
+const TokenizedAssetsAdmin: NextPage = () => {
     const [tokenizedAssets, setTokenizedAssets] = useState<TokenizedAsset[]>(
         [],
     );
@@ -43,12 +42,9 @@ const Temp: NextPage = () => {
                 selectedAsset={selectedAsset}
             />
 
-            <div className="d-flex flex-column gap-3 mb-5">
-                <div className="d-flex gap-3 align-items-center">
-                    <IconReceipt size={35} />
-                    <Title order={2}>Gestor de imóveis tokenizados</Title>
-                </div>
-                <div className="d-flex justify-content-between">
+            <div className="d-flex flex-column gap-2 mt-4 mb-4">
+                <Title order={3}>Gestor de imóveis tokenizados</Title>
+                <div className="d-flex gap-5 align-items-center justify-content-between">
                     <Text size={20}>
                         Gerencie todos os imóveis tokenizados na plataforma.
                     </Text>
@@ -64,7 +60,12 @@ const Temp: NextPage = () => {
 
             <div className="">
                 <LoadingOverlay visible={loading} overlayBlur={2} />
-                <Table striped className="mt-4" horizontalSpacing="xl">
+                <Table
+                    striped
+                    withBorder
+                    className="mt-4"
+                    horizontalSpacing="xl"
+                >
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -131,4 +132,4 @@ const Temp: NextPage = () => {
     );
 };
 
-export default Temp;
+export default TokenizedAssetsAdmin;

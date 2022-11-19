@@ -33,7 +33,7 @@ const client = axios.create({
 export default function App(props: AppProps) {
     const { Component, pageProps } = props;
     const theme = useMantineTheme();
-    const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
+    const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
     const toggleColorScheme = (value?: ColorScheme) =>
         setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
     const dark = colorScheme === "dark";

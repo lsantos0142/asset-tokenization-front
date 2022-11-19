@@ -2,6 +2,7 @@ import {
     Anchor,
     Breadcrumbs,
     Button,
+    Card,
     Checkbox,
     Divider,
     Group,
@@ -244,7 +245,6 @@ const CreateOffer: NextPage = () => {
                     </Button>
                 </div>
             </div>
-
             <div className="d-flex flex-wrap gap-4">
                 {ownerships.map((ownership) => {
                     return (

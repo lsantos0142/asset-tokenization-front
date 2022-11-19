@@ -1,22 +1,20 @@
 import {
-    Text,
+    Badge,
     Button,
     Card,
     Divider,
-    Group,
-    Space,
-    Title,
-    Badge,
     Grid,
+    Group,
     Modal,
+    Space,
+    Text,
+    Title,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
-import formatCPF from "../helpers/FormatCPF";
-import { formatNumber } from "../helpers/FormatCurrencyBRL";
 import { formatDate } from "../helpers/FormatDate";
 import { Collateral } from "../types/Collateral";
 import { User } from "../types/User";
@@ -216,7 +214,7 @@ const CollateralsAdmin: NextPage = () => {
                 </Group>
             </Modal>
 
-            <div className="d-flex flex-column gap-2 mt-5 mb-5">
+            <div className="d-flex flex-column gap-2 mt-4 mb-5">
                 <Title order={3}>
                     Validação de novas garantias de empréstimo
                 </Title>
@@ -351,8 +349,6 @@ const CollateralsAdmin: NextPage = () => {
                     Nenhuma garantia pendente de validação.
                 </Text>
             )}
-
-            <Divider my="xl" />
         </>
     );
 };

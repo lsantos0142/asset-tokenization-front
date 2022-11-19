@@ -201,7 +201,7 @@ const OffersAdmin: NextPage = () => {
                 </Group>
             </Modal>
 
-            <div className="d-flex flex-column gap-2 mt-5 mb-5">
+            <div className="d-flex flex-column gap-2 mt-4 mb-5">
                 <Title order={3}>
                     Ofertas Esperando Confirmação de Pagamento
                 </Title>
@@ -364,8 +364,6 @@ const OffersAdmin: NextPage = () => {
                     Nenhuma oferta pendente de confirmação de pagamento.
                 </Text>
             )}
-
-            <Divider my="xl" />
         </>
     );
 };

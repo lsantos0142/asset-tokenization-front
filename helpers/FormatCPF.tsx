@@ -1,4 +1,6 @@
-export default function formatCPF(CPF: string) {
+export default function formatCPF(CPF?: string) {
+    if (!CPF) return "";
+
     //retira os caracteres indesejados...
     CPF = CPF.replace(/[^\d]/g, "");
 

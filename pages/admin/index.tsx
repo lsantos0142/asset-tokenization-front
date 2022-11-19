@@ -7,6 +7,7 @@ import {
     Tabs,
     Title,
     Text,
+    Card,
 } from "@mantine/core";
 import { IconReportAnalytics } from "@tabler/icons";
 import type { NextPage } from "next";
@@ -15,6 +16,7 @@ import CollateralsAdmin from "../../components/CollateralsAdmin";
 import LoanPaymentAdmin from "../../components/LoanPaymentAdmin";
 import OffersAdmin from "../../components/OffersAdmin";
 import TokenizationProposalAdmin from "../../components/TokenizationProposalAdmin";
+import TokenizedAssetsAdmin from "../../components/TokenizedAssetsAdmin";
 
 const Admin: NextPage = () => {
     const items = [
@@ -32,7 +34,7 @@ const Admin: NextPage = () => {
 
             <Divider my="xl" />
 
-            <div className="d-flex flex-column gap-3 mb-1">
+            <div className="d-flex flex-column gap-3 mb-3">
                 <div className="d-flex gap-3 align-items-center">
                     <IconReportAnalytics size={35} />
                     <Title order={2}>Portal Admin</Title>
@@ -41,7 +43,7 @@ const Admin: NextPage = () => {
 
             <Space h="xl" />
 
-            <Tabs defaultValue="proposal" inverted>
+            <Tabs defaultValue="proposal">
                 <Tabs.List>
                     <Tabs.Tab value="proposal">
                         Propostas de tokenização
@@ -51,19 +53,33 @@ const Admin: NextPage = () => {
                     <Tabs.Tab value="loan-payment">
                         Quitações de empréstimos
                     </Tabs.Tab>
+                    <Tabs.Tab value="assets">Imóveis tokenizados</Tabs.Tab>
                 </Tabs.List>
 
                 <Tabs.Panel value="proposal" pb="xs">
-                    <TokenizationProposalAdmin />
+                    <Card withBorder radius={0}>
+                        <TokenizationProposalAdmin />
+                    </Card>
                 </Tabs.Panel>
                 <Tabs.Panel value="offer" pb="xs">
-                    <OffersAdmin />
+                    <Card withBorder radius={0}>
+                        <OffersAdmin />
+                    </Card>
                 </Tabs.Panel>
                 <Tabs.Panel value="collateral" pb="xs">
-                    <CollateralsAdmin />
+                    <Card withBorder radius={0}>
+                        <CollateralsAdmin />
+                    </Card>
                 </Tabs.Panel>
                 <Tabs.Panel value="loan-payment" pb="xs">
-                    <LoanPaymentAdmin />
+                    <Card withBorder radius={0}>
+                        <LoanPaymentAdmin />
+                    </Card>
+                </Tabs.Panel>
+                <Tabs.Panel value="assets" pb="xs">
+                    <Card withBorder radius={0}>
+                        <TokenizedAssetsAdmin />
+                    </Card>
                 </Tabs.Panel>
             </Tabs>
         </>

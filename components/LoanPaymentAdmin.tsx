@@ -53,11 +53,11 @@ const LoanPaymentAdmin: NextPage = () => {
                         setCollaterals(c);
                     })
                     .catch((e) => {
-                        console.log(e.response.data.message);
+                        console.log(e.response?.data?.message);
                     });
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     };
 
@@ -197,7 +197,7 @@ const LoanPaymentAdmin: NextPage = () => {
                 setAllUsers(res.data);
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
     };
 
@@ -283,7 +283,7 @@ const LoanPaymentAdmin: NextPage = () => {
                 </Group>
             </Modal>
 
-            <div className="d-flex flex-column gap-2 mt-5 mb-5">
+            <div className="d-flex flex-column gap-2 mt-4 mb-5">
                 <Title order={3}>
                     Empréstimos Esperando Confirmação de Pagamento
                 </Title>

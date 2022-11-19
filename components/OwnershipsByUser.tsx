@@ -2,21 +2,19 @@ import { Button, Group, Space, Text, Title } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
+import AuthContext from "../context/AuthContext";
 import { Ownership } from "../types/Ownership";
 import { OwnershipCard } from "./OwnershipCard";
 
-type OwnershipsByUserProps = {
-    userId?: string;
-};
-
-const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
+const OwnershipsByUser: NextPage = () => {
     const [ownerships, setOwnerships] = useState<Ownership[]>([]);
+    const { user } = useContext(AuthContext);
 
     const getAllOwnerships = useCallback(() => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/ownership/get-by-user/${userId}`,
+                `${process.env.BACK}/tokenized-asset/ownership/get-by-user/${user?.sub}`,
             )
             .then((res) => {
                 setOwnerships(res.data);
@@ -24,7 +22,7 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
             .catch((e) => {
                 console.log(e.response?.data?.message);
             });
-    }, [userId]);
+    }, [user]);
 
     useEffect(() => {
         getAllOwnerships();
@@ -32,20 +30,27 @@ const OwnershipsByUser: NextPage<OwnershipsByUserProps> = ({ userId }) => {
 
     return (
         <>
-            <Group position="apart">
-                <Title order={2}>Imóveis Tokenizados</Title>
-                <Button
-                    variant="outline"
-                    color={"blue"}
-                    onClick={getAllOwnerships}
-                >
-                    <IconRefresh />
-                </Button>
-            </Group>
+            <div className="d-flex flex-column gap-2 mt-4 mb-5">
+                <Title order={3}>Imóveis Tokenizados</Title>
+                <div className="d-flex gap-3 align-items-center justify-content-between">
+                    <Text size={20}>
+                        Visualize os imóveis tokenizados que você possui em sua
+                        carteira digital.
+                    </Text>
+                    <Button
+                        variant="outline"
+                        color={"blue"}
+                        onClick={getAllOwnerships}
+                    >
+                        <IconRefresh />
+                    </Button>
+                </div>
+            </div>
 
-            <Space h="xl" />
             {!ownerships?.length ? (
-                <Text>Você ainda não possui imóveis tokenizados.</Text>
+                <Text size={20} className="my-3 text-center">
+                    Você ainda não possui imóveis tokenizados.
+                </Text>
             ) : (
                 <div className="d-flex flex-wrap gap-4">
                     {ownerships.map((ownership) => {

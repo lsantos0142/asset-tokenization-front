@@ -14,26 +14,24 @@ import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
+import AuthContext from "../context/AuthContext";
 import { formatDate } from "../helpers/FormatDate";
 import { Collateral } from "../types/Collateral";
 import { User } from "../types/User";
 
-type CollateralsByUserProps = {
-    userId?: string;
-};
-
-const CollateralsByUser: NextPage<CollateralsByUserProps> = ({ userId }) => {
+const CollateralsByUser: NextPage = () => {
     const [collaterals, setCollaterals] = useState<Collateral[]>([]);
     const [allUsers, setAllUsers] = useState<User[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedCollateralId, setSelectedCollateralId] =
         useState<string>("");
+    const { user } = useContext(AuthContext);
 
     const getAllCollaterals = useCallback(() => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/collateral/get-by-user/${userId}?status=ACTIVE`,
+                `${process.env.BACK}/tokenized-asset/collateral/get-by-user/${user?.sub}?status=ACTIVE`,
             )
             .then((res) => {
                 setCollaterals(res.data);
@@ -41,7 +39,7 @@ const CollateralsByUser: NextPage<CollateralsByUserProps> = ({ userId }) => {
             .catch((e) => {
                 console.log(e.response?.data?.message);
             });
-    }, [userId]);
+    }, [user]);
 
     useEffect(() => {
         getAllCollaterals();
@@ -153,20 +151,27 @@ const CollateralsByUser: NextPage<CollateralsByUserProps> = ({ userId }) => {
                 </Group>
             </Modal>
 
-            <Group position="apart">
-                <Title order={2}>Empréstimos</Title>
-                <Button
-                    variant="outline"
-                    color={"blue"}
-                    onClick={getAllCollaterals}
-                >
-                    <IconRefresh />
-                </Button>
-            </Group>
+            <div className="d-flex flex-column gap-2 mt-4 mb-5">
+                <Title order={3}>Garantias de empréstimos</Title>
+                <div className="d-flex gap-3 align-items-center justify-content-between">
+                    <Text size={20}>
+                        Visualize as garantias de empréstimos associadas aos
+                        seus imóveis tokenizados.
+                    </Text>
+                    <Button
+                        variant="outline"
+                        color={"blue"}
+                        onClick={getAllCollaterals}
+                    >
+                        <IconRefresh />
+                    </Button>
+                </div>
+            </div>
 
-            <Space h="xl" />
             {!collaterals?.length ? (
-                <Text>Você não possui empréstimos ativos.</Text>
+                <Text size={20} className="my-3 text-center">
+                    Você não possui garantias de empréstimos ativas.
+                </Text>
             ) : (
                 <Grid gutter={30}>
                     {collaterals.map((collateral) => {

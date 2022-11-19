@@ -14,9 +14,11 @@ import {
     Grid,
     Badge,
     MediaQuery,
+    Tooltip,
+    Modal,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons";
+import { IconCheck, IconInfoCircle, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -35,6 +37,7 @@ const OfferDetails: NextPage = () => {
     const { id } = router.query;
 
     const [offer, setOffer] = useState<Offer>();
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     const getOfferById = useCallback(() => {
         if (typeof id !== "undefined") {
@@ -113,6 +116,33 @@ const OfferDetails: NextPage = () => {
 
     return (
         <>
+            <Modal
+                centered
+                size={540}
+                opened={showModal}
+                onClose={() => setShowModal(false)}
+                title={
+                    <Title size={23} order={3}>
+                        Oferta aceita com sucesso!
+                    </Title>
+                }
+            >
+                <Text size={22} className="my-5">
+                    O pagamento deverá ser realizado nos próximos dias, assim
+                    que houver a confirmação do pagamento, você receberá o
+                    imóvel tokenizado associado à sua carteira digital
+                </Text>
+                <div className="text-center mt-1">
+                    <Button
+                        size="md"
+                        onClick={() => router.push("/marketplace")}
+                        color="dark"
+                    >
+                        Voltar
+                    </Button>
+                </div>
+            </Modal>
+
             <Breadcrumbs>{items}</Breadcrumbs>
 
             <Divider my="xl" />
@@ -121,7 +151,7 @@ const OfferDetails: NextPage = () => {
 
             <Space h="xl" />
 
-            <Card shadow="sm" p="xl" radius="lg" withBorder>
+            <Card p="xl" radius="sm" withBorder>
                 <Grid gutter={50}>
                     <Grid.Col lg={5} xl={4}>
                         <MediaQuery
@@ -149,13 +179,31 @@ const OfferDetails: NextPage = () => {
                                         }}
                                     />
                                 </Center>
-                                <Button
-                                    color="green"
-                                    variant="outline"
-                                    onClick={handleAcceptOffer}
-                                >
-                                    Aceitar Oferta
-                                </Button>
+                                <div className="d-flex gap-2 align-items-center">
+                                    <Button
+                                        className="flex-grow-1"
+                                        color="green"
+                                        variant="outline"
+                                        onClick={handleAcceptOffer}
+                                        disabled={!user?.walletAddress}
+                                    >
+                                        Aceitar Oferta
+                                    </Button>
+
+                                    {!user?.walletAddress && (
+                                        <Tooltip
+                                            label="Para aceitar uma oferta, cadastre sua carteira digital na tela de dados do perfil"
+                                            color="black"
+                                            withArrow
+                                        >
+                                            <div>
+                                                <IconInfoCircle
+                                                    color={"gray"}
+                                                />
+                                            </div>
+                                        </Tooltip>
+                                    )}
+                                </div>
                             </Stack>
                         </MediaQuery>
                     </Grid.Col>

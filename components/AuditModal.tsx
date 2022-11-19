@@ -13,6 +13,7 @@ import { showNotification } from "@mantine/notifications";
 import { IconExternalLink, IconX } from "@tabler/icons";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
+import formatCPF from "../helpers/FormatCPF";
 import { formatNumber } from "../helpers/FormatCurrencyBRL";
 import { IAuditResponse } from "../types/Audit";
 import { TokenizedAsset } from "../types/TokenizedAsset";
@@ -114,7 +115,9 @@ export function AuditModal({
                                     )}
                                 </div>
                                 <div className="d-flex flex-column gap-1">
-                                    <Text>CPF: {ownerData.owner?.cpf}</Text>
+                                    <Text>
+                                        CPF: {formatCPF(ownerData.owner?.cpf)}
+                                    </Text>
                                     <Text>
                                         Percentual do imóvel:{" "}
                                         {ownerData.shares * 100}%

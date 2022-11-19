@@ -181,7 +181,7 @@ const TokenizationProposalAdmin: NextPage = () => {
                 </Group>
             </Modal>
 
-            <div className="d-flex flex-column gap-2 mt-5 mb-5">
+            <div className="d-flex flex-column gap-2 mt-4 mb-5">
                 <Title order={3}>Propostas de Tokenização Ativas</Title>
                 <div className="d-flex gap-3 align-items-center justify-content-between">
                     <Text size={20}>
