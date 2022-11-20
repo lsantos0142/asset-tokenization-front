@@ -234,7 +234,7 @@ const CreateOffer: NextPage = () => {
                 </div>
                 <div className="d-flex justify-content-between">
                     <Text size={20}>
-                        Selecione o imóvel que deseja ofertar no Markeplace.
+                        Selecione o imóvel que deseja ofertar no Marketplace.
                     </Text>
                     <Button
                         variant="outline"
