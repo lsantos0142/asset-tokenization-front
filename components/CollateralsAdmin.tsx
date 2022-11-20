@@ -31,7 +31,7 @@ const CollateralsAdmin: NextPage = () => {
     const getAllPendingCollaterals = () => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/collateral/get-all?status=PENDING_CONFIRMATION`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/collateral/get-all?status=PENDING_CONFIRMATION`,
             )
             .then((res) => {
                 setCollaterals(res.data);
@@ -53,7 +53,7 @@ const CollateralsAdmin: NextPage = () => {
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/collateral/reject/${selectedCollateralId}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/collateral/reject/${selectedCollateralId}`,
             )
             .then((res) => {
                 getAllPendingCollaterals();
@@ -96,7 +96,7 @@ const CollateralsAdmin: NextPage = () => {
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/collateral/validate/${selectedCollateralId}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/collateral/validate/${selectedCollateralId}`,
             )
             .then((res) => {
                 getAllPendingCollaterals();
@@ -133,7 +133,7 @@ const CollateralsAdmin: NextPage = () => {
 
     const getAllUsers = () => {
         axios
-            .get(`${process.env.BACK}/users`)
+            .get(`${process.env.NEXT_PUBLIC_BACK}/users`)
             .then((res) => {
                 setAllUsers(res.data);
             })

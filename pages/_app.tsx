@@ -26,7 +26,7 @@ import { RouteGuard } from "../components/RouteGuard";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const client = axios.create({
-    baseURL: process.env.BACK,
+    baseURL: process.env.NEXT_PUBLIC_BACK,
     timeout: 10000,
 });
 

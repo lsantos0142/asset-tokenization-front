@@ -33,7 +33,7 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
     const getAllAvailableOffers = useCallback(() => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/offer/get-all?status=AVAILABLE`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/get-all?status=AVAILABLE`,
             )
             .then((res) => {
                 setOffers(

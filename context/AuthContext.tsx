@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }: any) => {
 
             axios
                 .post(
-                    `${process.env.BACK}/auth/logout`,
+                    `${process.env.NEXT_PUBLIC_BACK}/auth/logout`,
                     {},
                     { headers: headers },
                 )
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: any) => {
 
             axios
                 .post(
-                    `${process.env.BACK}/auth/refresh`,
+                    `${process.env.NEXT_PUBLIC_BACK}/auth/refresh`,
                     {},
                     { headers: headers },
                 )

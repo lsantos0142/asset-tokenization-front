@@ -67,7 +67,7 @@ const Tokenization: NextPage = () => {
         setTimeout(() => {
             axios
                 .post(
-                    `${process.env.BACK}/tokenized-asset/proposal/create`,
+                    `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/proposal/create`,
                     values,
                 )
                 .then((res) => {

@@ -37,7 +37,7 @@ const RentPayments: NextPage = () => {
     const getAllOwnerships = useCallback(async () => {
         try {
             const { data } = await axios.get<Ownership[]>(
-                `${process.env.BACK}/tokenized-asset/ownership/get-by-user/${user.sub}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/ownership/get-by-user/${user.sub}`,
             );
 
             setEffectiveOwnerships(data);

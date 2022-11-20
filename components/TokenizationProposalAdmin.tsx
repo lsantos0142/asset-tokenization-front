@@ -26,7 +26,9 @@ const TokenizationProposalAdmin: NextPage = () => {
 
     const getAllActiveProposals = () => {
         axios
-            .get(`${process.env.BACK}/tokenized-asset/proposal/get-pending`)
+            .get(
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/proposal/get-pending`,
+            )
             .then((res) => {
                 setProposals(res.data);
             })
@@ -47,7 +49,7 @@ const TokenizationProposalAdmin: NextPage = () => {
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/proposal/refuse/${selectedProposalId}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/proposal/refuse/${selectedProposalId}`,
             )
             .then((res) => {
                 getAllActiveProposals();
@@ -90,7 +92,7 @@ const TokenizationProposalAdmin: NextPage = () => {
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/proposal/accept/${selectedProposalId}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/proposal/accept/${selectedProposalId}`,
             )
             .then((res) => {
                 getAllActiveProposals();

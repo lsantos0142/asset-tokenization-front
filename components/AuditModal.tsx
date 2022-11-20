@@ -37,7 +37,7 @@ export function AuditModal({
             setLoading(true);
 
             const { data } = await axios.get<IAuditResponse[]>(
-                `${process.env.BACK}/tokenized-asset/audit/${selectedAsset?.contractAddress}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/audit/${selectedAsset?.contractAddress}`,
             );
 
             setAuditData(data);

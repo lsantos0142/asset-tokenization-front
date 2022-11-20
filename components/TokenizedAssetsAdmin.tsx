@@ -19,7 +19,7 @@ const TokenizedAssetsAdmin: NextPage = () => {
         try {
             setLoading(true);
             const { data } = await axios.get<TokenizedAsset[]>(
-                `${process.env.BACK}/tokenized-asset/get-all`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/get-all`,
             );
 
             setTokenizedAssets(data);

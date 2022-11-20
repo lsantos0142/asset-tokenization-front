@@ -25,7 +25,7 @@ const OffersByUser: NextPage = () => {
     const getUserOffers = useCallback(() => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/offer/get-by-user/${user.sub}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/get-by-user/${user.sub}`,
             )
             .then((res) => {
                 setOffers(res.data);

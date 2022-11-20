@@ -50,7 +50,7 @@ export function RegisterRentPaymentModal({
 
             await axios
                 .post(
-                    `${process.env.BACK}/tokenized-asset/rent-payment/create`,
+                    `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/rent-payment/create`,
                     payload,
                 )
                 .then((res) => {

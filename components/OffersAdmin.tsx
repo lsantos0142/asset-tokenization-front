@@ -29,7 +29,7 @@ const OffersAdmin: NextPage = () => {
     const getAllWaitingPaymentOffers = () => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/offer/get-all?status=WAITING_PAYMENT`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/get-all?status=WAITING_PAYMENT`,
             )
             .then((res) => {
                 setOffers(res.data);
@@ -51,7 +51,7 @@ const OffersAdmin: NextPage = () => {
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/offer/reject-payment/${selectedOfferId}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/reject-payment/${selectedOfferId}`,
             )
             .then((res) => {
                 getAllWaitingPaymentOffers();
@@ -94,7 +94,7 @@ const OffersAdmin: NextPage = () => {
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/offer/validate-payment/${selectedOfferId}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/validate-payment/${selectedOfferId}`,
             )
             .then((res) => {
                 getAllWaitingPaymentOffers();

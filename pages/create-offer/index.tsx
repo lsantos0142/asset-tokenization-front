@@ -34,7 +34,7 @@ const CreateOffer: NextPage = () => {
     const getAllOwnerships = useCallback(() => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/ownership/get-by-user/${user?.sub}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/ownership/get-by-user/${user?.sub}`,
             )
             .then((res) => {
                 setOwnerships(res.data);
@@ -85,7 +85,7 @@ const CreateOffer: NextPage = () => {
         setTimeout(() => {
             axios
                 .post(
-                    `${process.env.BACK}/tokenized-asset/offer/create`,
+                    `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/create`,
                     values,
                 )
                 .then((res) => {

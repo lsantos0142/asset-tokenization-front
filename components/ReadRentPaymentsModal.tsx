@@ -35,7 +35,7 @@ export function ReadRentPaymentsModal({
             setLoading(true);
 
             const { data } = await axios.get<RentPayment[]>(
-                `${process.env.BACK}/tokenized-asset/rent-payment/get-by-ownership/${selectedOwnership?.id}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/rent-payment/get-by-ownership/${selectedOwnership?.id}`,
             );
 
             setRentPayments(data);

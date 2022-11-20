@@ -51,7 +51,7 @@ const Login: NextPage = () => {
 
     const handleSignup = (values: typeof signupForm.values) => {
         axios
-            .post(`${process.env.BACK}/auth/signup`, {
+            .post(`${process.env.NEXT_PUBLIC_BACK}/auth/signup`, {
                 name: values.name,
                 username: values.username,
                 password: values.password,
@@ -88,7 +88,7 @@ const Login: NextPage = () => {
 
     const handleLogin = (values: typeof loginForm.values) => {
         axios
-            .post(`${process.env.BACK}/auth/login`, {
+            .post(`${process.env.NEXT_PUBLIC_BACK}/auth/login`, {
                 username: values.username,
                 password: values.password,
             })

@@ -31,7 +31,7 @@ export function UserProfileInfo() {
     const getUser = useCallback(async () => {
         try {
             const { data } = await axios.get<User>(
-                `${process.env.BACK}/users/${user.sub}`,
+                `${process.env.NEXT_PUBLIC_BACK}/users/${user.sub}`,
             );
 
             setUserInfo(data);
@@ -43,7 +43,7 @@ export function UserProfileInfo() {
     const handleConnectWallet = useCallback(async () => {
         try {
             const { status } = await axios.put(
-                `${process.env.BACK}/users/${user.sub}/${walletAddress}`,
+                `${process.env.NEXT_PUBLIC_BACK}/users/${user.sub}/${walletAddress}`,
             );
             if (status === 200) refresh();
         } catch (e) {

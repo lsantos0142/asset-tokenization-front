@@ -50,7 +50,7 @@ const Loan: NextPage = () => {
     const getAllOwnerships = useCallback(() => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/ownership/get-by-user/${user?.sub}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/ownership/get-by-user/${user?.sub}`,
             )
             .then((res) => {
                 setOwnerships(res.data);
@@ -66,7 +66,7 @@ const Loan: NextPage = () => {
 
     const getAllUsers = () => {
         axios
-            .get(`${process.env.BACK}/users`)
+            .get(`${process.env.NEXT_PUBLIC_BACK}/users`)
             .then((res) => {
                 setAllUsers(
                     res.data
@@ -145,7 +145,7 @@ const Loan: NextPage = () => {
         setTimeout(() => {
             axios
                 .post(
-                    `${process.env.BACK}/tokenized-asset/collateral/create`,
+                    `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/collateral/create`,
                     body,
                 )
                 .then((res) => {

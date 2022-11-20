@@ -43,7 +43,7 @@ const OfferDetails: NextPage = () => {
         if (typeof id !== "undefined") {
             axios
                 .get(
-                    `${process.env.BACK}/tokenized-asset/offer/get-by-id/${id}`,
+                    `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/get-by-id/${id}`,
                 )
                 .then((res) => {
                     setOffer(res.data);
@@ -70,10 +70,13 @@ const OfferDetails: NextPage = () => {
 
         setTimeout(() => {
             axios
-                .put(`${process.env.BACK}/tokenized-asset/offer/accept`, {
-                    userId: user.sub,
-                    offerId: offer?.id,
-                })
+                .put(
+                    `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/accept`,
+                    {
+                        userId: user.sub,
+                        offerId: offer?.id,
+                    },
+                )
                 .then((res) => {
                     updateNotification({
                         id: "accept_offer_" + offer?.id,

@@ -31,7 +31,7 @@ const CollateralsByUser: NextPage = () => {
     const getAllCollaterals = useCallback(() => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/collateral/get-by-user/${user?.sub}?status=ACTIVE`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/collateral/get-by-user/${user?.sub}?status=ACTIVE`,
             )
             .then((res) => {
                 setCollaterals(res.data);
@@ -47,7 +47,7 @@ const CollateralsByUser: NextPage = () => {
 
     const getAllUsers = () => {
         axios
-            .get(`${process.env.BACK}/users`)
+            .get(`${process.env.NEXT_PUBLIC_BACK}/users`)
             .then((res) => {
                 setAllUsers(res.data);
             })
@@ -79,7 +79,7 @@ const CollateralsByUser: NextPage = () => {
         setTimeout(() => {
             axios
                 .put(
-                    `${process.env.BACK}/tokenized-asset/collateral/register-loan-payment/${selectedCollateralId}`,
+                    `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/collateral/register-loan-payment/${selectedCollateralId}`,
                 )
                 .then((res) => {
                     getAllCollaterals();

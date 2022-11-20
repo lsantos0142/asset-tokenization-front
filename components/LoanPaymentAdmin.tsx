@@ -40,13 +40,13 @@ const LoanPaymentAdmin: NextPage = () => {
     const getAllPendingCollaterals = () => {
         axios
             .get(
-                `${process.env.BACK}/tokenized-asset/collateral/get-all?status=AWAITING_LOAN_PAYMENT_VALIDATION`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/collateral/get-all?status=AWAITING_LOAN_PAYMENT_VALIDATION`,
             )
             .then((res) => {
                 let c = res.data;
                 axios
                     .get(
-                        `${process.env.BACK}/tokenized-asset/collateral/get-all?status=ACTIVE`,
+                        `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/collateral/get-all?status=ACTIVE`,
                     )
                     .then((r) => {
                         c.push(...r.data);
@@ -81,10 +81,13 @@ const LoanPaymentAdmin: NextPage = () => {
         });
 
         axios
-            .delete(`${process.env.BACK}/tokenized-asset/collateral/delete`, {
-                headers: { ContentType: "application/json" },
-                data: body,
-            })
+            .delete(
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/collateral/delete`,
+                {
+                    headers: { ContentType: "application/json" },
+                    data: body,
+                },
+            )
             .then((res) => {
                 getAllPendingCollaterals();
                 updateNotification({
@@ -146,7 +149,7 @@ const LoanPaymentAdmin: NextPage = () => {
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/collateral/seize/${selectedCollateralId}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/collateral/seize/${selectedCollateralId}`,
                 body,
             )
             .then((res) => {
@@ -192,7 +195,7 @@ const LoanPaymentAdmin: NextPage = () => {
 
     const getAllUsers = () => {
         axios
-            .get(`${process.env.BACK}/users`)
+            .get(`${process.env.NEXT_PUBLIC_BACK}/users`)
             .then((res) => {
                 setAllUsers(res.data);
             })
