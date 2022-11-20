@@ -5,6 +5,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import formatCPF from "../helpers/FormatCPF";
 import { User } from "../types/User";
+import Web3 from "web3";
 
 export function UserProfileInfo() {
     const [walletAddress, setWalletAddress] = useState("");
@@ -18,7 +19,7 @@ export function UserProfileInfo() {
                 const accounts = await (window as any).ethereum.request({
                     method: "eth_requestAccounts",
                 });
-                setWalletAddress(accounts[0]);
+                setWalletAddress(Web3.utils.toChecksumAddress(accounts[0]));
             } catch (error) {
                 console.error(error);
             }
