@@ -1,14 +1,14 @@
 import {
-    Badge,
+    Text,
     Button,
     Card,
     Divider,
-    Grid,
     Group,
-    Modal,
     Space,
-    Text,
     Title,
+    Badge,
+    Grid,
+    Modal,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
@@ -16,28 +16,32 @@ import axios from "axios";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import formatCPF from "../helpers/FormatCPF";
-import { Proposal } from "../types/Proposal";
+import { formatNumber } from "../helpers/FormatCurrencyBRL";
+import { Offer } from "../types/Offer";
 
-const TokenizationProposalAdmin: NextPage = () => {
-    const [proposals, setProposals] = useState<Proposal[]>([]);
+const OffersAdmin: NextPage = () => {
+    const [offers, setOffers] = useState<Offer[]>([]);
     const [openedRejectModal, setOpenedRejectModal] = useState<boolean>(false);
-    const [openedAcceptModal, setOpenedAcceptModal] = useState<boolean>(false);
-    const [selectedProposalId, setSelectedProposalId] = useState<string>("");
+    const [openedConfirmModal, setOpenedConfirmModal] =
+        useState<boolean>(false);
+    const [selectedOfferId, setSelectedOfferId] = useState<string>("");
 
-    const getAllActiveProposals = () => {
+    const getAllWaitingPaymentOffers = () => {
         axios
-            .get(`${process.env.BACK}/tokenized-asset/proposal/get-pending`)
+            .get(
+                `${process.env.BACK}/tokenized-asset/offer/get-all?status=WAITING_PAYMENT`,
+            )
             .then((res) => {
-                setProposals(res.data);
+                setOffers(res.data);
             })
             .catch((e) => {
                 console.log(e.response?.data?.message);
             });
     };
 
-    const handleRejectProposal = () => {
+    const handleRejectOfferPayment = () => {
         showNotification({
-            id: "reject_tokenization_proposal" + selectedProposalId,
+            id: "reject_offer_payment" + selectedOfferId,
             disallowClose: true,
             autoClose: false,
             title: <Text size="xl">Rejeitando Proposta</Text>,
@@ -47,12 +51,12 @@ const TokenizationProposalAdmin: NextPage = () => {
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/proposal/refuse/${selectedProposalId}`,
+                `${process.env.BACK}/tokenized-asset/offer/reject-payment/${selectedOfferId}`,
             )
             .then((res) => {
-                getAllActiveProposals();
+                getAllWaitingPaymentOffers();
                 updateNotification({
-                    id: "reject_tokenization_proposal" + selectedProposalId,
+                    id: "reject_offer_payment" + selectedOfferId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconCheck size={16} />,
@@ -65,7 +69,7 @@ const TokenizationProposalAdmin: NextPage = () => {
             })
             .catch((e) => {
                 updateNotification({
-                    id: "reject_tokenization_proposal" + selectedProposalId,
+                    id: "reject_offer_payment" + selectedOfferId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconX size={16} />,
@@ -78,49 +82,57 @@ const TokenizationProposalAdmin: NextPage = () => {
             });
     };
 
-    const handleAcceptProposal = () => {
+    const handleConfirmOfferPayment = () => {
         showNotification({
-            id: "accept_tokenization_proposal" + selectedProposalId,
+            id: "confirm_offer_payment" + selectedOfferId,
             disallowClose: true,
             autoClose: false,
-            title: <Text size="xl">Aceitando Proposta</Text>,
+            title: <Text size="xl">Confirmando Pagamento da Oferta</Text>,
             message: <Text size="xl">Favor esperar até a conclusão</Text>,
             loading: true,
         });
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/proposal/accept/${selectedProposalId}`,
+                `${process.env.BACK}/tokenized-asset/offer/validate-payment/${selectedOfferId}`,
             )
             .then((res) => {
-                getAllActiveProposals();
+                getAllWaitingPaymentOffers();
                 updateNotification({
-                    id: "accept_tokenization_proposal" + selectedProposalId,
+                    id: "confirm_offer_payment" + selectedOfferId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconCheck size={16} />,
                     color: "green",
-                    title: <Text size="xl">Tokenização Aceita</Text>,
+                    title: (
+                        <Text size="xl">Pagamento da Oferta Confirmado</Text>
+                    ),
                     message: (
-                        <Text size="xl">Tokenização aceita com sucesso</Text>
+                        <Text size="xl">
+                            Pagamento da oferta confirmado com sucesso
+                        </Text>
                     ),
                 });
             })
             .catch((e) => {
                 updateNotification({
-                    id: "accept_tokenization_proposal" + selectedProposalId,
+                    id: "confirm_offer_payment" + selectedOfferId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconX size={16} />,
                     color: "red",
-                    title: <Text size="xl">Erro no Aceite da Tokenização</Text>,
+                    title: (
+                        <Text size="xl">
+                            Erro na Confimação do Pagamento da Oferta
+                        </Text>
+                    ),
                     message: <Text size="xl">{e.response?.data?.message}</Text>,
                 });
             });
     };
 
     useEffect(() => {
-        getAllActiveProposals();
+        getAllWaitingPaymentOffers();
     }, []);
 
     return (
@@ -129,7 +141,11 @@ const TokenizationProposalAdmin: NextPage = () => {
                 centered
                 opened={openedRejectModal}
                 onClose={() => setOpenedRejectModal(false)}
-                title={<Title order={3}>Deseja Rejeitar Esta Proposta?</Title>}
+                title={
+                    <Title order={3}>
+                        Deseja Rejeitar o Pagamento Desta Oferta?
+                    </Title>
+                }
             >
                 <Group position="apart">
                     <Button
@@ -144,7 +160,7 @@ const TokenizationProposalAdmin: NextPage = () => {
                         variant="outline"
                         color="red"
                         onClick={() => {
-                            handleRejectProposal();
+                            handleRejectOfferPayment();
                             setOpenedRejectModal(false);
                         }}
                     >
@@ -155,15 +171,19 @@ const TokenizationProposalAdmin: NextPage = () => {
 
             <Modal
                 centered
-                opened={openedAcceptModal}
-                onClose={() => setOpenedAcceptModal(false)}
-                title={<Title order={3}>Deseja Aceitar Esta Proposta?</Title>}
+                opened={openedConfirmModal}
+                onClose={() => setOpenedConfirmModal(false)}
+                title={
+                    <Title order={3}>
+                        Deseja Confirmar o Pagamento Desta Oferta?
+                    </Title>
+                }
             >
                 <Group position="apart">
                     <Button
                         variant="outline"
                         color="gray"
-                        onClick={() => setOpenedAcceptModal(false)}
+                        onClick={() => setOpenedConfirmModal(false)}
                     >
                         Cancelar
                     </Button>
@@ -172,75 +192,110 @@ const TokenizationProposalAdmin: NextPage = () => {
                         variant="outline"
                         color="green"
                         onClick={() => {
-                            handleAcceptProposal();
-                            setOpenedAcceptModal(false);
+                            handleConfirmOfferPayment();
+                            setOpenedConfirmModal(false);
                         }}
                     >
-                        Aceitar
+                        Confirmar
                     </Button>
                 </Group>
             </Modal>
 
             <div className="d-flex flex-column gap-2 mt-4 mb-5">
-                <Title order={3}>Propostas de Tokenização Ativas</Title>
-                <div className="d-flex gap-3 align-items-center justify-content-between">
+                <Title order={3}>
+                    Ofertas Esperando Confirmação de Pagamento
+                </Title>
+                <div className="d-flex gap-2 align-items-center justify-content-between">
                     <Text size={20}>
-                        Gerencie as propostas de tokenização ativas, aceite ou
-                        rejeite de acordo com os dados fornecidos.
+                        Gerencie as ofertas com compradores já definidos. Caso a
+                        oferta tenha sido paga, valide o pagamento no respectivo
+                        card abaixo.
                     </Text>
                     <Button
                         variant="outline"
                         color={"blue"}
-                        onClick={getAllActiveProposals}
+                        onClick={getAllWaitingPaymentOffers}
                     >
                         <IconRefresh />
                     </Button>
                 </div>
             </div>
 
-            {!!proposals.length ? (
+            {!!offers?.length ? (
                 <Grid gutter={30}>
-                    {proposals.map((proposal) => {
+                    {offers.map((offer) => {
                         return (
-                            <Grid.Col md={6} xl={4} key={proposal.id}>
+                            <Grid.Col md={6} xl={4} key={offer.id}>
                                 <Card shadow="sm" p="lg" radius="lg" withBorder>
                                     <Text size={22} weight={500}>
-                                        {proposal.address}
+                                        {
+                                            offer.ownership?.tokenizedAsset
+                                                ?.address
+                                        }
                                     </Text>
 
                                     <Badge color="pink" variant="light" mt="md">
-                                        Em aberto
+                                        Esperando Pagamento
                                     </Badge>
 
                                     <Space h="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Nome do Usuário</Text>
-                                        <Text>{proposal?.user?.username}</Text>
-                                    </Group>
-
-                                    <Divider size="xs" />
-
-                                    <Group position="apart" my="xs">
-                                        <Text>Nome</Text>
-                                        <Text>{proposal?.user?.name}</Text>
-                                    </Group>
-
-                                    <Divider size="xs" />
-
-                                    <Group position="apart" my="xs">
-                                        <Text>CPF do Usuário</Text>
+                                        <Text>Usuário Comprador</Text>
                                         <Text>
-                                            {formatCPF(proposal?.user?.cpf!)}
+                                            {offer?.currentBuyer?.username}
                                         </Text>
                                     </Group>
 
                                     <Divider size="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Área útil</Text>
+                                        <Text>CPF do Comprador</Text>
                                         <Text>
-                                            {proposal.usableArea} m<sup>2</sup>
+                                            {offer?.currentBuyer?.cpf
+                                                ? formatCPF(
+                                                      offer?.currentBuyer?.cpf,
+                                                  )
+                                                : null}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Nome do Comprador</Text>
+                                        <Text>{offer?.currentBuyer?.name}</Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Usuário Vendedor</Text>
+                                        <Text>
+                                            {offer?.ownership?.user?.username}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>CPF do Vendedor</Text>
+                                        <Text>
+                                            {offer?.ownership?.user?.cpf
+                                                ? formatCPF(
+                                                      offer?.ownership?.user
+                                                          ?.cpf,
+                                                  )
+                                                : null}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Nome do Vendedor</Text>
+                                        <Text>
+                                            {offer?.ownership?.user?.name}
                                         </Text>
                                     </Group>
 
@@ -248,7 +303,30 @@ const TokenizationProposalAdmin: NextPage = () => {
 
                                     <Group position="apart" my="xs">
                                         <Text>Número de Registro</Text>
-                                        <Text>{proposal.registration}</Text>
+                                        <Text>
+                                            {
+                                                offer?.ownership?.tokenizedAsset
+                                                    ?.registration
+                                            }
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>
+                                            Porcentagem do Imóvel em Oferta
+                                        </Text>
+                                        <Text>{offer?.percentage * 100} %</Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Valor da Oferta</Text>
+                                        <Text>
+                                            {formatNumber.format(offer?.amount)}
+                                        </Text>
                                     </Group>
 
                                     <Space h="xl" />
@@ -259,9 +337,7 @@ const TokenizationProposalAdmin: NextPage = () => {
                                             color="red"
                                             onClick={() => {
                                                 setOpenedRejectModal(true);
-                                                setSelectedProposalId(
-                                                    proposal.id,
-                                                );
+                                                setSelectedOfferId(offer?.id);
                                             }}
                                         >
                                             Rejeitar
@@ -270,13 +346,11 @@ const TokenizationProposalAdmin: NextPage = () => {
                                             variant="outline"
                                             color="green"
                                             onClick={() => {
-                                                setOpenedAcceptModal(true);
-                                                setSelectedProposalId(
-                                                    proposal.id,
-                                                );
+                                                setOpenedConfirmModal(true);
+                                                setSelectedOfferId(offer?.id);
                                             }}
                                         >
-                                            Aceitar
+                                            Confirmar
                                         </Button>
                                     </Group>
                                 </Card>
@@ -286,11 +360,12 @@ const TokenizationProposalAdmin: NextPage = () => {
                 </Grid>
             ) : (
                 <Text size={20} className="my-3 text-center">
-                    Não há nehuma proposta de tokenização ativa.
+                    {" "}
+                    Nenhuma oferta pendente de confirmação de pagamento.
                 </Text>
             )}
         </>
     );
 };
 
-export default TokenizationProposalAdmin;
+export default OffersAdmin;

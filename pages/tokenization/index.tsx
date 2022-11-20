@@ -1,27 +1,35 @@
 import {
-    Text,
     Anchor,
-    Grid,
     Breadcrumbs,
-    Divider,
-    Space,
-    Title,
-    TextInput,
-    Group,
     Button,
+    Card,
+    Divider,
+    Modal,
     NumberInput,
+    Text,
+    TextInput,
+    Title,
+    Tooltip,
 } from "@mantine/core";
-import type { NextPage } from "next";
 import { useForm } from "@mantine/form";
-import Link from "next/link";
-import { useContext } from "react";
-import AuthContext from "../../context/AuthContext";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons";
+import {
+    IconCheck,
+    IconCurrencyEthereum,
+    IconInfoCircle,
+    IconX,
+} from "@tabler/icons";
 import axios from "axios";
+import type { NextPage } from "next";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useContext, useState } from "react";
+import AuthContext from "../../context/AuthContext";
 
 const Tokenization: NextPage = () => {
     const { user } = useContext(AuthContext);
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const router = useRouter();
 
     const createTokenizationProposalForm = useForm({
         initialValues: {
@@ -29,7 +37,6 @@ const Tokenization: NextPage = () => {
             address: "",
             usableArea: undefined,
             registration: undefined,
-            deed: "",
             userId: "",
         },
 
@@ -40,7 +47,6 @@ const Tokenization: NextPage = () => {
                 value && value > 0 ? null : "Campo Obrigatório",
             registration: (value) =>
                 value && value > 0 ? null : "Campo Obrigatório",
-            deed: (value) => (!value ? "Campo Obrigatório" : null),
         },
     });
 
@@ -48,7 +54,6 @@ const Tokenization: NextPage = () => {
         values: typeof createTokenizationProposalForm.values,
     ) => {
         values.userId = user.sub;
-        console.log(values);
         createTokenizationProposalForm.reset();
         showNotification({
             id: "create_tokenization_proposal_" + values.registration,
@@ -79,6 +84,8 @@ const Tokenization: NextPage = () => {
                             <Text size="xl">Proposta criada com sucesso</Text>
                         ),
                     });
+
+                    setShowModal(true);
                 })
                 .catch((e) => {
                     console.log(e);
@@ -94,7 +101,7 @@ const Tokenization: NextPage = () => {
                             <Text size="xl">Erro na Criação da Proposta</Text>
                         ),
                         message: (
-                            <Text size="xl">{e.response.data.message}</Text>
+                            <Text size="xl">{e.response?.data?.message}</Text>
                         ),
                     });
                 });
@@ -112,33 +119,59 @@ const Tokenization: NextPage = () => {
 
     return (
         <>
+            <Modal
+                centered
+                size={540}
+                opened={showModal}
+                onClose={() => setShowModal(false)}
+                title={
+                    <Title size={23} order={3}>
+                        Dados enviados com sucesso!
+                    </Title>
+                }
+            >
+                <Text size={22} className="my-5">
+                    Os dados enviados serão validados pela plataforma e, caso
+                    aceitos, você receberá o imóvel tokenizado associado à sua
+                    carteira digital.
+                </Text>
+                <div className="text-center mt-1">
+                    <Button
+                        size="md"
+                        onClick={() => router.push("/marketplace")}
+                        color="dark"
+                    >
+                        Voltar
+                    </Button>
+                </div>
+            </Modal>
+
             <Breadcrumbs>{items}</Breadcrumbs>
 
             <Divider my="xl" />
 
-            <Title order={2}>Criar Proposta de Tokenização</Title>
+            <div className="d-flex flex-column gap-3 mb-5">
+                <div className="d-flex gap-3 align-items-center">
+                    <IconCurrencyEthereum size={35} />
+                    <Title order={2}>Tokenize o seu imóvel</Title>
+                </div>
+                <Text size={20}>
+                    Insira os dados do seu imóvel para análise da plataforma.
+                    Caso os dados sejam aprovados, você receberá em sua carteira
+                    digital o imóvel tokenizado.
+                </Text>
+            </div>
 
-            <Space h="xl" />
-
-            <form
-                onSubmit={createTokenizationProposalForm.onSubmit((values) =>
-                    handleCreateTokenizationProposal(values),
-                )}
-            >
-                <Grid gutter={30}>
-                    <Grid.Col md={6} xl={4}>
+            <Card withBorder className="p-4">
+                <form
+                    onSubmit={createTokenizationProposalForm.onSubmit(
+                        (values) => handleCreateTokenizationProposal(values),
+                    )}
+                    className="d-flex flex-column gap-4"
+                >
+                    <div className="d-flex flex-wrap gap-4">
                         <TextInput
-                            disabled
-                            withAsterisk
-                            label="Endereço da Carteira do Dono Efetivo"
-                            placeholder="Ex: 0x7E2CdEcA4cC308B5253118d7dC99B124EB3a0556"
-                            {...createTokenizationProposalForm.getInputProps(
-                                "effectiveOwner",
-                            )}
-                        />
-                    </Grid.Col>
-                    <Grid.Col md={6} xl={3}>
-                        <TextInput
+                            className="flex-grow-1"
                             withAsterisk
                             label="Endereço do Imóvel"
                             placeholder="Ex: Av. Prof. Luciano Gualberto, 380"
@@ -146,9 +179,8 @@ const Tokenization: NextPage = () => {
                                 "address",
                             )}
                         />
-                    </Grid.Col>
-                    <Grid.Col md={6} xl={2}>
                         <NumberInput
+                            className="flex-grow-1"
                             min={1}
                             withAsterisk
                             label={`Área Útil do Imóvel (m\xB2)`}
@@ -159,9 +191,11 @@ const Tokenization: NextPage = () => {
                             stepHoldDelay={500}
                             stepHoldInterval={100}
                         />
-                    </Grid.Col>
-                    <Grid.Col md={6} xl={3}>
+                    </div>
+
+                    <div className="d-flex flex-wrap gap-4">
                         <NumberInput
+                            className="flex-grow-1"
                             min={1}
                             withAsterisk
                             label="Número do Registro em Cartório"
@@ -172,25 +206,39 @@ const Tokenization: NextPage = () => {
                             stepHoldDelay={500}
                             stepHoldInterval={100}
                         />
-                    </Grid.Col>
-                    <Grid.Col md={6} xl={2}>
                         <TextInput
+                            className="flex-grow-1"
+                            disabled
                             withAsterisk
-                            label="Escritura do Imóvel"
-                            placeholder="Ex: Escritura do Imóvel"
+                            label="Endereço da Carteira do Dono Efetivo"
                             {...createTokenizationProposalForm.getInputProps(
-                                "deed",
+                                "effectiveOwner",
                             )}
                         />
-                    </Grid.Col>
-                </Grid>
-
-                <Group position="right" my="xl">
-                    <Button variant="outline" type="submit">
-                        Criar Proposta de Tokenização
-                    </Button>
-                </Group>
-            </form>
+                    </div>
+                    <div className="d-flex gap-2 align-items-center mt-3">
+                        <Button
+                            variant="outline"
+                            type="submit"
+                            style={{ width: "fit-content" }}
+                            disabled={!user?.walletAddress}
+                        >
+                            Enviar dados do imóvel
+                        </Button>
+                        {!user?.walletAddress && (
+                            <Tooltip
+                                label="Para tokenizar um imóvel, cadastre sua carteira digital na tela de dados do perfil"
+                                color="black"
+                                withArrow
+                            >
+                                <div>
+                                    <IconInfoCircle color={"gray"} />
+                                </div>
+                            </Tooltip>
+                        )}
+                    </div>
+                </form>
+            </Card>
         </>
     );
 };

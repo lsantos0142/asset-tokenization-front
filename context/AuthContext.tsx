@@ -1,5 +1,6 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import { useCallback } from "react";
 import { createContext, useEffect, useState } from "react";
 
 const AuthContext = createContext({} as any);
@@ -11,38 +12,13 @@ export const AuthProvider = ({ children }: any) => {
     const [authTokens, setAuthTokens] = useState<any>();
     const [loading, setLoading] = useState<boolean>(true);
 
-    useEffect(() => {
-        if (localStorage.getItem("TOKENS")) {
-            setUser(
-                jwtDecode(
-                    JSON.parse(localStorage.getItem("TOKENS") as string)
-                        .accessToken,
-                ),
-            );
-            setAuthTokens(JSON.parse(localStorage.getItem("TOKENS") as string));
-        }
-    }, []);
-
-    useEffect(() => {
-        if (loading) {
-            refresh();
-        }
-        const fiveMinutes = 1000 * 60 * 5;
-        let interval = setInterval(() => {
-            if (authTokens) {
-                refresh();
-            }
-        }, fiveMinutes);
-        return () => clearInterval(interval);
-    }, [authTokens, loading]);
-
     const login = (user: any, authTokens: any) => {
         setUser(user);
         setAuthTokens(authTokens);
         localStorage.setItem("TOKENS", JSON.stringify(authTokens));
     };
 
-    const logout = () => {
+    const logout = useCallback(() => {
         if (authTokens?.refreshToken) {
             const headers = {
                 "Content-Type": "application/json",
@@ -66,9 +42,9 @@ export const AuthProvider = ({ children }: any) => {
                     localStorage.removeItem("TOKENS");
                 });
         }
-    };
+    }, [authTokens]);
 
-    const refresh = () => {
+    const refresh = useCallback(() => {
         if (authTokens?.refreshToken) {
             const headers = {
                 "Content-Type": "application/json",
@@ -99,7 +75,32 @@ export const AuthProvider = ({ children }: any) => {
         if (loading) {
             setLoading(false);
         }
-    };
+    }, [authTokens, loading, logout]);
+
+    useEffect(() => {
+        if (localStorage.getItem("TOKENS")) {
+            setUser(
+                jwtDecode(
+                    JSON.parse(localStorage.getItem("TOKENS") as string)
+                        .accessToken,
+                ),
+            );
+            setAuthTokens(JSON.parse(localStorage.getItem("TOKENS") as string));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (loading) {
+            refresh();
+        }
+        const fiveMinutes = 1000 * 60 * 5;
+        let interval = setInterval(() => {
+            if (authTokens) {
+                refresh();
+            }
+        }, fiveMinutes);
+        return () => clearInterval(interval);
+    }, [authTokens, loading, refresh]);
 
     let contextData = {
         user,

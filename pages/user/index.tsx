@@ -1,56 +1,29 @@
 import {
     Anchor,
-    Box,
     Breadcrumbs,
     Button,
+    Card,
     Divider,
-    Title,
-    Grid,
-    Space,
-    Text,
     Group,
+    Space,
+    Tabs,
+    Title,
 } from "@mantine/core";
-import axios from "axios";
+import { IconReportAnalytics, IconUser } from "@tabler/icons";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
+import CollateralsByUser from "../../components/CollateralsByUser";
+import OffersByUser from "../../components/OffersByUser";
 import OwnershipsByUser from "../../components/OwnershipsByUser";
+import { UserProfileInfo } from "../../components/UserProfileInfo";
 import AuthContext from "../../context/AuthContext";
-import { Ownership } from "../../types/Ownership";
 
 const User: NextPage = () => {
     const router = useRouter();
 
-    const { user, logout, refresh } = useContext(AuthContext);
-    const [walletAddress, setWalletAddress] = useState("");
-
-    const requestAccount = async () => {
-        if ((window as any).ethereum) {
-            try {
-                const accounts = await (window as any).ethereum.request({
-                    method: "eth_requestAccounts",
-                });
-                setWalletAddress(accounts[0]);
-                console.log(accounts[0]);
-            } catch (error) {
-                console.log("Error Connecting");
-            }
-        } else {
-            console.log("No metamask");
-        }
-    };
-
-    const handleConnectWallet = () => {
-        axios
-            .put(`${process.env.BACK}/users/${user.sub}/${walletAddress}`)
-            .then((res) => {
-                if (res.status === 200) {
-                    refresh();
-                }
-            })
-            .catch((e) => {});
-    };
+    const { logout } = useContext(AuthContext);
 
     const items = [
         { title: "Home", href: "/" },
@@ -63,8 +36,15 @@ const User: NextPage = () => {
 
     return (
         <>
-            <Group position="apart">
-                <Breadcrumbs>{items}</Breadcrumbs>
+            <Breadcrumbs>{items}</Breadcrumbs>
+
+            <Divider my="xl" />
+
+            <div className="d-flex  gap-3 mb-1 justify-content-between">
+                <div className="d-flex gap-3 align-items-center">
+                    <IconUser size={35} />
+                    <Title order={2}>Meu perfil</Title>
+                </div>
                 <Button
                     variant="outline"
                     color={"red"}
@@ -74,66 +54,39 @@ const User: NextPage = () => {
                 >
                     Logout
                 </Button>
-            </Group>
+            </div>
 
-            <Divider my="xl" />
+            <Space h="xl" />
 
-            {/* Conectar Carteira */}
-            <Group position="apart">
-                {user?.walletAddress ? (
-                    <Box>
-                        <Title order={2}>Carteira Conectada</Title>
-                    </Box>
-                ) : (
-                    <Box>
-                        <Title order={2}>Conectar Carteira</Title>
-                    </Box>
-                )}
+            <Tabs defaultValue="profile">
+                <Tabs.List>
+                    <Tabs.Tab value="profile">Dados gerais</Tabs.Tab>
+                    <Tabs.Tab value="ownership">Imóveis tokenizados</Tabs.Tab>
+                    <Tabs.Tab value="collateral">Garantias</Tabs.Tab>
+                    <Tabs.Tab value="offers">Ofertas abertas</Tabs.Tab>
+                </Tabs.List>
 
-                {user?.walletAddress ? (
-                    <Box>
-                        <Text size="xl">Endereço da Carteira: </Text>
-                        <Text size="xl">{user?.walletAddress}</Text>
-                    </Box>
-                ) : walletAddress !== "" ? (
-                    <Box>
-                        <Text size="xl" color="yellow">
-                            Carteira Metamask:{" "}
-                        </Text>
-                        <Text size="xl" color="yellow">
-                            {walletAddress}
-                        </Text>
-                        <Space h="xl" />
-                        <Button
-                            variant="outline"
-                            color="green"
-                            onClick={handleConnectWallet}
-                        >
-                            Salvar Carteira
-                        </Button>
-                    </Box>
-                ) : (
-                    <Box>
-                        <Button variant="outline" onClick={requestAccount}>
-                            Conectar Metamask
-                        </Button>
-                    </Box>
-                )}
-            </Group>
-
-            <Divider my="xl" />
-
-            {/* Listar imóveis do usuário */}
-            <OwnershipsByUser userId={user?.sub} />
-
-            <Divider my="xl" />
-
-            {/* Listar garantias do usuário */}
-            <Title order={2}>Empréstimos</Title>
-            <Grid justify="space-between">
-                <Grid.Col span="content"></Grid.Col>
-                <Grid.Col span="content"></Grid.Col>
-            </Grid>
+                <Tabs.Panel value="profile" pb="xs">
+                    <Card withBorder radius={0}>
+                        <UserProfileInfo />
+                    </Card>
+                </Tabs.Panel>
+                <Tabs.Panel value="ownership" pb="xs">
+                    <Card withBorder radius={0}>
+                        <OwnershipsByUser />
+                    </Card>
+                </Tabs.Panel>
+                <Tabs.Panel value="collateral" pb="xs">
+                    <Card withBorder radius={0}>
+                        <CollateralsByUser />
+                    </Card>
+                </Tabs.Panel>
+                <Tabs.Panel value="offers" pb="xs">
+                    <Card withBorder radius={0}>
+                        <OffersByUser />
+                    </Card>
+                </Tabs.Panel>
+            </Tabs>
         </>
     );
 };

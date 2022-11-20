@@ -11,6 +11,7 @@ import {
     Center,
     Image,
 } from "@mantine/core";
+import { IconHome2, IconRefresh } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -29,7 +30,7 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
 
     const [offers, setOffers] = useState<Offer[]>([]);
 
-    const getAllAvailableOffers = () => {
+    const getAllAvailableOffers = useCallback(() => {
         axios
             .get(
                 `${process.env.BACK}/tokenized-asset/offer/get-all?status=AVAILABLE`,
@@ -42,13 +43,13 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
                 );
             })
             .catch((e) => {
-                console.log(e.response.data.message);
+                console.log(e.response?.data?.message);
             });
-    };
+    }, [user]);
 
     useEffect(() => {
         getAllAvailableOffers();
-    }, []);
+    }, [getAllAvailableOffers]);
 
     const handleOpenOfferDetail = (id: string) => {
         router.push(`marketplace/${id}`);
@@ -56,115 +57,135 @@ const MarketplaceOffers: NextPage<MarketplaceOffersProps> = ({}) => {
 
     return (
         <>
-            <Group position="apart">
-                <Title order={2}>Marketplace</Title>
-                <Button
-                    variant="outline"
-                    color={"blue"}
-                    onClick={getAllAvailableOffers}
-                >
-                    Atualizar Ofertas
-                </Button>
-            </Group>
+            <div className="d-flex flex-column gap-3 mb-5">
+                <div className="d-flex gap-3 align-items-center">
+                    <IconHome2 size={35} />
+                    <Title order={2}>Marketplace</Title>
+                </div>
+                <div className="d-flex justify-content-between">
+                    <Text size={20}>
+                        Visualize diferentes ofertas de imóveis tokenizados
+                        disponíveis para venda e adquira o seu em sua carteira
+                        digital.
+                    </Text>
+                    <Button
+                        variant="outline"
+                        color={"blue"}
+                        onClick={getAllAvailableOffers}
+                    >
+                        <IconRefresh />
+                    </Button>
+                </div>
+            </div>
+            {!!offers?.length ? (
+                <Grid gutter={30}>
+                    {offers.map((offer) => {
+                        return (
+                            <Grid.Col key={offer.id} md={6} lg={4} xl={3}>
+                                <Card shadow="sm" p="lg" radius="lg" withBorder>
+                                    <Card.Section className="mt-1 mb-5">
+                                        <Center>
+                                            <Image
+                                                width={150}
+                                                height={150}
+                                                alt="Casa"
+                                                src="/house.png"
+                                                withPlaceholder
+                                                style={{
+                                                    filter: filterList[
+                                                        Math.floor(
+                                                            Math.random() *
+                                                                filterList.length,
+                                                        )
+                                                    ],
+                                                }}
+                                            />
+                                        </Center>
+                                    </Card.Section>
 
-            <Space h="xl" />
-
-            <Grid gutter={30}>
-                {offers.map((offer) => {
-                    return (
-                        <Grid.Col
-                            key={offer.id}
-                            md={6}
-                            lg={4}
-                            xl={3}
-                            onClick={() => handleOpenOfferDetail(offer.id)}
-                        >
-                            <Card
-                                shadow="sm"
-                                p="lg"
-                                radius="lg"
-                                withBorder
-                                sx={{ cursor: "pointer" }}
-                            >
-                                <Card.Section p="1em">
-                                    <Center>
-                                        <Image
-                                            width={100}
-                                            height={100}
-                                            alt="Casa"
-                                            src="/house.png"
-                                            withPlaceholder
-                                            style={{
-                                                filter: filterList[
-                                                    Math.floor(
-                                                        Math.random() *
-                                                            filterList.length,
-                                                    )
-                                                ],
-                                            }}
-                                        />
-                                    </Center>
-                                </Card.Section>
-
-                                <Text size={22} weight={500}>
-                                    {offer?.ownership?.tokenizedAsset?.address}
-                                </Text>
-
-                                <Badge
-                                    color="green"
-                                    variant="light"
-                                    mt="lg"
-                                    sx={
-                                        offer.isEffectiveTransfer
-                                            ? { visibility: "visible" }
-                                            : { visibility: "hidden" }
-                                    }
-                                >
-                                    Transferência de Posse
-                                </Badge>
-
-                                <Space h="xs" />
-
-                                <Group position="apart" my="xs">
-                                    <Text>Área Útil</Text>
-                                    <Text>
+                                    <Text size={22} weight={500}>
                                         {
                                             offer?.ownership?.tokenizedAsset
-                                                ?.usableArea
-                                        }{" "}
-                                        m<sup>2</sup>
+                                                ?.address
+                                        }
                                     </Text>
-                                </Group>
 
-                                <Divider size="xs" />
+                                    <Badge
+                                        color="green"
+                                        variant="light"
+                                        mt="md"
+                                        sx={
+                                            offer.isEffectiveTransfer
+                                                ? { visibility: "visible" }
+                                                : { visibility: "hidden" }
+                                        }
+                                    >
+                                        Transferência de Posse
+                                    </Badge>
 
-                                <Group position="apart" my="xs">
-                                    <Text>Valor da Oferta</Text>
-                                    <Text>
-                                        {formatNumber.format(offer.amount)}
-                                    </Text>
-                                </Group>
+                                    <Space h="xs" />
 
-                                <Divider size="xs" />
+                                    <Group position="apart" my="xs">
+                                        <Text>Área Útil</Text>
+                                        <Text>
+                                            {
+                                                offer?.ownership?.tokenizedAsset
+                                                    ?.usableArea
+                                            }{" "}
+                                            m<sup>2</sup>
+                                        </Text>
+                                    </Group>
 
-                                <Group position="apart" my="xs">
-                                    <Text>Porcentagem de Posse</Text>
-                                    <Text>{offer.percentage * 100} %</Text>
-                                </Group>
+                                    <Divider size="xs" />
 
-                                <Divider size="xs" />
+                                    <Group position="apart" my="xs">
+                                        <Text>Valor da Oferta</Text>
+                                        <Text>
+                                            {formatNumber.format(offer.amount)}
+                                        </Text>
+                                    </Group>
 
-                                <Group position="apart" my="xs">
-                                    <Text>Vendedor</Text>
-                                    <Text>
-                                        {offer?.ownership?.user?.username}
-                                    </Text>
-                                </Group>
-                            </Card>
-                        </Grid.Col>
-                    );
-                })}
-            </Grid>
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Porcentagem de Posse</Text>
+                                        <Text>{offer.percentage * 100} %</Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Vendedor</Text>
+                                        <Text>
+                                            {offer?.ownership?.user?.username}
+                                        </Text>
+                                    </Group>
+                                    <div className="d-flex mt-5">
+                                        <Button
+                                            className="text-center"
+                                            variant="outline"
+                                            color={"green"}
+                                            onClick={() =>
+                                                handleOpenOfferDetail(offer.id)
+                                            }
+                                        >
+                                            Adquirir
+                                        </Button>
+                                    </div>
+                                </Card>
+                            </Grid.Col>
+                        );
+                    })}
+                </Grid>
+            ) : (
+                <>
+                    <Space h="xs" />
+                    <Text className="mt-5 text-center" size={23}>
+                        Ainda não existe nenhuma oferta disponível no
+                        Marketplace.
+                    </Text>
+                </>
+            )}
         </>
     );
 };

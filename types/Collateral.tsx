@@ -1,15 +1,13 @@
 import { Ownership } from "./Ownership";
-import { User } from "./User";
 
-export type Offer = {
+export type Collateral = {
     id: string;
     createdAt: string;
     updatedAt: string;
     deletedAt?: string;
+    bankWallet: string;
     percentage: number;
-    amount: number;
-    isEffectiveTransfer: boolean;
+    expirationDate: string;
     status: number;
-    ownership?: Ownership;
-    currentBuyer?: User;
+    ownership: Ownership;
 };

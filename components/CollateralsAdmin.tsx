@@ -15,113 +15,142 @@ import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
-import formatCPF from "../helpers/FormatCPF";
-import { Proposal } from "../types/Proposal";
+import { formatDate } from "../helpers/FormatDate";
+import { Collateral } from "../types/Collateral";
+import { User } from "../types/User";
 
-const TokenizationProposalAdmin: NextPage = () => {
-    const [proposals, setProposals] = useState<Proposal[]>([]);
+const CollateralsAdmin: NextPage = () => {
+    const [collaterals, setCollaterals] = useState<Collateral[]>([]);
     const [openedRejectModal, setOpenedRejectModal] = useState<boolean>(false);
-    const [openedAcceptModal, setOpenedAcceptModal] = useState<boolean>(false);
-    const [selectedProposalId, setSelectedProposalId] = useState<string>("");
+    const [openedConfirmModal, setOpenedConfirmModal] =
+        useState<boolean>(false);
+    const [selectedCollateralId, setSelectedCollateralId] =
+        useState<string>("");
+    const [allUsers, setAllUsers] = useState<User[]>([]);
 
-    const getAllActiveProposals = () => {
+    const getAllPendingCollaterals = () => {
         axios
-            .get(`${process.env.BACK}/tokenized-asset/proposal/get-pending`)
+            .get(
+                `${process.env.BACK}/tokenized-asset/collateral/get-all?status=PENDING_CONFIRMATION`,
+            )
             .then((res) => {
-                setProposals(res.data);
+                setCollaterals(res.data);
             })
             .catch((e) => {
                 console.log(e.response?.data?.message);
             });
     };
 
-    const handleRejectProposal = () => {
+    const handleRejectCollateral = () => {
         showNotification({
-            id: "reject_tokenization_proposal" + selectedProposalId,
+            id: "reject_collateral_" + selectedCollateralId,
             disallowClose: true,
             autoClose: false,
-            title: <Text size="xl">Rejeitando Proposta</Text>,
+            title: <Text size="xl">Rejeitando Empréstimo</Text>,
             message: <Text size="xl">Favor esperar até a conclusão</Text>,
             loading: true,
         });
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/proposal/refuse/${selectedProposalId}`,
+                `${process.env.BACK}/tokenized-asset/collateral/reject/${selectedCollateralId}`,
             )
             .then((res) => {
-                getAllActiveProposals();
+                getAllPendingCollaterals();
                 updateNotification({
-                    id: "reject_tokenization_proposal" + selectedProposalId,
+                    id: "reject_collateral_" + selectedCollateralId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconCheck size={16} />,
                     color: "green",
-                    title: <Text size="xl">Tokenização Rejeitada</Text>,
+                    title: <Text size="xl">Empréstimo Rejeitado</Text>,
                     message: (
-                        <Text size="xl">Tokenização rejeitada com sucesso</Text>
+                        <Text size="xl">Empréstimo rejeitado com sucesso</Text>
                     ),
                 });
             })
             .catch((e) => {
                 updateNotification({
-                    id: "reject_tokenization_proposal" + selectedProposalId,
+                    id: "reject_collateral_" + selectedCollateralId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconX size={16} />,
                     color: "red",
                     title: (
-                        <Text size="xl">Erro na Rejeição da Tokenização</Text>
+                        <Text size="xl">Erro na Rejeição do Empréstimo</Text>
                     ),
                     message: <Text size="xl">{e.response?.data?.message}</Text>,
                 });
             });
     };
 
-    const handleAcceptProposal = () => {
+    const handleConfirmCollateral = () => {
         showNotification({
-            id: "accept_tokenization_proposal" + selectedProposalId,
+            id: "confirm_collateral_" + selectedCollateralId,
             disallowClose: true,
             autoClose: false,
-            title: <Text size="xl">Aceitando Proposta</Text>,
+            title: <Text size="xl">Confirmando Empréstimo</Text>,
             message: <Text size="xl">Favor esperar até a conclusão</Text>,
             loading: true,
         });
 
         axios
             .put(
-                `${process.env.BACK}/tokenized-asset/proposal/accept/${selectedProposalId}`,
+                `${process.env.BACK}/tokenized-asset/collateral/validate/${selectedCollateralId}`,
             )
             .then((res) => {
-                getAllActiveProposals();
+                getAllPendingCollaterals();
                 updateNotification({
-                    id: "accept_tokenization_proposal" + selectedProposalId,
+                    id: "confirm_collateral_" + selectedCollateralId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconCheck size={16} />,
                     color: "green",
-                    title: <Text size="xl">Tokenização Aceita</Text>,
+                    title: <Text size="xl">Empréstimo Confirmado</Text>,
                     message: (
-                        <Text size="xl">Tokenização aceita com sucesso</Text>
+                        <Text size="xl">Empréstimo confirmado com sucesso</Text>
                     ),
                 });
             })
             .catch((e) => {
                 updateNotification({
-                    id: "accept_tokenization_proposal" + selectedProposalId,
+                    id: "confirm_collateral_" + selectedCollateralId,
                     disallowClose: true,
                     autoClose: 5000,
                     icon: <IconX size={16} />,
                     color: "red",
-                    title: <Text size="xl">Erro no Aceite da Tokenização</Text>,
+                    title: (
+                        <Text size="xl">Erro na Confimação do Empréstimo</Text>
+                    ),
                     message: <Text size="xl">{e.response?.data?.message}</Text>,
                 });
             });
     };
 
     useEffect(() => {
-        getAllActiveProposals();
+        getAllPendingCollaterals();
     }, []);
+
+    const getAllUsers = () => {
+        axios
+            .get(`${process.env.BACK}/users`)
+            .then((res) => {
+                setAllUsers(res.data);
+            })
+            .catch((e) => {
+                console.log(e.response?.data?.message);
+            });
+    };
+
+    useEffect(() => {
+        getAllUsers();
+    }, []);
+
+    const getBankUsername = (collateral: Collateral) => {
+        return allUsers.filter(
+            (user) => user.walletAddress === collateral.bankWallet,
+        )[0]?.username;
+    };
 
     return (
         <>
@@ -129,7 +158,9 @@ const TokenizationProposalAdmin: NextPage = () => {
                 centered
                 opened={openedRejectModal}
                 onClose={() => setOpenedRejectModal(false)}
-                title={<Title order={3}>Deseja Rejeitar Esta Proposta?</Title>}
+                title={
+                    <Title order={3}>Deseja Rejeitar Este Empréstimo?</Title>
+                }
             >
                 <Group position="apart">
                     <Button
@@ -144,7 +175,7 @@ const TokenizationProposalAdmin: NextPage = () => {
                         variant="outline"
                         color="red"
                         onClick={() => {
-                            handleRejectProposal();
+                            handleRejectCollateral();
                             setOpenedRejectModal(false);
                         }}
                     >
@@ -155,15 +186,17 @@ const TokenizationProposalAdmin: NextPage = () => {
 
             <Modal
                 centered
-                opened={openedAcceptModal}
-                onClose={() => setOpenedAcceptModal(false)}
-                title={<Title order={3}>Deseja Aceitar Esta Proposta?</Title>}
+                opened={openedConfirmModal}
+                onClose={() => setOpenedConfirmModal(false)}
+                title={
+                    <Title order={3}>Deseja Confirmar Este Empréstimo?</Title>
+                }
             >
                 <Group position="apart">
                     <Button
                         variant="outline"
                         color="gray"
-                        onClick={() => setOpenedAcceptModal(false)}
+                        onClick={() => setOpenedConfirmModal(false)}
                     >
                         Cancelar
                     </Button>
@@ -172,83 +205,110 @@ const TokenizationProposalAdmin: NextPage = () => {
                         variant="outline"
                         color="green"
                         onClick={() => {
-                            handleAcceptProposal();
-                            setOpenedAcceptModal(false);
+                            handleConfirmCollateral();
+                            setOpenedConfirmModal(false);
                         }}
                     >
-                        Aceitar
+                        Confirmar
                     </Button>
                 </Group>
             </Modal>
 
             <div className="d-flex flex-column gap-2 mt-4 mb-5">
-                <Title order={3}>Propostas de Tokenização Ativas</Title>
-                <div className="d-flex gap-3 align-items-center justify-content-between">
+                <Title order={3}>
+                    Validação de novas garantias de empréstimo
+                </Title>
+                <div className="d-flex gap-5 align-items-center justify-content-between">
                     <Text size={20}>
-                        Gerencie as propostas de tokenização ativas, aceite ou
-                        rejeite de acordo com os dados fornecidos.
+                        Gerencie as novas garantias cadastradas pelos usuários
+                        no portal. Caso uma garantia tenha sido de fato acordada
+                        entre as partes envolvidas e esteja com os dados
+                        corretos, valide a criação em seu respectivo card.
                     </Text>
                     <Button
                         variant="outline"
                         color={"blue"}
-                        onClick={getAllActiveProposals}
+                        onClick={getAllPendingCollaterals}
                     >
                         <IconRefresh />
                     </Button>
                 </div>
             </div>
-
-            {!!proposals.length ? (
+            {!!collaterals?.length ? (
                 <Grid gutter={30}>
-                    {proposals.map((proposal) => {
+                    {collaterals.map((collateral) => {
                         return (
-                            <Grid.Col md={6} xl={4} key={proposal.id}>
+                            <Grid.Col md={6} xl={4} key={collateral.id}>
                                 <Card shadow="sm" p="lg" radius="lg" withBorder>
                                     <Text size={22} weight={500}>
-                                        {proposal.address}
+                                        {
+                                            collateral.ownership?.tokenizedAsset
+                                                ?.address
+                                        }
                                     </Text>
 
                                     <Badge color="pink" variant="light" mt="md">
-                                        Em aberto
+                                        Esperando Confirmação
                                     </Badge>
 
                                     <Space h="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Nome do Usuário</Text>
-                                        <Text>{proposal?.user?.username}</Text>
-                                    </Group>
-
-                                    <Divider size="xs" />
-
-                                    <Group position="apart" my="xs">
-                                        <Text>Nome</Text>
-                                        <Text>{proposal?.user?.name}</Text>
-                                    </Group>
-
-                                    <Divider size="xs" />
-
-                                    <Group position="apart" my="xs">
-                                        <Text>CPF do Usuário</Text>
+                                        <Text>Usuário Mutuário</Text>
                                         <Text>
-                                            {formatCPF(proposal?.user?.cpf!)}
+                                            {
+                                                collateral.ownership.user
+                                                    ?.username!
+                                            }
                                         </Text>
                                     </Group>
 
                                     <Divider size="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Área útil</Text>
+                                        <Text>Usuário Mutuante</Text>
                                         <Text>
-                                            {proposal.usableArea} m<sup>2</sup>
+                                            {getBankUsername(collateral)}
                                         </Text>
                                     </Group>
 
                                     <Divider size="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Número de Registro</Text>
-                                        <Text>{proposal.registration}</Text>
+                                        <Text>Porcentagem em Garantia</Text>
+                                        <Text>
+                                            {collateral.percentage * 100} %
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>
+                                            Data de Expiração do Empréstimo
+                                        </Text>
+                                        <Text>
+                                            {formatDate.format(
+                                                new Date(
+                                                    collateral.expirationDate,
+                                                ),
+                                            )}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>
+                                            Número de Registro do Imóvel
+                                        </Text>
+                                        <Text>
+                                            {
+                                                collateral?.ownership
+                                                    ?.tokenizedAsset
+                                                    ?.registration
+                                            }
+                                        </Text>
                                     </Group>
 
                                     <Space h="xl" />
@@ -259,8 +319,8 @@ const TokenizationProposalAdmin: NextPage = () => {
                                             color="red"
                                             onClick={() => {
                                                 setOpenedRejectModal(true);
-                                                setSelectedProposalId(
-                                                    proposal.id,
+                                                setSelectedCollateralId(
+                                                    collateral?.id,
                                                 );
                                             }}
                                         >
@@ -270,13 +330,13 @@ const TokenizationProposalAdmin: NextPage = () => {
                                             variant="outline"
                                             color="green"
                                             onClick={() => {
-                                                setOpenedAcceptModal(true);
-                                                setSelectedProposalId(
-                                                    proposal.id,
+                                                setOpenedConfirmModal(true);
+                                                setSelectedCollateralId(
+                                                    collateral?.id,
                                                 );
                                             }}
                                         >
-                                            Aceitar
+                                            Confirmar
                                         </Button>
                                     </Group>
                                 </Card>
@@ -286,11 +346,11 @@ const TokenizationProposalAdmin: NextPage = () => {
                 </Grid>
             ) : (
                 <Text size={20} className="my-3 text-center">
-                    Não há nehuma proposta de tokenização ativa.
+                    Nenhuma garantia pendente de validação.
                 </Text>
             )}
         </>
     );
 };
 
-export default TokenizationProposalAdmin;
+export default CollateralsAdmin;

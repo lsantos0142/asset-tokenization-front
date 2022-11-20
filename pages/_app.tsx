@@ -23,6 +23,7 @@ import axios from "axios";
 import { AuthProvider } from "../context/AuthContext";
 import { NotificationsProvider } from "@mantine/notifications";
 import { RouteGuard } from "../components/RouteGuard";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const client = axios.create({
     baseURL: process.env.BACK,
@@ -32,7 +33,7 @@ const client = axios.create({
 export default function App(props: AppProps) {
     const { Component, pageProps } = props;
     const theme = useMantineTheme();
-    const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
+    const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
     const toggleColorScheme = (value?: ColorScheme) =>
         setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
     const dark = colorScheme === "dark";
@@ -70,7 +71,7 @@ export default function App(props: AppProps) {
                                         height: "100%",
                                     }}
                                 >
-                                    <Link href="/">
+                                    <Link href="/marketplace">
                                         <Center>
                                             <Title
                                                 style={{

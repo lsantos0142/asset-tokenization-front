@@ -5,10 +5,8 @@ import {
     Box,
     Breadcrumbs,
     Button,
-    Center,
     Divider,
     Group,
-    NavLink,
     PasswordInput,
     TextInput,
     Title,
@@ -62,28 +60,28 @@ const Login: NextPage = () => {
             .then((res) => {
                 if (res.status === 200) {
                     login(jwtDecode(res.data.accessToken), res.data);
-                    router.push("/");
+                    router.push("/marketplace");
                 }
             })
             .catch((e) => {
                 if (e.response.data.statusCode == 400) {
-                    if (e.response.data.message === "Unauthorized") {
+                    if (e.response?.data?.message === "Unauthorized") {
                         setError("Digite um usuário e senha");
                     } else {
-                        console.log(e.response.data.message);
+                        console.log(e.response?.data?.message);
                         setError(
                             Array.prototype.join.call(
-                                e.response.data.message,
+                                e.response?.data?.message,
                                 "\r\n",
                             ),
                         );
                     }
                     setShow(true);
                 } else if (e.response.status == 409) {
-                    setError(e.response.data.message);
+                    setError(e.response?.data?.message);
                     setShow(true);
                 } else {
-                    alert(e.response.data.message);
+                    alert(e.response?.data?.message);
                 }
             });
     };
@@ -97,19 +95,19 @@ const Login: NextPage = () => {
             .then((res) => {
                 if (res.status === 200) {
                     login(jwtDecode(res.data.accessToken), res.data);
-                    router.push("/");
+                    router.push("/marketplace");
                 }
             })
             .catch((e) => {
                 if (e.response.data.statusCode == 401) {
-                    if (e.response.data.message === "Unauthorized") {
+                    if (e.response?.data?.message === "Unauthorized") {
                         setError("Digite um usuário e senha");
                     } else {
-                        setError(e.response.data.message);
+                        setError(e.response?.data?.message);
                     }
                     setShow(true);
                 } else {
-                    alert(e.response.data.message);
+                    alert(e.response?.data?.message);
                 }
             });
     };
@@ -125,8 +123,39 @@ const Login: NextPage = () => {
 
     return (
         <>
-            <Breadcrumbs>{items}</Breadcrumbs>
-            <Divider my="xl" />
+            <Title order={2} align="center" mt={"1rem"}>
+                Fazer Login
+            </Title>
+            <Box sx={{ maxWidth: 400 }} mx="auto">
+                <form
+                    onSubmit={loginForm.onSubmit((values) =>
+                        handleLogin(values),
+                    )}
+                >
+                    <TextInput
+                        my={"lg"}
+                        withAsterisk
+                        label="Usuário"
+                        placeholder="Digite seu usuário"
+                        {...loginForm.getInputProps("username")}
+                    />
+
+                    <PasswordInput
+                        my={"lg"}
+                        withAsterisk
+                        label="Senha"
+                        placeholder="Digite sua senha"
+                        {...loginForm.getInputProps("password")}
+                    />
+
+                    <Group position="right" my="xl">
+                        <Button variant="outline" type="submit">
+                            Fazer Login
+                        </Button>
+                    </Group>
+                </form>
+            </Box>
+            <Divider my="xl" label="OU" labelPosition="center" />
 
             <Title order={2} align="center">
                 Registrar
@@ -172,41 +201,6 @@ const Login: NextPage = () => {
                     <Group position="right" my="xl">
                         <Button variant="outline" type="submit">
                             Registrar
-                        </Button>
-                    </Group>
-                </form>
-            </Box>
-
-            <Divider my="xl" label="OU" labelPosition="center" />
-
-            <Title order={2} align="center" mt={"1rem"}>
-                Fazer Login
-            </Title>
-            <Box sx={{ maxWidth: 400 }} mx="auto">
-                <form
-                    onSubmit={loginForm.onSubmit((values) =>
-                        handleLogin(values),
-                    )}
-                >
-                    <TextInput
-                        my={"lg"}
-                        withAsterisk
-                        label="Usuário"
-                        placeholder="Digite seu usuário"
-                        {...loginForm.getInputProps("username")}
-                    />
-
-                    <PasswordInput
-                        my={"lg"}
-                        withAsterisk
-                        label="Senha"
-                        placeholder="Digite sua senha"
-                        {...loginForm.getInputProps("password")}
-                    />
-
-                    <Group position="right" my="xl">
-                        <Button variant="outline" type="submit">
-                            Fazer Login
                         </Button>
                     </Group>
                 </form>

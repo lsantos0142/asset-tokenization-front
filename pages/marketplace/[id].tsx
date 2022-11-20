@@ -13,9 +13,12 @@ import {
     Stack,
     Grid,
     Badge,
+    MediaQuery,
+    Tooltip,
+    Modal,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons";
+import { IconCheck, IconInfoCircle, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -24,6 +27,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import { filterList } from "../../helpers/FilterList";
 import formatCPF from "../../helpers/FormatCPF";
+import { formatNumber } from "../../helpers/FormatCurrencyBRL";
 import { Offer } from "../../types/Offer";
 
 const OfferDetails: NextPage = () => {
@@ -33,6 +37,7 @@ const OfferDetails: NextPage = () => {
     const { id } = router.query;
 
     const [offer, setOffer] = useState<Offer>();
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     const getOfferById = useCallback(() => {
         if (typeof id !== "undefined") {
@@ -44,7 +49,7 @@ const OfferDetails: NextPage = () => {
                     setOffer(res.data);
                 })
                 .catch((e) => {
-                    console.log(e.response.data.message);
+                    console.log(e.response?.data?.message);
                 });
         }
     }, [id]);
@@ -92,7 +97,7 @@ const OfferDetails: NextPage = () => {
                         color: "red",
                         title: <Text size="xl">Erro no Aceite da Oferta</Text>,
                         message: (
-                            <Text size="xl">{e.response.data.message}</Text>
+                            <Text size="xl">{e.response?.data?.message}</Text>
                         ),
                     });
                 });
@@ -111,6 +116,33 @@ const OfferDetails: NextPage = () => {
 
     return (
         <>
+            <Modal
+                centered
+                size={540}
+                opened={showModal}
+                onClose={() => setShowModal(false)}
+                title={
+                    <Title size={23} order={3}>
+                        Oferta aceita com sucesso!
+                    </Title>
+                }
+            >
+                <Text size={22} className="my-5">
+                    O pagamento deverá ser realizado nos próximos dias, assim
+                    que houver a confirmação do pagamento, você receberá o
+                    imóvel tokenizado associado à sua carteira digital
+                </Text>
+                <div className="text-center mt-1">
+                    <Button
+                        size="md"
+                        onClick={() => router.push("/marketplace")}
+                        color="dark"
+                    >
+                        Voltar
+                    </Button>
+                </div>
+            </Modal>
+
             <Breadcrumbs>{items}</Breadcrumbs>
 
             <Divider my="xl" />
@@ -119,47 +151,100 @@ const OfferDetails: NextPage = () => {
 
             <Space h="xl" />
 
-            <Card shadow="sm" p="xl" radius="lg" withBorder>
+            <Card p="xl" radius="sm" withBorder>
                 <Grid gutter={50}>
-                    <Grid.Col lg={5}>
-                        <Stack>
-                            <Center>
-                                <Image
-                                    height="40vh"
-                                    width="40vh"
-                                    alt="Casa"
-                                    src="/house.png"
-                                    withPlaceholder
-                                    style={{
-                                        filter: filterList[
-                                            Math.floor(
-                                                Math.random() *
-                                                    filterList.length,
-                                            )
-                                        ],
-                                    }}
-                                />
-                            </Center>
-                            <Button
-                                color="green"
-                                variant="outline"
-                                onClick={handleAcceptOffer}
-                            >
-                                Aceitar Oferta
-                            </Button>
-                        </Stack>
+                    <Grid.Col lg={5} xl={4}>
+                        <MediaQuery
+                            query="(max-width: 1200px) and (min-width: 650px)"
+                            styles={{
+                                width: "50%",
+                                marginInline: "auto",
+                            }}
+                        >
+                            <Stack justify="center">
+                                <Center>
+                                    <Image
+                                        height="100%"
+                                        fit="contain"
+                                        alt="Casa"
+                                        src="/house.png"
+                                        withPlaceholder
+                                        style={{
+                                            filter: filterList[
+                                                Math.floor(
+                                                    Math.random() *
+                                                        filterList.length,
+                                                )
+                                            ],
+                                        }}
+                                    />
+                                </Center>
+                                <div className="d-flex gap-2 align-items-center">
+                                    <Button
+                                        className="flex-grow-1"
+                                        color="green"
+                                        variant="outline"
+                                        onClick={handleAcceptOffer}
+                                        disabled={!user?.walletAddress}
+                                    >
+                                        Aceitar Oferta
+                                    </Button>
+
+                                    {!user?.walletAddress && (
+                                        <Tooltip
+                                            label="Para aceitar uma oferta, cadastre sua carteira digital na tela de dados do perfil"
+                                            color="black"
+                                            withArrow
+                                        >
+                                            <div>
+                                                <IconInfoCircle
+                                                    color={"gray"}
+                                                />
+                                            </div>
+                                        </Tooltip>
+                                    )}
+                                </div>
+                            </Stack>
+                        </MediaQuery>
                     </Grid.Col>
-                    <Grid.Col lg={7}>
+                    <Grid.Col lg={7} xl={8}>
                         <Stack>
-                            <Group position="apart" mb="xs">
-                                <Text size={25} weight={500}>
-                                    {offer?.ownership?.tokenizedAsset?.address}
+                            <Text size={25} weight={500}>
+                                {offer?.ownership?.tokenizedAsset?.address}
+                            </Text>
+
+                            <Badge
+                                color="green"
+                                variant="light"
+                                mt="md"
+                                sx={
+                                    offer?.isEffectiveTransfer
+                                        ? {
+                                              visibility: "visible",
+                                              width: "fit-content",
+                                          }
+                                        : { visibility: "hidden" }
+                                }
+                            >
+                                Transferência de Posse
+                            </Badge>
+
+                            <Space h="xs" />
+
+                            <Title order={3}>Dados da Oferta:</Title>
+
+                            <Group position="apart">
+                                <Text>Porcentagem à Venda</Text>
+                                <Text>{offer?.percentage! * 100} %</Text>
+                            </Group>
+
+                            <Divider size="xs" />
+
+                            <Group position="apart">
+                                <Text>Valor da Oferta</Text>
+                                <Text>
+                                    {formatNumber.format(offer?.amount!)}
                                 </Text>
-                                {offer?.isEffectiveTransfer ? (
-                                    <Badge color="green" variant="light">
-                                        Transferência de Posse
-                                    </Badge>
-                                ) : null}
                             </Group>
 
                             <Space h="xs" />
