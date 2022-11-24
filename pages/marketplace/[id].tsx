@@ -89,6 +89,7 @@ const OfferDetails: NextPage = () => {
                             <Text size="xl">Oferta aceita com sucesso</Text>
                         ),
                     });
+                    setShowModal(true);
                 })
                 .catch((e) => {
                     console.log(e);
