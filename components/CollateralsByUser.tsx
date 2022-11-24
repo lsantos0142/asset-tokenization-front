@@ -252,7 +252,7 @@ const CollateralsByUser: NextPage = () => {
                                             );
                                         }}
                                     >
-                                        Pagar empréstimo
+                                        Quitar empréstimo
                                     </Button>
                                 </Card>
                             </Grid.Col>
