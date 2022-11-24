@@ -245,28 +245,43 @@ const CreateOffer: NextPage = () => {
                     </Button>
                 </div>
             </div>
-            <div className="d-flex flex-wrap gap-4">
-                {ownerships.map((ownership) => {
-                    return (
-                        <OwnershipCard key={ownership.id} ownership={ownership}>
-                            <div className="d-flex mt-4">
-                                <Button
-                                    className="text-center"
-                                    variant="outline"
-                                    color={"green"}
-                                    onClick={() => {
-                                        setOpenedModal(true);
-                                        createOfferForm.reset();
-                                        setSelectedOwnershipId(ownership?.id);
-                                    }}
-                                >
-                                    Criar oferta
-                                </Button>
-                            </div>
-                        </OwnershipCard>
-                    );
-                })}
-            </div>
+            {ownerships?.lentgh ? (
+                <div className="d-flex flex-wrap gap-4">
+                    {ownerships.map((ownership) => {
+                        return (
+                            <OwnershipCard
+                                key={ownership.id}
+                                ownership={ownership}
+                            >
+                                <div className="d-flex mt-4">
+                                    <Button
+                                        className="text-center"
+                                        variant="outline"
+                                        color={"green"}
+                                        onClick={() => {
+                                            setOpenedModal(true);
+                                            createOfferForm.reset();
+                                            setSelectedOwnershipId(
+                                                ownership?.id,
+                                            );
+                                        }}
+                                    >
+                                        Criar oferta
+                                    </Button>
+                                </div>
+                            </OwnershipCard>
+                        );
+                    })}
+                </div>
+            ) : (
+                <>
+                    <Space h="xs" />
+                    <Text className="mt-5 text-center" size={23}>
+                        Você não possui nenhum imóvel para ofertar no
+                        Marketplace.
+                    </Text>
+                </>
+            )}
         </>
     );
 };
