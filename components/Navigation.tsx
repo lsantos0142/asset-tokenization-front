@@ -82,7 +82,7 @@ const Navigation: React.FC = () => {
                                 <div>
                                     <IconBook />
                                 </div>
-                                <Center>Garantias de empréstimos</Center>
+                                <Center>Criar garantia</Center>
                             </div>
                         </Link>
                     }

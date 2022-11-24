@@ -1,11 +1,9 @@
 import {
     Anchor,
-    Badge,
     Breadcrumbs,
     Button,
-    Card,
     Divider,
-    Group,
+    Space,
     Text,
     Title,
 } from "@mantine/core";
@@ -95,37 +93,47 @@ const RentPayments: NextPage = () => {
                 </div>
             </div>
 
-            <div className="d-flex flex-wrap gap-4">
-                {effectiveOwnerships.map((ownership) => (
-                    <OwnershipCard key={ownership.id} ownership={ownership}>
-                        <div className="d-flex mt-4 justify-content-between">
-                            <Button
-                                className="text-center"
-                                variant="outline"
-                                color={"green"}
-                                onClick={() => {
-                                    setShowRegisterModal(true);
-                                    setSelectedOwnership(ownership);
-                                }}
-                                disabled={!ownership.isEffectiveOwner}
-                            >
-                                Registrar
-                            </Button>
-                            <Button
-                                className="text-center"
-                                variant="outline"
-                                color={"green"}
-                                onClick={() => {
-                                    setShowReadModal(true);
-                                    setSelectedOwnership(ownership);
-                                }}
-                            >
-                                Visualizar
-                            </Button>
-                        </div>
-                    </OwnershipCard>
-                ))}
-            </div>
+            {!!effectiveOwnerships?.length ? (
+                <div className="d-flex flex-wrap gap-4">
+                    {effectiveOwnerships.map((ownership) => (
+                        <OwnershipCard key={ownership.id} ownership={ownership}>
+                            <div className="d-flex mt-4 justify-content-between">
+                                <Button
+                                    className="text-center"
+                                    variant="outline"
+                                    color={"green"}
+                                    onClick={() => {
+                                        setShowRegisterModal(true);
+                                        setSelectedOwnership(ownership);
+                                    }}
+                                    disabled={!ownership.isEffectiveOwner}
+                                >
+                                    Registrar
+                                </Button>
+                                <Button
+                                    className="text-center"
+                                    variant="outline"
+                                    color={"green"}
+                                    onClick={() => {
+                                        setShowReadModal(true);
+                                        setSelectedOwnership(ownership);
+                                    }}
+                                >
+                                    Visualizar
+                                </Button>
+                            </div>
+                        </OwnershipCard>
+                    ))}
+                </div>
+            ) : (
+                <>
+                    <Space h="xs" />
+                    <Text className="mt-5 text-center" size={23}>
+                        Você não possui nenhum imóvel para registrar ou
+                        visualizar os pagamentos de aluguéis.
+                    </Text>
+                </>
+            )}
         </>
     );
 };

@@ -64,7 +64,7 @@ const Login: NextPage = () => {
                 }
             })
             .catch((e) => {
-                if (e.response.data.statusCode == 400) {
+                if (e.response?.data?.statusCode == 400) {
                     if (e.response?.data?.message === "Unauthorized") {
                         setError("Digite um usuário e senha");
                     } else {
@@ -99,7 +99,7 @@ const Login: NextPage = () => {
                 }
             })
             .catch((e) => {
-                if (e.response.data.statusCode == 401) {
+                if (e.response?.data?.statusCode == 401) {
                     if (e.response?.data?.message === "Unauthorized") {
                         setError("Digite um usuário e senha");
                     } else {

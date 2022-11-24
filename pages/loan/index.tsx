@@ -90,7 +90,7 @@ const Loan: NextPage = () => {
     const createCollateralForm = useForm({
         initialValues: {
             bankUserId: null,
-            sellerUserId: user.sub,
+            sellerUserId: user?.sub,
             collateralShares: 0.0,
             expirationDate: new Date(),
             contractAddress: "",
@@ -302,7 +302,7 @@ const Loan: NextPage = () => {
             <div className="d-flex flex-column gap-3 mb-5">
                 <div className="d-flex gap-3 align-items-center">
                     <IconBook size={35} />
-                    <Title order={2}>Garantias de empréstimos</Title>
+                    <Title order={2}>Criar garantia de empréstimo</Title>
                 </div>
                 <div className="d-flex justify-content-between">
                     <Text size={20}>
@@ -319,27 +319,41 @@ const Loan: NextPage = () => {
                 </div>
             </div>
 
-            <div className="d-flex flex-wrap gap-4">
-                {ownerships.map((ownership) => {
-                    return (
-                        <OwnershipCard key={ownership.id} ownership={ownership}>
-                            <div className="d-flex mt-4">
-                                <Button
-                                    className="text-center"
-                                    variant="outline"
-                                    color={"green"}
-                                    onClick={() => {
-                                        setOpenedModal(true);
-                                        setSelectedOwnershipId(ownership?.id);
-                                    }}
-                                >
-                                    Cadastrar garantia
-                                </Button>
-                            </div>
-                        </OwnershipCard>
-                    );
-                })}
-            </div>
+            {!!ownerships?.length ? (
+                <div className="d-flex flex-wrap gap-4">
+                    {ownerships.map((ownership) => {
+                        return (
+                            <OwnershipCard
+                                key={ownership.id}
+                                ownership={ownership}
+                            >
+                                <div className="d-flex mt-4">
+                                    <Button
+                                        className="text-center"
+                                        variant="outline"
+                                        color={"green"}
+                                        onClick={() => {
+                                            setOpenedModal(true);
+                                            setSelectedOwnershipId(
+                                                ownership?.id,
+                                            );
+                                        }}
+                                    >
+                                        Cadastrar garantia
+                                    </Button>
+                                </div>
+                            </OwnershipCard>
+                        );
+                    })}
+                </div>
+            ) : (
+                <>
+                    <Space h="xs" />
+                    <Text className="mt-5 text-center" size={23}>
+                        Você não possui nenhum imóvel para dar como garantia.
+                    </Text>
+                </>
+            )}
         </>
     );
 };
