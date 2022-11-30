@@ -1,21 +1,19 @@
-import { Button, Group, Modal, NumberInput, Title, Text } from "@mantine/core";
+import { Button, Group, Modal, NumberInput, Text, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons";
 import axios from "axios";
-import { useCallback, useState } from "react";
-import { Ownership } from "../types/Ownership";
+import { useCallback } from "react";
+import { TokenizedAsset } from "../types/TokenizedAsset";
 
 interface IRegisterRentPaymentModalProps {
-    selectedOwnership?: Ownership;
+    selectedAsset?: TokenizedAsset;
     showModal: boolean;
     setShowModal: (showModal: boolean) => void;
-    getAllOwnerships: () => Promise<void>;
 }
 
 export function RegisterRentPaymentModal({
-    getAllOwnerships,
-    selectedOwnership,
+    selectedAsset,
     showModal,
     setShowModal,
 }: IRegisterRentPaymentModalProps) {
@@ -32,9 +30,8 @@ export function RegisterRentPaymentModal({
         async (values: typeof createOfferForm.values) => {
             const payload = {
                 ...values,
-                tokenizedAssetId: selectedOwnership?.tokenizedAsset?.id,
-                contractAddress:
-                    selectedOwnership?.tokenizedAsset?.contractAddress,
+                tokenizedAssetId: selectedAsset?.id,
+                contractAddress: selectedAsset?.contractAddress,
             };
 
             showNotification({
@@ -54,7 +51,6 @@ export function RegisterRentPaymentModal({
                     payload,
                 )
                 .then((res) => {
-                    getAllOwnerships();
                     updateNotification({
                         id: "register_rent_payment_" + values.amount,
                         disallowClose: true,
@@ -89,7 +85,7 @@ export function RegisterRentPaymentModal({
                     console.error(e);
                 });
         },
-        [createOfferForm, selectedOwnership, setShowModal],
+        [createOfferForm, selectedAsset, setShowModal],
     );
 
     return (
@@ -104,7 +100,7 @@ export function RegisterRentPaymentModal({
                 }}
                 title={
                     <Title order={3}>
-                        {`Registrar pagamento de aluguel do imóvel ${selectedOwnership?.tokenizedAsset?.registration}`}
+                        {`Registrar pagamento de aluguel do imóvel ${selectedAsset?.registration}`}
                     </Title>
                 }
             >

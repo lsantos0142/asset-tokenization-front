@@ -72,7 +72,7 @@ const Navigation: React.FC = () => {
                 />
             </Navbar.Section>
 
-            <Navbar.Section>
+            <Navbar.Section grow>
                 <NavLink
                     py={0}
                     active={router.pathname.includes("loan")}
@@ -83,22 +83,6 @@ const Navigation: React.FC = () => {
                                     <IconBook />
                                 </div>
                                 <Center>Criar garantia</Center>
-                            </div>
-                        </Link>
-                    }
-                />
-            </Navbar.Section>
-            <Navbar.Section grow>
-                <NavLink
-                    py={0}
-                    active={router.pathname.includes("rent-payments")}
-                    label={
-                        <Link href={"/rent-payments"}>
-                            <div className="py-3 d-flex gap-3 align-items-center">
-                                <div>
-                                    <IconReceipt />
-                                </div>
-                                <Center>Pagamentos de aluguéis</Center>
                             </div>
                         </Link>
                     }

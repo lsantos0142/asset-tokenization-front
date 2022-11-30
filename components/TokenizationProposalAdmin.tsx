@@ -11,10 +11,10 @@ import {
     Title,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconRefresh, IconX } from "@tabler/icons";
+import { IconCheck, IconDownload, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import formatCPF from "../helpers/FormatCPF";
 import { Proposal } from "../types/Proposal";
 
@@ -36,6 +36,18 @@ const TokenizationProposalAdmin: NextPage = () => {
                 console.log(e.response?.data?.message);
             });
     };
+
+    const downloadDocument = useCallback(async (id: string) => {
+        try {
+            const { data } = await axios.get<string>(
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/proposal/get-document/${id}`,
+            );
+            var a = document.createElement("a");
+            a.href = data;
+            a.download = "document.pdf";
+            a.click();
+        } catch (e) {}
+    }, []);
 
     const handleRejectProposal = () => {
         showNotification({
@@ -251,6 +263,21 @@ const TokenizationProposalAdmin: NextPage = () => {
                                     <Group position="apart" my="xs">
                                         <Text>Número de Registro</Text>
                                         <Text>{proposal.registration}</Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Visualizar documentos</Text>
+                                        <Button
+                                            className="p-0 m-0"
+                                            variant="subtle"
+                                            onClick={() =>
+                                                downloadDocument(proposal.id)
+                                            }
+                                        >
+                                            <IconDownload size={20} />
+                                        </Button>
                                     </Group>
 
                                     <Space h="xl" />

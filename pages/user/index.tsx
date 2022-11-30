@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import CollateralsByUser from "../../components/CollateralsByUser";
+import OffersByBuyer from "../../components/OffersByBuyer";
 import OffersByUser from "../../components/OffersByUser";
 import OwnershipsByUser from "../../components/OwnershipsByUser";
 import { UserProfileInfo } from "../../components/UserProfileInfo";
@@ -64,6 +65,7 @@ const User: NextPage = () => {
                     <Tabs.Tab value="ownership">Imóveis tokenizados</Tabs.Tab>
                     <Tabs.Tab value="collateral">Garantias</Tabs.Tab>
                     <Tabs.Tab value="offers">Ofertas abertas</Tabs.Tab>
+                    <Tabs.Tab value="purchases">Compras realizadas</Tabs.Tab>
                 </Tabs.List>
 
                 <Tabs.Panel value="profile" pb="xs">
@@ -84,6 +86,11 @@ const User: NextPage = () => {
                 <Tabs.Panel value="offers" pb="xs">
                     <Card withBorder radius={0}>
                         <OffersByUser />
+                    </Card>
+                </Tabs.Panel>
+                <Tabs.Panel value="purchases" pb="xs">
+                    <Card withBorder radius={0}>
+                        <OffersByBuyer />
                     </Card>
                 </Tabs.Panel>
             </Tabs>

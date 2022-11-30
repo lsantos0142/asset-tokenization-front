@@ -5,6 +5,7 @@ import type { NextPage } from "next";
 import { useCallback, useEffect, useState } from "react";
 import { TokenizedAsset } from "../types/TokenizedAsset";
 import { AuditModal } from "./AuditModal";
+import { RegisterRentPaymentModal } from "./RegisterRentPaymentModal";
 
 const TokenizedAssetsAdmin: NextPage = () => {
     const [tokenizedAssets, setTokenizedAssets] = useState<TokenizedAsset[]>(
@@ -12,7 +13,9 @@ const TokenizedAssetsAdmin: NextPage = () => {
     );
     const [selectedAsset, setSelectedAsset] = useState<TokenizedAsset>();
 
-    const [showModal, setShowModal] = useState<boolean>(false);
+    const [showAuditModal, setShowAuditModal] = useState<boolean>(false);
+    const [showRegisterModal, setShowRegisterModal] = useState<boolean>(false);
+
     const [loading, setLoading] = useState<boolean>(false);
 
     const getAllTokenizedAssets = useCallback(async () => {
@@ -37,8 +40,14 @@ const TokenizedAssetsAdmin: NextPage = () => {
     return (
         <>
             <AuditModal
-                setShowModal={setShowModal}
-                showModal={showModal}
+                setShowModal={setShowAuditModal}
+                showModal={showAuditModal}
+                selectedAsset={selectedAsset}
+            />
+
+            <RegisterRentPaymentModal
+                setShowModal={setShowRegisterModal}
+                showModal={showRegisterModal}
                 selectedAsset={selectedAsset}
             />
 
@@ -103,17 +112,34 @@ const TokenizedAssetsAdmin: NextPage = () => {
                                     </div>
                                 </td>
                                 <td>
-                                    <Button
-                                        variant="outline"
-                                        color={"blue"}
-                                        onClick={() => {
-                                            setShowModal(true);
-                                            setSelectedAsset(ta);
-                                            getAllTokenizedAssets();
-                                        }}
-                                    >
-                                        Auditar
-                                    </Button>
+                                    <div className="d-flex gap-2">
+                                        <Button
+                                            size="xs"
+                                            variant="outline"
+                                            color={"blue"}
+                                            onClick={() => {
+                                                setShowAuditModal(true);
+                                                setSelectedAsset(ta);
+                                                getAllTokenizedAssets();
+                                            }}
+                                        >
+                                            <Text size={14}>Auditar</Text>
+                                        </Button>
+                                        <Button
+                                            size="xs"
+                                            variant="outline"
+                                            color={"blue"}
+                                            onClick={() => {
+                                                setShowRegisterModal(true);
+                                                setSelectedAsset(ta);
+                                                getAllTokenizedAssets();
+                                            }}
+                                        >
+                                            <Text size={14}>
+                                                Registrar aluguel
+                                            </Text>
+                                        </Button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

@@ -6,10 +6,13 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { Ownership } from "../types/Ownership";
 import { OwnershipCard } from "./OwnershipCard";
+import { ReadRentPaymentsModal } from "./ReadRentPaymentsModal";
 
 const OwnershipsByUser: NextPage = () => {
     const [ownerships, setOwnerships] = useState<Ownership[]>([]);
     const { user } = useContext(AuthContext);
+    const [selectedOwnership, setSelectedOwnership] = useState<Ownership>();
+    const [showReadModal, setShowReadModal] = useState<boolean>(false);
 
     const getAllOwnerships = useCallback(() => {
         axios
@@ -30,6 +33,11 @@ const OwnershipsByUser: NextPage = () => {
 
     return (
         <>
+            <ReadRentPaymentsModal
+                setShowModal={setShowReadModal}
+                showModal={showReadModal}
+                selectedOwnership={selectedOwnership}
+            />
             <div className="d-flex flex-column gap-2 mt-4 mb-5">
                 <Title order={3}>Imóveis Tokenizados</Title>
                 <div className="d-flex gap-3 align-items-center justify-content-between">
@@ -58,7 +66,21 @@ const OwnershipsByUser: NextPage = () => {
                             <OwnershipCard
                                 key={ownership.id}
                                 ownership={ownership}
-                            />
+                            >
+                                <div className="mt-4">
+                                    <Button
+                                        className="text-center"
+                                        variant="outline"
+                                        color={"green"}
+                                        onClick={() => {
+                                            setShowReadModal(true);
+                                            setSelectedOwnership(ownership);
+                                        }}
+                                    >
+                                        Aluguéis recebidos
+                                    </Button>
+                                </div>
+                            </OwnershipCard>
                         );
                     })}
                 </div>

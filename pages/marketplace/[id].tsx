@@ -18,7 +18,12 @@ import {
     Modal,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconInfoCircle, IconX } from "@tabler/icons";
+import {
+    IconCheck,
+    IconExternalLink,
+    IconInfoCircle,
+    IconX,
+} from "@tabler/icons";
 import axios from "axios";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -280,22 +285,27 @@ const OfferDetails: NextPage = () => {
 
                             <Divider size="xs" />
 
-                            <Link
-                                href={`https://goerli.etherscan.io/address/${offer?.ownership?.tokenizedAsset?.contractAddress}`}
-                            >
-                                <Group
-                                    position="apart"
-                                    sx={{ cursor: "pointer" }}
-                                >
-                                    <Text>Endereço do Imóvel Tokenizado</Text>
-                                    <Text>
-                                        {
-                                            offer?.ownership?.tokenizedAsset
-                                                ?.contractAddress
-                                        }
-                                    </Text>
-                                </Group>
-                            </Link>
+                            <Group position="apart">
+                                <Text>Endereço do Imóvel Tokenizado</Text>
+                                <div className="d-flex gap-1 align-items-center">
+                                    {
+                                        offer?.ownership?.tokenizedAsset
+                                            ?.contractAddress
+                                    }
+                                    <Button
+                                        className="p-0 m-0"
+                                        variant="subtle"
+                                    >
+                                        <a
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            href={`https://goerli.etherscan.io/address/${offer?.ownership?.tokenizedAsset?.contractAddress}`}
+                                        >
+                                            <IconExternalLink size={20} />
+                                        </a>
+                                    </Button>
+                                </div>
+                            </Group>
 
                             <Space h="xs" />
 
@@ -311,19 +321,6 @@ const OfferDetails: NextPage = () => {
                             <Group position="apart">
                                 <Text>Usuário</Text>
                                 <Text>{offer?.ownership?.user?.username!}</Text>
-                            </Group>
-
-                            <Divider size="xs" />
-
-                            <Group position="apart">
-                                <Text>CPF</Text>
-                                <Text>
-                                    {offer?.ownership?.user?.cpf
-                                        ? formatCPF(
-                                              offer?.ownership?.user?.cpf!,
-                                          )
-                                        : null}
-                                </Text>
                             </Group>
                         </Stack>
                     </Grid.Col>

@@ -8,6 +8,7 @@ export type Offer = {
     deletedAt?: string;
     percentage: number;
     amount: number;
+    receipt: string;
     isEffectiveTransfer: boolean;
     status: number;
     ownership?: Ownership;

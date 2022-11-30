@@ -17,15 +17,18 @@ import AuthContext from "../context/AuthContext";
 import formatCPF from "../helpers/FormatCPF";
 import { formatNumber } from "../helpers/FormatCurrencyBRL";
 import { Offer } from "../types/Offer";
+import { AddReceiptModal } from "./AddReceiptModal";
 
-const OffersByUser: NextPage = () => {
+const OffersByBuyer: NextPage = () => {
     const [offers, setOffers] = useState<Offer[]>([]);
     const { user } = useContext(AuthContext);
+    const [showReceiptModal, setShowReceiptModal] = useState(false);
+    const [selectedOffer, setSelectedOffer] = useState<Offer>();
 
     const getUserOffers = useCallback(() => {
         axios
             .get(
-                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/get-by-user/${user.sub}`,
+                `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/get-by-buyer/${user.sub}`,
             )
             .then((res) => {
                 setOffers(res.data);
@@ -42,11 +45,17 @@ const OffersByUser: NextPage = () => {
 
     return (
         <>
+            <AddReceiptModal
+                setShowModal={setShowReceiptModal}
+                showModal={showReceiptModal}
+                selectedOffer={selectedOffer}
+                getUserOffers={getUserOffers}
+            />
             <div className="d-flex flex-column gap-2 mt-4 mb-5">
-                <Title order={3}>Ofertas abertas no Marketplace</Title>
+                <Title order={3}>Compras realizadas no Marketplace</Title>
                 <div className="d-flex gap-2 align-items-center justify-content-between">
                     <Text size={20}>
-                        Gerencie as suas ofertas criadas no Marketplace.
+                        Gerencie Ccmpras realizadas no Marketplace.
                     </Text>
                     <Button
                         variant="outline"
@@ -71,15 +80,6 @@ const OffersByUser: NextPage = () => {
                                         }
                                     </Text>
 
-                                    {offer.status === 0 && (
-                                        <Badge
-                                            color="green"
-                                            variant="light"
-                                            mt="md"
-                                        >
-                                            Em aberto
-                                        </Badge>
-                                    )}
                                     {offer.status === 1 && (
                                         <Badge
                                             color="pink"
@@ -87,6 +87,15 @@ const OffersByUser: NextPage = () => {
                                             mt="md"
                                         >
                                             Esperando Pagamento
+                                        </Badge>
+                                    )}
+                                    {offer.status === 2 && (
+                                        <Badge
+                                            color="green"
+                                            variant="light"
+                                            mt="md"
+                                        >
+                                            Paga
                                         </Badge>
                                     )}
 
@@ -115,20 +124,47 @@ const OffersByUser: NextPage = () => {
                                         <Text>{offer?.percentage * 100} %</Text>
                                     </Group>
                                     <Divider size="xs" />
+
                                     <Group position="apart" my="xs">
-                                        <Text>Usuário Comprador</Text>
+                                        <Text>Usuário Vendedor</Text>
                                         <Text>
-                                            {offer?.currentBuyer?.username ??
-                                                "-"}
+                                            {offer?.ownership?.user?.username}
                                         </Text>
                                     </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>Nome do Vendedor</Text>
+                                        <Text>
+                                            {offer?.ownership?.user?.name}
+                                        </Text>
+                                    </Group>
+
                                     <Divider size="xs" />
                                     <Group position="apart" my="xs">
-                                        <Text>Nome do Comprador</Text>
+                                        <Text>Comprovante de pagamento</Text>
                                         <Text>
-                                            {offer?.currentBuyer?.name ?? "-"}
+                                            {offer?.receipt
+                                                ? offer.receipt
+                                                : "-"}
                                         </Text>
                                     </Group>
+                                    {!offer?.receipt && (
+                                        <div className="mt-4">
+                                            <Button
+                                                className="text-center"
+                                                variant="outline"
+                                                color={"green"}
+                                                onClick={() => {
+                                                    setShowReceiptModal(true);
+                                                    setSelectedOffer(offer);
+                                                }}
+                                            >
+                                                Adicionar comprovante
+                                            </Button>
+                                        </div>
+                                    )}
                                 </Card>
                             </Grid.Col>
                         );
@@ -136,11 +172,11 @@ const OffersByUser: NextPage = () => {
                 </Grid>
             ) : (
                 <Text size={20} className="my-3 text-center">
-                    Você não possui ofertas abertas ou aguardando pagamento.
+                    Você ainda não realizou nenhuma compra no Marketplace.
                 </Text>
             )}
         </>
     );
 };
 
-export default OffersByUser;
+export default OffersByBuyer;

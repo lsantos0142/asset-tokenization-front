@@ -55,9 +55,9 @@ export function AuditModal({
     }, [selectedAsset]);
 
     useEffect(() => {
-        if (!selectedAsset) return;
+        if (!showModal) return;
         getAuditData();
-    }, [getAuditData, selectedAsset]);
+    }, [getAuditData, selectedAsset, showModal]);
 
     return (
         <>

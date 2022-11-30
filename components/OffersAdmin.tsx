@@ -241,16 +241,37 @@ const OffersAdmin: NextPage = () => {
                                     <Space h="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Usuário Comprador</Text>
+                                        <Text>Número de registro</Text>
                                         <Text>
-                                            {offer?.currentBuyer?.username}
+                                            {
+                                                offer?.ownership?.tokenizedAsset
+                                                    ?.registration
+                                            }
                                         </Text>
                                     </Group>
 
                                     <Divider size="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>CPF do Comprador</Text>
+                                        <Text>Valor da oferta</Text>
+                                        <Text>
+                                            {formatNumber.format(offer?.amount)}
+                                        </Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>
+                                            Porcentagem do imóvel ofertada
+                                        </Text>
+                                        <Text>{offer?.percentage * 100} %</Text>
+                                    </Group>
+
+                                    <Divider size="xs" />
+
+                                    <Group position="apart" my="xs">
+                                        <Text>CPF do comprador</Text>
                                         <Text>
                                             {offer?.currentBuyer?.cpf
                                                 ? formatCPF(
@@ -263,23 +284,23 @@ const OffersAdmin: NextPage = () => {
                                     <Divider size="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Nome do Comprador</Text>
+                                        <Text>Nome do comprador</Text>
                                         <Text>{offer?.currentBuyer?.name}</Text>
                                     </Group>
 
                                     <Divider size="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Usuário Vendedor</Text>
+                                        <Text>Usuário do comprador</Text>
                                         <Text>
-                                            {offer?.ownership?.user?.username}
+                                            {offer?.currentBuyer?.username}
                                         </Text>
                                     </Group>
 
                                     <Divider size="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>CPF do Vendedor</Text>
+                                        <Text>CPF do vendedor</Text>
                                         <Text>
                                             {offer?.ownership?.user?.cpf
                                                 ? formatCPF(
@@ -293,40 +314,24 @@ const OffersAdmin: NextPage = () => {
                                     <Divider size="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Nome do Vendedor</Text>
+                                        <Text>Nome do vendedor</Text>
                                         <Text>
                                             {offer?.ownership?.user?.name}
                                         </Text>
                                     </Group>
 
                                     <Divider size="xs" />
-
                                     <Group position="apart" my="xs">
-                                        <Text>Número de Registro</Text>
+                                        <Text>Usuário do vendedor</Text>
                                         <Text>
-                                            {
-                                                offer?.ownership?.tokenizedAsset
-                                                    ?.registration
-                                            }
+                                            {offer?.ownership?.user?.username}
                                         </Text>
                                     </Group>
 
                                     <Divider size="xs" />
-
                                     <Group position="apart" my="xs">
-                                        <Text>
-                                            Porcentagem do Imóvel em Oferta
-                                        </Text>
-                                        <Text>{offer?.percentage * 100} %</Text>
-                                    </Group>
-
-                                    <Divider size="xs" />
-
-                                    <Group position="apart" my="xs">
-                                        <Text>Valor da Oferta</Text>
-                                        <Text>
-                                            {formatNumber.format(offer?.amount)}
-                                        </Text>
+                                        <Text>Comprovante de pagamento</Text>
+                                        <Text>{offer?.receipt ?? "-"}</Text>
                                     </Group>
 
                                     <Space h="xl" />

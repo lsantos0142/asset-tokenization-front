@@ -1,4 +1,5 @@
-import { Badge, Card, Divider, Group, Text } from "@mantine/core";
+import { Badge, Button, Card, Divider, Group, Text } from "@mantine/core";
+import { IconExternalLink } from "@tabler/icons";
 import { Ownership } from "../types/Ownership";
 
 interface IOwnershipCardProps {
@@ -48,6 +49,24 @@ export function OwnershipCard({ children, ownership }: IOwnershipCardProps) {
                     {Math.round(ownership.percentageOwned * 10000) / 100} %
                 </Text>
             </Group>
+
+            <Divider size="xs" />
+
+            <Group position="apart" my="xs">
+                <Text>Visualizar no Etherscan</Text>
+                <div className="d-flex gap-1 align-items-center">
+                    <Button className="p-0 m-0" variant="subtle">
+                        <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={`https://goerli.etherscan.io/address/${ownership.tokenizedAsset?.contractAddress}`}
+                        >
+                            <IconExternalLink size={20} />
+                        </a>
+                    </Button>
+                </div>
+            </Group>
+
             {children}
         </Card>
     );

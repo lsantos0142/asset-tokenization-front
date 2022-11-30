@@ -4,6 +4,7 @@ import {
     Button,
     Card,
     Divider,
+    FileInput,
     Modal,
     NumberInput,
     Text,
@@ -25,10 +26,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext";
+import { fileToBase64 } from "./utils";
 
 const Tokenization: NextPage = () => {
     const { user } = useContext(AuthContext);
     const [showModal, setShowModal] = useState<boolean>(false);
+    const [fileValue, setFileValue] = useState<File | null>(null);
     const router = useRouter();
 
     const createTokenizationProposalForm = useForm({
@@ -50,10 +53,11 @@ const Tokenization: NextPage = () => {
         },
     });
 
-    const handleCreateTokenizationProposal = (
+    const handleCreateTokenizationProposal = async (
         values: typeof createTokenizationProposalForm.values,
     ) => {
         values.userId = user.sub;
+        const fileBase64 = await fileToBase64(fileValue!);
         createTokenizationProposalForm.reset();
         showNotification({
             id: "create_tokenization_proposal_" + values.registration,
@@ -68,7 +72,7 @@ const Tokenization: NextPage = () => {
             axios
                 .post(
                     `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/proposal/create`,
-                    values,
+                    { ...values, document: fileBase64 },
                 )
                 .then((res) => {
                     updateNotification({
@@ -167,11 +171,11 @@ const Tokenization: NextPage = () => {
                     onSubmit={createTokenizationProposalForm.onSubmit(
                         (values) => handleCreateTokenizationProposal(values),
                     )}
-                    className="d-flex flex-column gap-4"
+                    className="d-flex flex-column gap-4 "
                 >
-                    <div className="d-flex flex-wrap gap-4">
+                    <div className="d-flex flex-wrap gap-4 justify-content-between">
                         <TextInput
-                            className="flex-grow-1"
+                            style={{ width: "49%" }}
                             withAsterisk
                             label="Endereço do Imóvel"
                             placeholder="Ex: Av. Prof. Luciano Gualberto, 380"
@@ -180,7 +184,7 @@ const Tokenization: NextPage = () => {
                             )}
                         />
                         <NumberInput
-                            className="flex-grow-1"
+                            style={{ width: "49%" }}
                             min={1}
                             withAsterisk
                             label={`Área Útil do Imóvel (m\xB2)`}
@@ -193,9 +197,9 @@ const Tokenization: NextPage = () => {
                         />
                     </div>
 
-                    <div className="d-flex flex-wrap gap-4">
+                    <div className="d-flex flex-wrap gap-4 justify-content-between">
                         <NumberInput
-                            className="flex-grow-1"
+                            style={{ width: "49%" }}
                             min={1}
                             withAsterisk
                             label="Número do Registro em Cartório"
@@ -207,7 +211,7 @@ const Tokenization: NextPage = () => {
                             stepHoldInterval={100}
                         />
                         <TextInput
-                            className="flex-grow-1"
+                            style={{ width: "49%" }}
                             disabled
                             withAsterisk
                             label="Endereço da Carteira do Dono Efetivo"
@@ -216,6 +220,13 @@ const Tokenization: NextPage = () => {
                             )}
                         />
                     </div>
+                    <FileInput
+                        value={fileValue}
+                        onChange={setFileValue}
+                        placeholder="Selecionar arquivo"
+                        label="Documentos do imóvel (Ex.: Escrituras, comprovante de posse, etc)"
+                        withAsterisk
+                    />
                     <div className="d-flex gap-2 align-items-center mt-3">
                         <Button
                             variant="outline"

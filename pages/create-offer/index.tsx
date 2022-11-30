@@ -245,7 +245,7 @@ const CreateOffer: NextPage = () => {
                     </Button>
                 </div>
             </div>
-            {ownerships?.lentgh ? (
+            {ownerships?.length ? (
                 <div className="d-flex flex-wrap gap-4">
                     {ownerships.map((ownership) => {
                         return (
