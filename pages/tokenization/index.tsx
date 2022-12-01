@@ -26,7 +26,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext";
-import { fileToBase64 } from "./utils";
+import { fileToBase64 } from "../../helpers/FileToBase64";
 
 const Tokenization: NextPage = () => {
     const { user } = useContext(AuthContext);

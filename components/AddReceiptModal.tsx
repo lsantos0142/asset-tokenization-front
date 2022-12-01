@@ -19,7 +19,7 @@ export function AddReceiptModal({
     setShowModal,
     getUserOffers,
 }: IAddReceiptModalProps) {
-    const form = useForm({
+    const modalForm = useForm({
         initialValues: {
             receipt: "",
         },
@@ -29,55 +29,57 @@ export function AddReceiptModal({
     });
 
     const addReceipt = useCallback(
-        async (values: typeof form.values) => {
-            try {
-                showNotification({
-                    id: "register_rent_payment_" + values.receipt,
-                    disallowClose: true,
-                    autoClose: false,
-                    title: (
-                        <Text size="xl">
-                            Adicionando comprovante de pagamento
-                        </Text>
-                    ),
-                    message: (
-                        <Text size="xl">Favor esperar até a conclusão</Text>
-                    ),
-                    loading: true,
-                });
-                await axios.post(
+        async (values: typeof modalForm.values) => {
+            showNotification({
+                id: "register_rent_payment_" + values.receipt,
+                disallowClose: true,
+                autoClose: false,
+                title: (
+                    <Text size="xl">Adicionando comprovante de pagamento</Text>
+                ),
+                message: <Text size="xl">Favor esperar até a conclusão</Text>,
+                loading: true,
+            });
+
+            await axios
+                .post(
                     `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/add-receipt`,
                     { ...values, offerId: selectedOffer?.id },
-                );
-
-                updateNotification({
-                    id: "register_rent_payment_" + values.receipt,
-                    disallowClose: true,
-                    autoClose: 5000,
-                    icon: <IconCheck size={16} />,
-                    color: "green",
-                    title: <Text size="xl">Sucesso!</Text>,
-                    message: <Text size="xl">Comprovante adicionado.</Text>,
+                )
+                .then((res) => {
+                    updateNotification({
+                        id: "register_rent_payment_" + values.receipt,
+                        disallowClose: true,
+                        autoClose: 5000,
+                        icon: <IconCheck size={16} />,
+                        color: "green",
+                        title: <Text size="xl">Sucesso!</Text>,
+                        message: <Text size="xl">Comprovante adicionado.</Text>,
+                    });
+                    setShowModal(false);
+                    modalForm.reset();
+                    getUserOffers();
+                })
+                .catch((e) => {
+                    updateNotification({
+                        id: "register_rent_payment_" + values.receipt,
+                        disallowClose: true,
+                        autoClose: 5000,
+                        icon: <IconX size={16} />,
+                        color: "red",
+                        title: (
+                            <Text size="xl">
+                                Erro no registro do comprovante.
+                            </Text>
+                        ),
+                        message: (
+                            <Text size="xl">{e.response?.data?.message}</Text>
+                        ),
+                    });
+                    console.error(e);
                 });
-                setShowModal(false);
-                form.reset();
-                getUserOffers();
-            } catch (e) {
-                updateNotification({
-                    id: "register_rent_payment_" + values.receipt,
-                    disallowClose: true,
-                    autoClose: 5000,
-                    icon: <IconX size={16} />,
-                    color: "red",
-                    title: (
-                        <Text size="xl">Erro no registro do comprovante.</Text>
-                    ),
-                    message: <Text size="xl">{e.response?.data?.message}</Text>,
-                });
-                console.error(e);
-            }
         },
-        [form, selectedOffer, setShowModal, getUserOffers],
+        [modalForm, selectedOffer, setShowModal, getUserOffers],
     );
 
     return (
@@ -88,7 +90,7 @@ export function AddReceiptModal({
                 opened={showModal}
                 onClose={() => {
                     setShowModal(false);
-                    form.reset();
+                    modalForm.reset();
                 }}
                 title={
                     <Title order={3}>
@@ -98,13 +100,15 @@ export function AddReceiptModal({
             >
                 <form
                     className="mt-5"
-                    onSubmit={form.onSubmit((values) => addReceipt(values))}
+                    onSubmit={modalForm.onSubmit((values) =>
+                        addReceipt(values),
+                    )}
                 >
                     <div className="d-flex flex-column gap-5">
                         <TextInput
                             withAsterisk
                             label="Comprovante de pagamento"
-                            {...form.getInputProps("receipt")}
+                            {...modalForm.getInputProps("receipt")}
                         />
 
                         <Group position="apart">
