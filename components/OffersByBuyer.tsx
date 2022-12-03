@@ -31,7 +31,7 @@ const OffersByBuyer: NextPage = () => {
                 `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/offer/get-by-buyer/${user.sub}`,
             )
             .then((res) => {
-                setOffers(res.data);
+                setOffers(res.data?.filter((o: Offer) => !!o.ownership));
             })
             .catch((e) => {
                 console.log(e.response?.data?.message);
@@ -55,7 +55,7 @@ const OffersByBuyer: NextPage = () => {
                 <Title order={3}>Compras realizadas no Marketplace</Title>
                 <div className="d-flex gap-2 align-items-center justify-content-between">
                     <Text size={20}>
-                        Gerencie Ccmpras realizadas no Marketplace.
+                        Gerencie suas compras realizadas no Marketplace.
                     </Text>
                     <Button
                         variant="outline"
@@ -150,21 +150,22 @@ const OffersByBuyer: NextPage = () => {
                                                 : "-"}
                                         </Text>
                                     </Group>
-                                    {!offer?.receipt && (
-                                        <div className="mt-4">
-                                            <Button
-                                                className="text-center"
-                                                variant="outline"
-                                                color={"green"}
-                                                onClick={() => {
-                                                    setShowReceiptModal(true);
-                                                    setSelectedOffer(offer);
-                                                }}
-                                            >
-                                                Adicionar comprovante
-                                            </Button>
-                                        </div>
-                                    )}
+
+                                    <div className="mt-4">
+                                        <Button
+                                            className="text-center"
+                                            variant="outline"
+                                            color={"green"}
+                                            onClick={() => {
+                                                setShowReceiptModal(true);
+                                                setSelectedOffer(offer);
+                                            }}
+                                        >
+                                            {!offer.receipt
+                                                ? "Adicionar comprovante"
+                                                : "Editar comprovante"}
+                                        </Button>
+                                    </div>
                                 </Card>
                             </Grid.Col>
                         );

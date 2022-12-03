@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons";
 import axios from "axios";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { Offer } from "../types/Offer";
 
 interface IAddReceiptModalProps {
@@ -21,12 +21,17 @@ export function AddReceiptModal({
 }: IAddReceiptModalProps) {
     const modalForm = useForm({
         initialValues: {
-            receipt: "",
+            receipt: selectedOffer?.receipt ?? "",
         },
         validate: {
             receipt: (value) => (!value ? "Campo Obrigatório" : null),
         },
     });
+
+    useEffect(() => {
+        if (!selectedOffer) return;
+        modalForm.setFieldValue("receipt", selectedOffer.receipt ?? "");
+    }, [selectedOffer]);
 
     const addReceipt = useCallback(
         async (values: typeof modalForm.values) => {
