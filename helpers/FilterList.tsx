@@ -1,6 +1,7 @@
 export const filterList = [
-    "invert(99%) sepia(52%) saturate(6231%) hue-rotate(322deg) brightness(96%) contrast(94%)",
-    "invert(68%) sepia(59%) saturate(590%) hue-rotate(160deg) brightness(95%) contrast(89%)",
-    "invert(25%) sepia(40%) saturate(2269%) hue-rotate(331deg) brightness(104%) contrast(114%)",
-    "invert(75%) sepia(65%) saturate(544%) hue-rotate(72deg) brightness(100%) contrast(93%)",
+    "invert(76%) sepia(25%) saturate(564%) hue-rotate(166deg) brightness(91%) contrast(91%)",
+    "invert(39%) sepia(10%) saturate(1199%) hue-rotate(270deg) brightness(95%) contrast(82%)",
+    "invert(29%) sepia(4%) saturate(1697%) hue-rotate(205deg) brightness(94%) contrast(85%)",
+    "invert(23%) sepia(4%) saturate(5251%) hue-rotate(158deg) brightness(87%) contrast(81%)",
+    "invert(19%) sepia(54%) saturate(353%) hue-rotate(160deg) brightness(96%) contrast(96%)",
 ];
