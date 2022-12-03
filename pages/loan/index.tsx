@@ -1,34 +1,31 @@
 import {
-    Select,
     Anchor,
-    Text,
     Breadcrumbs,
-    Divider,
-    Space,
-    Title,
-    Group,
-    Card,
-    Grid,
-    Badge,
     Button,
+    Divider,
+    Group,
     Modal,
-    Stack,
     NumberInput,
+    Select,
+    Space,
+    Stack,
+    Text,
     TextInput,
+    Title,
 } from "@mantine/core";
+import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconBook, IconCheck, IconRefresh, IconX } from "@tabler/icons";
 import axios from "axios";
+import "dayjs/locale/pt-br";
 import type { NextPage } from "next";
 import Link from "next/link";
-import "dayjs/locale/pt-br";
 import { useCallback, useContext, useEffect, useState } from "react";
+import { OwnershipCard } from "../../components/OwnershipCard";
 import AuthContext from "../../context/AuthContext";
 import { Ownership } from "../../types/Ownership";
 import { User } from "../../types/User";
-import { DatePicker } from "@mantine/dates";
-import { OwnershipCard } from "../../components/OwnershipCard";
 
 type SelectData = {
     value: string;

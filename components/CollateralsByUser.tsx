@@ -24,6 +24,8 @@ const CollateralsByUser: NextPage = () => {
     const [collaterals, setCollaterals] = useState<Collateral[]>([]);
     const [allUsers, setAllUsers] = useState<User[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
+    const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+
     const [selectedCollateralId, setSelectedCollateralId] =
         useState<string>("");
     const { user } = useContext(AuthContext);
@@ -82,6 +84,7 @@ const CollateralsByUser: NextPage = () => {
                     `${process.env.NEXT_PUBLIC_BACK}/tokenized-asset/collateral/register-loan-payment/${selectedCollateralId}`,
                 )
                 .then((res) => {
+                    setShowSuccessModal(true);
                     getAllCollaterals();
                     updateNotification({
                         id: "register_loan_payment_" + selectedCollateralId,
@@ -118,13 +121,39 @@ const CollateralsByUser: NextPage = () => {
     return (
         <>
             <Modal
+                centered
+                size={540}
+                opened={showSuccessModal}
+                onClose={() => setShowSuccessModal(false)}
+                title={
+                    <Title size={23} order={3}>
+                        Sucesso!
+                    </Title>
+                }
+            >
+                <Text size={22} className="my-5">
+                    O imóvel será desalienado assim que a quitação do empréstimo
+                    for validada pelo administrador.
+                </Text>
+                <div className="text-center mt-1">
+                    <Button
+                        size="md"
+                        onClick={() => setShowSuccessModal(false)}
+                        color="dark"
+                    >
+                        Confirmar
+                    </Button>
+                </div>
+            </Modal>
+
+            <Modal
                 size="auto"
                 centered
                 opened={showModal}
                 onClose={() => setShowModal(false)}
                 title={
                     <Title order={3}>
-                        {`Deseja registrar o pagamento do empréstimo?`}
+                        {`Deseja registrar a quitação do empréstimo?`}
                     </Title>
                 }
             >
