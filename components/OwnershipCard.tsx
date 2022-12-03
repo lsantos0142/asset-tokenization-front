@@ -53,6 +53,15 @@ export function OwnershipCard({ children, ownership }: IOwnershipCardProps) {
             <Divider size="xs" />
 
             <Group position="apart" my="xs">
+                <Text>Porcentagem disponível para operações</Text>
+                <Text>
+                    {Math.round(ownership.availablePercentage * 10000) / 100} %
+                </Text>
+            </Group>
+
+            <Divider size="xs" />
+
+            <Group position="apart" my="xs">
                 <Text>Visualizar no Etherscan</Text>
                 <div className="d-flex gap-1 align-items-center">
                     <Button className="p-0 m-0" variant="subtle">

@@ -60,8 +60,8 @@ const CreateOffer: NextPage = () => {
             percentage: (value) =>
                 !value
                     ? "Campo Obrigatório"
-                    : value > selectedOwnership?.percentageOwned! * 100
-                    ? "Porcentagem maior do que a que possui"
+                    : value > selectedOwnership?.availablePercentage! * 100
+                    ? "Porcentagem maior do que a disponível para operações"
                     : null,
             amount: (value) => (!value ? "Campo Obrigatório" : null),
         },

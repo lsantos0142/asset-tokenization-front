@@ -42,6 +42,7 @@ const Loan: NextPage = () => {
     const [allUsers, setAllUsers] = useState<SelectData[]>([]);
     const [selectedOwnershipId, setSelectedOwnershipId] = useState<string>("");
     const [openedModal, setOpenedModal] = useState<boolean>(false);
+    const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
 
     const selectedOwnership = ownerships.find(
         (o) => o?.id === selectedOwnershipId,
@@ -99,7 +100,12 @@ const Loan: NextPage = () => {
         validate: {
             bankUserId: (value) => (!value ? "Campo Obrigatório" : null),
             sellerUserId: (value) => (!value ? "Campo Obrigatório" : null),
-            collateralShares: (value) => (!value ? "Campo Obrigatório" : null),
+            collateralShares: (value) =>
+                !value
+                    ? "Campo Obrigatório"
+                    : value > selectedOwnership?.availablePercentage! * 100
+                    ? "Porcentagem maior do que a disponível para operações"
+                    : null,
             expirationDate: (value) => (!value ? "Campo Obrigatório" : null),
             contractAddress: (value: any) =>
                 !value ? "Campo Obrigatório" : null,
@@ -149,6 +155,7 @@ const Loan: NextPage = () => {
                     body,
                 )
                 .then((res) => {
+                    setShowSuccessModal(true);
                     updateNotification({
                         id:
                             "create_collateral_" +
@@ -165,6 +172,7 @@ const Loan: NextPage = () => {
                             <Text size="xl">Empréstimo criado com sucesso</Text>
                         ),
                     });
+                    getAllOwnerships();
                 })
                 .catch((e) => {
                     console.log(e);
@@ -293,6 +301,32 @@ const Loan: NextPage = () => {
                         </Button>
                     </Group>
                 </form>
+            </Modal>
+
+            <Modal
+                centered
+                size={540}
+                opened={showSuccessModal}
+                onClose={() => setShowSuccessModal(false)}
+                title={
+                    <Title size={23} order={3}>
+                        Dados enviados com sucesso!
+                    </Title>
+                }
+            >
+                <Text size={22} className="my-5">
+                    A garantia será criada e associada a sua carteira digital
+                    assim que os dados forem validados pelo administrador.
+                </Text>
+                <div className="text-center mt-1">
+                    <Button
+                        size="md"
+                        onClick={() => setShowSuccessModal(false)}
+                        color="dark"
+                    >
+                        Confirmar
+                    </Button>
+                </div>
             </Modal>
 
             <Breadcrumbs>{items}</Breadcrumbs>
