@@ -327,7 +327,7 @@ const LoanPaymentAdmin: NextPage = () => {
                                     <Space h="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Usuário Mutuário</Text>
+                                        <Text>Usuário Devedor</Text>
                                         <Text>
                                             {
                                                 collateral.ownership.user
@@ -339,7 +339,7 @@ const LoanPaymentAdmin: NextPage = () => {
                                     <Divider size="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Usuário Mutuante</Text>
+                                        <Text>Usuário Credor</Text>
                                         <Text>
                                             {getBankUsername(collateral)}
                                         </Text>

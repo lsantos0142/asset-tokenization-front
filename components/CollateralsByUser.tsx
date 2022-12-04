@@ -241,7 +241,7 @@ const CollateralsByUser: NextPage = () => {
                                     <Divider size="xs" />
 
                                     <Group position="apart" my="xs">
-                                        <Text>Mutuante</Text>
+                                        <Text>Credor</Text>
                                         <Text>
                                             {getBankUsername(collateral)}
                                         </Text>
